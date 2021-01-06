@@ -5,7 +5,7 @@ Below, you'll find a random collection of notes that I made over the course of m
 If it isn't obvious by now, this blog format was inspired by [Frank McSherry's aweome blog](https://github.com/frankmcsherry/blog)
 
 ##### Computer Science (WIP)
-1. [$\left<O(n), O(1)\right>$ RMQ in Rust](https://github.com/jlikhuva/blog/blob/master/posts/rmq.md)
+1. [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/master/posts/rmq.md)
 2. [A bottom up Splay Tree](https://github.com/jlikhuva/blog/blob/master/posts/splay.md)
 3. [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/master/posts/string_indexing.md)
 4. [The Binomial Heap](https://github.com/jlikhuva/blog/blob/master/posts/binomial.md)
