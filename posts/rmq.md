@@ -10,7 +10,7 @@ RMQ_A(i, j) = \begin{cases}
 $$ --> 
 
 <div align="center"><img style="background: white;" src="../svg/vZtLroTQei.svg"></div>
-We can do this for all possible values of <!-- $i$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/iwGG4VHdmx.svg"> and <!-- $j$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/uETZh5A6Hd.svg"> to fill up our lookup table. This takes quadratic time. Thus, with this approach, we cam solve the RMQ problem in <!-- $\left<\Theta(n^2), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/8UBwqFAqMg.svg">. 
+We can do this for all possible values of `i` and `j` to fill up our lookup table. This takes quadratic time. Thus, with this approach, we cam solve the RMQ problem in <!-- $\left<\Theta(n^2), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/8UBwqFAqMg.svg">
 
 The code below implements this approach. The only modification we make is that instead or calculating the actual minimal value, we calculate the index of the smallest value. That is `argmin` instead of `min`
 

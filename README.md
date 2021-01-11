@@ -6,7 +6,7 @@ If it isn't obvious by now, this blog format was inspired by [Frank McSherry's a
 
 ##### Computer Science (WIP)
 1. [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
-2. [A bottom up Splay Tree](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
+2. [A Bottom up Splay Tree](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 3. [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
 4. [The Binomial Heap](https://github.com/jlikhuva/blog/blob/main/posts/binomial.md)
 5. [Specialized Containers for Integers](https://github.com/jlikhuva/blog/blob/main/posts/integer.md)
