@@ -6,7 +6,7 @@ If it isn't obvious by now, this blog format was inspired by [Frank McSherry's a
 
 ##### Computer Science (WIP)
 1. [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
-2. [A bottom up Splay Tree](https://github.com/jlikhuva/blog/blob/main/posts/splay.md)
+2. [A bottom up Splay Tree](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 3. [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
 4. [The Binomial Heap](https://github.com/jlikhuva/blog/blob/main/posts/binomial.md)
 5. [Specialized Containers for Integers](https://github.com/jlikhuva/blog/blob/main/posts/integer.md)
@@ -15,10 +15,11 @@ If it isn't obvious by now, this blog format was inspired by [Frank McSherry's a
 8. [Algorithms for Discrete Optimization](https://github.com/jlikhuva/blog/blob/main/posts/optimization.md)
 9. [Persistent & Retroactive Data Structures](https://github.com/jlikhuva/blog/blob/main/posts/splay.md)
 10. [Assorted ideas from Compuational Geometry](https://github.com/jlikhuva/blog/blob/main/posts/comp_geom.md)
+11. [Common Algorithmic Patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
 
 #####  Investment Science (WIP)
 1. Mean-Variance Portfolio Theory
 1. Capital Asset Pricing Model
 2. Fowards, Futures, and Swaps
-3. Options Theory
-4. IR Derivatives
+3. Options
+4. Pricing Securities
