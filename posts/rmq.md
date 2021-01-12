@@ -208,7 +208,7 @@ Once again, the query time is then best possible. However, even though the pre-p
 ##### Two-Level Structures & The Method of Four Russians
 We begin this detour by taking another detour. Let us discuss the algorithms used to find the median (or more generally, the i_th order statistic) of a collection of pairwise comparable items. `Quickselect` can solve this problem in expected linear time. However, if we want a worst case linear time solution, we need to use the `Median of Medians` procedure.
 
-We begin by dividing the input collection into blocks of `length=5`. This gives us $\lceil \frac{n}{5}\rceil$ blocks, with the final block possibly having `< 5` items.
+We begin by dividing the input collection into blocks of `length=5`. This gives us <!-- $\lceil \frac{n}{5}\rceil$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pF1PFO71La.svg"> blocks, with the final block possibly having `< 5` items. Let us build an abstraction for a single block
 
 ##### Cartesian Trees & The LCA-RMQ Equivalence
 
