@@ -1,6 +1,6 @@
 #### Introduction
 
-#### A naive solution
+#### A Naïve Solution
 The most straightforward way to solve this problem is to create a lookup table with all the RMQ answers precomputed. This will allow us to answer any RMQ in constant time by doing a table lookup. How can we build such a table? The first thing to notice is that this is a discrete optimization problem - we are interested in the minimal (aka the optimal) value in a given range. A quick reference to [common algorithmic patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) should tell us that we may be able to use dynamic programming to solve the problem. All we need to do is come up with an update rule. In particular, suppose our array is <!-- $A$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fT4Y6ki4ih.svg">,  if we know the smallest value in some range <!-- $(i, j)$ --> <img style="transform: translateY(0.1em); background: white;" src="https://render.githubusercontent.com/render/math?math=(i%2C%20j)"> to be <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg">, we can easily figure out the answer on a larger range <!-- $(i, j+1)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/BR28J51dHP.svg"> by comparing <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg"> with <!-- $A[i + 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/DVfAuKZf2r.svg">. That is:
 <!-- $$
 RMQ_A(i, j) = \begin{cases}
@@ -151,7 +151,7 @@ Now that we have our sparse table, how can we query from it given an arbitrary r
 
 Computing all subranges, however, is overkill. All we need are two sub-ranges that fully cover the underlying segment. How do we find the two covering segments? First, observe that if the length of the range is an exact power of two, then we do not need to do any further computation since we already precomputed answers for all such ranges. If its not, we start by finding the largest subrange that is an exact power of two. Specifically, we find the value `k` such that <!-- $2^k \leq (j - i) + 1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/SyXeSDNkuL.svg">. Note that this value `k` is the index of the most significant bit of the range's length. The first range is thus <!-- $[i, i + 2^k - 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/RsDV0G7oU5.svg">. After finding the largest subrange, the remaining portion's length certainly be not be a power of two. To proceed, we use a neat trick: we construct a range whose length is the smallest power of two larger than the remaining portion length. To prevent this subrange from overflowing the underlying range, we shift it over to the left, overlapping the first subrange, until it is full contained in the original range. The second range is thus <!-- $[j - 2^k + 1, j]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/2eOUcbNTa4.svg">
 
-To recapitulate, we query from the sparse table by finding the `argmin` two overlapping ranges whose answers have already been computed. Figuring out which ranges to use involves finding the `MSB(n)` where `n` is the length of the range in the query. How so we calculate `MSB(n)`? To compute `MSB(n)` in constant time, we can use a lookup table. Later on, when discussing specialized integer containers, we'll implement a complex but straightforward method for finding `k` in constant time. For now, a lookup table suffices. Thus, with this scheme, we have a <!-- $\left<\Theta(n\lg n), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/WpCYNtMQVL.svg"> solution to the `RMQ` problem. Below, we implement a procedure to compute the lookup table.
+To recapitulate, we query from the sparse table by finding the `argmin` of two overlapping ranges whose answers have already been computed. Figuring out which ranges to use involves finding the `MSB(n)` where `n` is the length of the range in the query. How so we calculate `MSB(n)`? To compute `MSB(n)` in constant time, we can use a lookup table. Later on, when discussing specialized integer containers, we'll implement a complex but straightforward method for finding `k` in constant time. For now, a lookup table suffices. Thus, with this scheme, we have a <!-- $\left<\Theta(n\lg n), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/WpCYNtMQVL.svg"> solution to the `RMQ` problem. Below, we implement a procedure to compute the lookup table.
 ```rust
 /// Here's the scheme we shall use to implement the lookup table:
 ///     - First, we shall assume that the values we get are 8 bytes (64bits) wide
@@ -205,14 +205,13 @@ impl MSBLookupTable {
     }
 }
 ```
-Once again, the query time is then best possible. However, even though the pre-processing time reduced from quadtratic to `O(n lg n)`, we can still do better. In particular, we can shave off a log factor and arrive at a linear time pre-processing algorithm. To figure out how to do that, we shall take a detour to discuss the method of four russians.
+Once again, the query time is the best possible. However, even though the pre-processing time reduced from quadtratic to `O(n lg n)`, we can still do better. In particular, we can shave off a log factor and arrive at a linear time pre-processing algorithm. To figure out how to do that, we shall take a detour to discuss the method of four russians.
 
-##### Two-Level Structures & The Method of Four Russians
+##### The Method of Four Russians
 We begin this detour by taking another detour. Let us discuss the algorithms used to find the median (or more generally, the `i_th` order statistic) of a collection of pairwise comparable items. `Quickselect` can solve this problem in expected linear time. However, if we want a worst case linear time solution, we need to use the `Median of Medians` procedure.
 
 `MoM` is exactly similar `Quickselelect`  except, instead of randomly picking the index to partition around, we compute an approximate median value. We begin by dividing the input collection into blocks of `length=5`. This gives us <!-- $\lceil \frac{n}{5}\rceil$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pF1PFO71La.svg"> blocks, with the final block possibly having `< 5` items. For each block, we calculate the median by first sorting and selection the lower median. For a single block, this always takes constant time, meaning that finding the median for all blocks takes linear time. We aggregate all the block-level medians into a single array. This array is of length <!-- $\lceil \frac{n}{5}\rceil$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pF1PFO71La.svg">. Once we have aggregated the lock level medians, we are faced with the xeact same problem we started with -- just on a much smaller array. Therefore, we can recursively find the median of this new array. Once we have this value, we can proceed as usual, using the [prune and conquer](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) strategy. Below, we implement this scheme
 ```rust
-
 /// The abstraction for a single block.
 pub struct MedianBlock<'a, T> {
     /// The starting index. This is 0-indexed and should be
@@ -229,8 +228,8 @@ pub struct MedianBlock<'a, T> {
     /// `start_idx + median_idx`
     median_idx: usize,
 
-    /// The array to which the indexes above refer
-    underlying: &'a [T],
+    /// The median of this block
+    median: &'a T,
 }
 
 /// For quick construction and error checking. (start_idx, end_idx, underlying, median_idx)
@@ -239,16 +238,18 @@ impl<'a, T> From<(usize, usize, &'a [T], usize)> for MedianBlock<'a, T> {
         let start_idx = block.0;
         let end_idx = block.1;
         let len = block.2.len();
+        let median_idx = block.3;
         debug_assert!(start_idx < end_idx);
         debug_assert!(end_idx < len);
+        debug_assert!(median_idx >= start_idx && median_idx <= end_idx);
         if end_idx < len {
-            debug_assert!(end_idx - start_idx == 5);
+            debug_assert!(end_idx - start_idx == 4);
         }
         MedianBlock {
             start_idx,
             end_idx,
-            median_idx: block.3,
-            underlying: block.2,
+            median_idx,
+            median: &block.2[median_idx]
         }
     }
 }
@@ -262,7 +263,73 @@ fn median_of_medians<'a, T>(array: &'a [T], k: usize) -> usize {
     todo!()
 }
 ```
+The median of medians procedure has a few key structures:
+* The input is divided into blocks or equal size. This is called block partitioning and each block is called the micro array.
+* The original problem (median in this case) is solved for each block using a naive method that works well for small input sizes. With this scheme, we are able to solve the problem for each block in constant time and for all blocks in linear time.
+* The solutions to all blocks are aggregated into a single array. We call this the macro array. The macro array, just like the micro arrays, are smaller instances of the original problem.
+* By combining, in some bespoke fashion, the macro and micro array solutions, we are able to solve the original problem with a log factor shaved off. In `MoM` we went from `Quickselect's` `O(n lg n)` to `O(n)`.  
+  
+The structures above are the major motifs in the method of four russians. How can we use this method to reduce the pre-processing time of our RMQ algorithm? We discuss that next.
 
-##### Cartesian Trees & The LCA-RMQ Equivalence
+**Two-Level & Hybrid Structures**
+To apply the method of four russians to the RMQ problem, we begin by dividing the input array into blocks of length <!-- $b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fCJxfN2Ysc.svg">. If the length of the array is <!-- $n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k2Z6CavdDQ.svg">, this results in <!-- $\mathcal{O}(\frac{n}{b})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/gwfsqBuBks.svg"> blocks. For each of these blocks, we find the index of the smallest value bu doing a simple scan. This takes <!-- $\mathcal{O}(b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Dqg8jnCq0o.svg"> in each block and <!-- $\mathcal{O}(\frac{n}{b}) * \mathcal{O}(b) = \mathcal{O}(n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/oI85zP1xyG.svg"> for all the blocks. We aggregate these min values in a new macro array. Given a qeury range `[i, j]` how can we use the blocks and the macro array to satisfy the query? Also, what value of `b` should we use? To query, we start by figuring out which block the ends of the query fall into. We do that by dividing each end with the block size, i.e `start_block = i/b, end_block = j/b`. We then scan the items in `start_block` that appear after `i` and the items in `end_block` that appear before `j` and take the minimal value over them. Let's call this value, the smallest value at the ends of the range, <!-- $\lambda$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/w3irZZ0Jg1.svg"> Then we scan the macro array to find the minimal value among all blocks between `start_block` and `end_block`. let's call this value <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/6bXEiZZAEX.svg">. The answer to our query is the `min` (or `argmin`) between these two values: <!-- $RMQ_A(i, j) = \min(\lambda, \alpha)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/KHSI90DMS3.svg"> How long does this take? Well, finding the `min` in the end blocks take `O(b)` and scanning the intermediate blocks takes `O(n/b)`. This gives us `O(b + n/b)`. Therefpre, to properly characterize the runtime, we need to find the value of `b` that minimized the expression `b + n/b`. We do so below
+<!-- $$
+\begin{array}{c}
+    f(b) = b + \dfrac{n}{b} \\
+    f'(b) = 1 - \dfrac{n}{b^2}\\
+    0 = 1 - \dfrac{n}{b^2}\\
+    b^2 = n \\
+    b = \sqrt{n}
+\end{array}
+$$ --> 
 
-##### The Fischer-Heun RMQ Structure
+<div align="center"><img style="background: white;" src="../svg/7i3PLJolgh.svg"></div>
+
+So, we set `b` to the square root of `n`. This gives us a query time of <!-- $\mathcal{O}(\sqrt{n})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qSsMnsGYC0.svg"> and an overall time of <!-- $\left<O(n), O(n^{0.5})\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cgFTCzGhAr.svg">. We implement this scheme below.
+```rust
+/// The abstraction for a single block. This is exactly like
+/// we had for median_of_medians
+pub struct RMQBlock<'a, T> {
+    /// The starting index. This is 0-indexed and should be
+    /// less than or equal to the end_idx
+    start_idx: usize,
+
+    /// The ending index. This should be strictly less than the
+    /// length of the underlying array
+    end_idx: usize,
+
+    /// The index of the smallest value in the given range. To move from this
+    /// index to an idx in the underlying, we simply calculate
+    /// `start_idx + min_idx`
+    min_idx: usize,
+
+    /// The minimal value of this block
+    min: &'a T,
+}
+
+/// We are essentially constructing a new data structure.
+/// This abstracts the logic for constructing
+/// the two level structure and answering range queries
+pub struct RMQBlockDecomposition<'a, T> {
+    /// An aggregation of the minimal values in each of our
+    /// (n/b) blocks.
+    macro_array: Vec<RMQBlock<'a, T>>,
+
+    /// The size of each block
+    block_size: usize,
+
+    /// The static array onto which this data structure is layered
+    underlying: &'a [T]
+}
+
+impl <'a, T> RMQBlockDecomposition<'a, T> {}
+
+```
+So, Block decomposition allowed us to have linear pre-processing time. However, in the process, we lost our constant query time? Can we do better than <!-- $\sqrt{n}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k4Mu0nuOVP.svg"> while still maintaining a linear pre-processing time? Yes. We can use a mix of block decomposition and sparse tables to achieve this. Let's see how. 
+
+#### A Hybrid Strategy
+
+
+#### Cartesian Trees & The LCA-RMQ Equivalence
+
+#### The Fischer-Heun RMQ Structure
