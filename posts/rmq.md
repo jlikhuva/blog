@@ -271,7 +271,8 @@ The median of medians procedure has a few key structures:
   
 The structures above are the major motifs in the method of four russians. How can we use this method to reduce the pre-processing time of our RMQ algorithm? We discuss that next.
 
-**Two-Level & Hybrid Structures**
+**Two-Level Structures**
+
 To apply the method of four russians to the RMQ problem, we begin by dividing the input array into blocks of length <!-- $b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fCJxfN2Ysc.svg">. If the length of the array is <!-- $n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k2Z6CavdDQ.svg">, this results in <!-- $\mathcal{O}(\frac{n}{b})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/gwfsqBuBks.svg"> blocks. For each of these blocks, we find the index of the smallest value bu doing a simple scan. This takes <!-- $\mathcal{O}(b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Dqg8jnCq0o.svg"> in each block and <!-- $\mathcal{O}(\frac{n}{b}) * \mathcal{O}(b) = \mathcal{O}(n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/oI85zP1xyG.svg"> for all the blocks. We aggregate these min values in a new macro array. Given a qeury range `[i, j]` how can we use the blocks and the macro array to satisfy the query? Also, what value of `b` should we use? To query, we start by figuring out which block the ends of the query fall into. We do that by dividing each end with the block size, i.e `start_block = i/b, end_block = j/b`. We then scan the items in `start_block` that appear after `i` and the items in `end_block` that appear before `j` and take the minimal value over them. Let's call this value, the smallest value at the ends of the range, <!-- $\lambda$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/w3irZZ0Jg1.svg"> Then we scan the macro array to find the minimal value among all blocks between `start_block` and `end_block`. let's call this value <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/6bXEiZZAEX.svg">. The answer to our query is the `min` (or `argmin`) between these two values: <!-- $RMQ_A(i, j) = \min(\lambda, \alpha)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/KHSI90DMS3.svg"> How long does this take? Well, finding the `min` in the end blocks take `O(b)` and scanning the intermediate blocks takes `O(n/b)`. This gives us `O(b + n/b)`. Therefpre, to properly characterize the runtime, we need to find the value of `b` that minimized the expression `b + n/b`. We do so below
 <!-- $$
 \begin{array}{c}
@@ -327,7 +328,7 @@ impl <'a, T> RMQBlockDecomposition<'a, T> {}
 ```
 So, Block decomposition allowed us to have linear pre-processing time. However, in the process, we lost our constant query time? Can we do better than <!-- $\sqrt{n}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k4Mu0nuOVP.svg"> while still maintaining a linear pre-processing time? Yes. We can use a mix of block decomposition and sparse tables to achieve this. Let's see how. 
 
-#### A Hybrid Strategy
+**Hybrid Strucures**
 
 
 #### Cartesian Trees & The LCA-RMQ Equivalence
