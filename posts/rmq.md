@@ -278,23 +278,58 @@ fn generate_macro_array<'a, T: Ord>(array: &'a [T]) -> Vec<MedianBlock<'a, T>> {
 /// definitely think of a way of creating an abstraction that can solve any
 /// method of four russians problem by having the client provide a funtion for
 /// block partitioning and solving the block level problem. 
-fn get_median_idx_by_sorting<T: Ord>(block: &[T]) -> usize {
+fn get_kth_by_sorting<T: Ord>(block: &[T], k: usize) -> usize {
     let sorted: Vec<_> = block
         .iter()
         .enumerate()
         .sorted_by_key(|x| x.1)
         .map(|x| x.0)
         .collect();
-    sorted[sorted.len()/2]
+    sorted[k]
 }
-```
-```rust
+
+/// Reorient the elements of the array around the element at `pivot_idx` and
+/// return the length of the left partition
+fn partition_at_pivot<T: Ord>(array: &mut [T], pivot_idx: usize) -> usize {
+    let last_idx = array.len() - 1;
+    array.swap(pivot_idx, last_idx);
+    let mut less_than_tail = 0;
+    for cur_idx in 0..last_idx {
+        if array[cur_idx] <= array[last_idx] {
+            array.swap(less_than_tail, cur_idx);
+            less_than_tail += 1;
+        }
+    }
+    array.swap(less_than_tail, last_idx);
+    less_than_tail + 1
+}
+
+/// recursively calculate the median of the median blocks. This will give us an
+/// approximate median that guranteeds us a roughly even split
+fn get_approx_median_idx<'a, T>(macro_array: &[MedianBlock<'a, T>]) -> usize {
+    todo!()
+}
+
 /// Computes the index of the k-th smallest element in the `array`. This is sometimes
 /// referred to as the k-th order statistic. This procedure computes this value in
 /// O(n). Note that this is a more general method for finding the median i.e the
 /// (n/2)-th order statistic
-fn kth_order_statistic<'a, T>(array: &'a [T], k: usize) -> usize {
-    todo!()
+fn kth_order_statistic<'a, T: Ord>(array: &'a mut [T], k: usize) -> &T {
+    match 5.cmp(&array.len()) {
+        Ordering::Less | Ordering::Equal => &array[get_kth_by_sorting(array, k)],
+        Ordering::Greater => {
+            let macro_array = generate_macro_array(array);
+            let approx_median_idx = get_approx_median_idx(macro_array.as_slice());
+            let left_range_size = partition_at_pivot(array, approx_median_idx);
+            match k.cmp(&left_range_size) {
+                Ordering::Equal => &array[k - 1],
+                Ordering::Less => kth_order_statistic(&mut array[..left_range_size], k),
+                Ordering::Greater => {
+                    kth_order_statistic(&mut array[left_range_size..], k - left_range_size)
+                }
+            }
+        }
+    }
 }
 ```
 The median of medians procedure has a few key structures:
