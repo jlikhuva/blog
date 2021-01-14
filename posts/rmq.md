@@ -397,9 +397,21 @@ impl <'a, T> RMQBlockDecomposition<'a, T> {}
 ```
 So, Block decomposition allowed us to have linear pre-processing time. However, in the process, we lost our constant query time? Can we do better than <!-- $\sqrt{n}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k4Mu0nuOVP.svg"> while still maintaining a linear pre-processing time? Yes. We can use a mix of block decomposition and sparse tables to achieve this. Let's see how. 
 
-**Hybrid Strucures**
+#### Hybrid Strucures
+When discussing block decomposition, after decomposing the input into micro arrays, we went ahead and solved the original problem on each block, treating each as a reduced instance of the original. We also did the same for the macro array. In the preceding section, we solved the problem by doing a linear scan. We can, however, use methods from previos sections -- sparse and dense lookup tables to solve the problem on the micro and macro arrays. When we do that, we end up with hybrid solutions that have faster query times. In this section, we shall explore a few hybrid structures and characterize their runtimes. 
 
+To create a hybrid structure, we need to decide which method we want to use to solve the problem on the macro array and on each micro array. By mixing and matching methods, we get different hybrids with different runtimes as shown in the table below.
+|Block Size|Macro Array Method|Micro Array Method|Runtime|
+|----------|------------------|------------------|-------|
+|<!-- $\lg n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/VfomraIoyi.svg">   | Sparse Table | Linear Scan |<!-- $\left<O(n), O(\lg n\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/iVybTYrhUA.svg">|
+|<!-- $\lg n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/VfomraIoyi.svg">    | Sparse Table | Sparse Table |<!-- $\left<O(n \lg \lg n), O(1\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/0m8X2tOgH1.svg">|
+|<!-- $\lg n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/VfomraIoyi.svg">    | The first hybrid in this table| Sparse Table|<!-- $\left<O(n), O(\lg \lg n\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cUT7DO2po5.svg">|
 
+Below, we implement the first hybrid method
+```rust
+/// WIP
+```
+By this point we have a nifty and quite efficient algorithm for the offline range min query problem. However, the title of the note did promise an `<O(n), O(1)>` solution. We discuss that in the next section with the caveat that the added constant factors that give us assymptotic constant query time may slow down the algorithm in practice. As noted [here](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf), the preceding `<O(n), O(lg)>` hybrid solution outperforms the `<O(n), O(1)>` solution in practice.
 #### Cartesian Trees & The LCA-RMQ Equivalence
 
 #### The Fischer-Heun RMQ Structure
