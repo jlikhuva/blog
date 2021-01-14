@@ -236,14 +236,16 @@ pub struct MedianBlock<'a, T> {
 impl<'a, T> From<(usize, usize, &'a [T], usize)> for MedianBlock<'a, T> {
     fn from(block: (usize, usize, &'a [T], usize)) -> Self {
         let start_idx = block.0;
-        let end_idx = block.1;
+        let mut end_idx = block.1;
         let len = block.2.len();
         let median_idx = block.3;
+        if end_idx >= len {
+            end_idx = len - 1;
+        }
         debug_assert!(start_idx < end_idx);
-        debug_assert!(end_idx < len);
         debug_assert!(median_idx >= start_idx && median_idx <= end_idx);
         if end_idx < len {
-            debug_assert!(end_idx - start_idx == 4);
+            debug_assert!(end_idx - start_idx == 5);
         }
         MedianBlock {
             start_idx,
@@ -256,10 +258,42 @@ impl<'a, T> From<(usize, usize, &'a [T], usize)> for MedianBlock<'a, T> {
 ```
 With the above abstractions in place, we can go ahead and implement the main procedure
 ```rust
+//! Median of Medians Helper Functions. These will come in handy when implementing
+//! multi-level data structures that use the method of four russians
+
+/// Block partitioning and aggregation. This is the same for all
+/// Method of Four Russians Algorithms
+fn generate_macro_array<'a, T: Ord>(array: &'a [T]) -> Vec<MedianBlock<'a, T>> {
+    let mut blocks = Vec::with_capacity(5);
+    for start_idx in (0..array.len()).step_by(5) {
+        let end_idx = (start_idx + 5) - 1;
+        let median_idx = get_median_idx_by_sorting(&array[start_idx..=end_idx]);
+        blocks.push((start_idx, end_idx, array, median_idx).into())
+    }
+    blocks
+}
+
+/// This solves the problem for a single block. This changes from problem to problem.
+/// For instance, when we solving RMQ, this will be get_min_idx_by_scanning. You can
+/// definitely think of a way of creating an abstraction that can solve any
+/// method of four russians problem by having the client provide a funtion for
+/// block partitioning and solving the block level problem. 
+fn get_median_idx_by_sorting<T: Ord>(block: &[T]) -> usize {
+    let sorted: Vec<_> = block
+        .iter()
+        .enumerate()
+        .sorted_by_key(|x| x.1)
+        .map(|x| x.0)
+        .collect();
+    sorted[sorted.len()/2]
+}
+```
+```rust
 /// Computes the index of the k-th smallest element in the `array`. This is sometimes
 /// referred to as the k-th order statistic. This procedure computes this value in
-/// O(n).
-fn median_of_medians<'a, T>(array: &'a [T], k: usize) -> usize {
+/// O(n). Note that this is a more general method for finding the median i.e the
+/// (n/2)-th order statistic
+fn kth_order_statistic<'a, T>(array: &'a [T], k: usize) -> usize {
     todo!()
 }
 ```
