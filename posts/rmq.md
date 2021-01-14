@@ -264,10 +264,11 @@ With the above abstractions in place, we can go ahead and implement the main pro
 /// Block partitioning and aggregation. This is the same for all
 /// Method of Four Russians Algorithms
 fn generate_macro_array<'a, T: Ord>(array: &'a [T]) -> Vec<MedianBlock<'a, T>> {
-    let mut blocks = Vec::with_capacity(5);
+    let mut blocks = Vec::with_capacity(array.len()/5);
     for start_idx in (0..array.len()).step_by(5) {
         let end_idx = (start_idx + 5) - 1;
-        let median_idx = get_median_idx_by_sorting(&array[start_idx..=end_idx]);
+        let block = &array[start_idx..=end_idx];
+        let median_idx = get_kth_by_sorting(block, block.len() / 2);
         blocks.push((start_idx, end_idx, array, median_idx).into())
     }
     blocks
@@ -279,13 +280,13 @@ fn generate_macro_array<'a, T: Ord>(array: &'a [T]) -> Vec<MedianBlock<'a, T>> {
 /// method of four russians problem by having the client provide a funtion for
 /// block partitioning and solving the block level problem. 
 fn get_kth_by_sorting<T: Ord>(block: &[T], k: usize) -> usize {
-    let sorted: Vec<_> = block
+    let kth = block
         .iter()
         .enumerate()
         .sorted_by_key(|x| x.1)
         .map(|x| x.0)
-        .collect();
-    sorted[k]
+        .nth(k);
+    kth.unwrap()
 }
 
 /// Reorient the elements of the array around the element at `pivot_idx` and
@@ -306,15 +307,24 @@ fn partition_at_pivot<T: Ord>(array: &mut [T], pivot_idx: usize) -> usize {
 
 /// recursively calculate the median of the median blocks. This will give us an
 /// approximate median that guranteeds us a roughly even split
-fn get_approx_median_idx<'a, T>(macro_array: &[MedianBlock<'a, T>]) -> usize {
-    todo!()
+fn get_approx_median_idx<'a, T: Ord + Clone>(macro_array: &mut [MedianBlock<'a, T>]) -> usize {
+    let median_pos = macro_array.len() / 2;
+    let mut medians: Vec<_> = macro_array.iter().map(|x| x.median.clone()).collect();
+    let approx_median = kth_order_statistic(&mut medians, median_pos);
+    let mut median_idx = 0;
+    for block in macro_array {
+        if block.median == approx_median {
+            median_idx = block.start_idx + block.median_idx;
+        }
+    }
+    median_idx
 }
 
 /// Computes the index of the k-th smallest element in the `array`. This is sometimes
 /// referred to as the k-th order statistic. This procedure computes this value in
 /// O(n). Note that this is a more general method for finding the median i.e the
 /// (n/2)-th order statistic
-fn kth_order_statistic<'a, T: Ord>(array: &'a mut [T], k: usize) -> &T {
+fn kth_order_statistic<'a, T: Ord + Clone>(array: &'a mut [T], k: usize) -> &T {
     match 5.cmp(&array.len()) {
         Ordering::Less | Ordering::Equal => &array[get_kth_by_sorting(array, k)],
         Ordering::Greater => {
@@ -411,7 +421,7 @@ Below, we implement the first hybrid method
 ```rust
 /// WIP
 ```
-By this point we have a nifty and quite efficient algorithm for the offline range min query problem. However, the title of the note did promise an `<O(n), O(1)>` solution. We discuss that in the next section with the caveat that the added constant factors that give us assymptotic constant query time may slow down the algorithm in practice. As noted [here](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf), the preceding `<O(n), O(lg)>` hybrid solution outperforms the `<O(n), O(1)>` solution in practice.
+By this point we have a cool and quite efficient algorithm for the offline range min query problem. However, the title of the note did promise an `<O(n), O(1)>` solution. We discuss that in the next section with the caveat that the added constant factors that give us assymptotic constant query time may slow down the algorithm in practice. As noted [here](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf), the preceding `<O(n), O(lg)>` hybrid solution outperforms the `<O(n), O(1)>` solution in practice.
 
 #### Cartesian Trees & The LCA-RMQ Equivalence
 To fully understand the upcoming `<O(n), O(1)>` solution, we need to to first get an intimate understanding of Cartesian Trees. They are largely responsible for the constant time lookup. In this section, we begin by discussing what cartesian trees are and how to efficently construct them. We then implement a cartesian tree.
