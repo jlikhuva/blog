@@ -412,6 +412,8 @@ Below, we implement the first hybrid method
 /// WIP
 ```
 By this point we have a nifty and quite efficient algorithm for the offline range min query problem. However, the title of the note did promise an `<O(n), O(1)>` solution. We discuss that in the next section with the caveat that the added constant factors that give us assymptotic constant query time may slow down the algorithm in practice. As noted [here](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf), the preceding `<O(n), O(lg)>` hybrid solution outperforms the `<O(n), O(1)>` solution in practice.
+
 #### Cartesian Trees & The LCA-RMQ Equivalence
+To fully understand the upcoming `<O(n), O(1)>` solution, we need to to first get an intimate understanding of Cartesian Trees. They are largely responsible for the constant time lookup. In this section, we begin by discussing what cartesian trees are and how to efficently construct them. We then implement a cartesian tree.
 
 #### The Fischer-Heun RMQ Structure
