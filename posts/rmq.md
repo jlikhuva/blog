@@ -340,7 +340,7 @@ fn kth_order_statistic<'a, T: Ord + Clone>(array: &'a mut [T], k: usize) -> &T {
             }
         }
     }
-}
+} 
 ```
 The median of medians procedure has a few key structures:
 * The input is divided into blocks or equal size. This is called block partitioning and each block is called the micro array.
@@ -404,6 +404,8 @@ pub struct RMQBlockDecomposition<'a, T> {
 
 impl <'a, T> RMQBlockDecomposition<'a, T> {}
 
+/// WIP: The naive hybrid
+
 ```
 So, Block decomposition allowed us to have linear pre-processing time. However, in the process, we lost our constant query time? Can we do better than <!-- $\sqrt{n}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k4Mu0nuOVP.svg"> while still maintaining a linear pre-processing time? Yes. We can use a mix of block decomposition and sparse tables to achieve this. Let's see how. 
 
@@ -419,11 +421,36 @@ To create a hybrid structure, we need to decide which method we want to use to s
 
 Below, we implement the first hybrid method
 ```rust
-/// WIP
+/// WIP: The cool hybrid
 ```
 By this point we have a cool and quite efficient algorithm for the offline range min query problem. However, the title of the note did promise an `<O(n), O(1)>` solution. We discuss that in the next section with the caveat that the added constant factors that give us assymptotic constant query time may slow down the algorithm in practice. As noted [here](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf), the preceding `<O(n), O(lg)>` hybrid solution outperforms the `<O(n), O(1)>` solution in practice.
 
 #### Cartesian Trees & The LCA-RMQ Equivalence
 To fully understand the upcoming `<O(n), O(1)>` solution, we need to to first get an intimate understanding of Cartesian Trees. They are largely responsible for the constant time lookup. In this section, we begin by discussing what cartesian trees are and how to efficently construct them. We then implement a cartesian tree.
 
+##### Cartesian Trees
+A cartesian tree is a derivative data structure. It is derived from an underlying array. More formally, the cartesian tree `T` of an array `A` is a min binary heap of the elements of `A` organized such that an in order traversal of the tree yields the original array. How can we construct such a tree given some input array? The main observations that will guide our construction will be the requirement that an in-order traversal must yield the array elements in their positional order, and the requirement that the tree be a min heap. During an in-order traversal, the right child is retrieved after both the parent and the left child -- consequently, the right-most node will be the last node retrieved. We can thus build the tree [incrementaly](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f), adding each new element as the rightmost node of the tree.
+
+More specifically,  we'll build the cartesian tree incrementally -- adding in elements in the order that they appear in the array. To add an element <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg">, we inspect the right spine of the tree starting with the right most node. We follow parent pointers until we find an element, <!-- $\psi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qPR3FOEHUn.svg">,  in the tree that is smaller that <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg">. We modify the tree, making <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg"> a right child of <!-- $\psi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qPR3FOEHUn.svg">. We also make the rest of the right subtree that is below <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg"> a left subtree of the new node. We implement this scheme below.
+```rust
+/// WIP: Cartesian Tree construction
+```
+Why are cartesian trees important, and how are they related to the `RMQ` problem? First, notice that once we have a cartesian tree for an array, we can answer any `RMQ` on that array. In particular, <!-- $RMQ_A(i, j) = LCA_T(A[i], A[j])$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/s3WLVY6DAX.svg">. That is we can answer `RMQ` by doing lowest common ancerstor searches in the cartesian tree. Although this idea is intrinsically interesting, we do not explore it further. To fully appreciate the importance of cartesian trees and their relation to the data structure design problem at hand, we have to explore when and how two arrays have isomorphic trees. This will lead us to a way of figuring out when two blocks can share the same pre-processed index -- a thing that will lead us to an `RMQ` data structure with constant query time.
+
+##### Cartesian Tree Isomorphisms
+When do two cartesian trees for two different arrays, <!-- $B_1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pCi7uET35K.svg">, <!-- $B_2$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/1b0Fxslia6.svg"> have the same shape? How can we tell this efficiently?
+
+```rust
+/// WIP: Cartesian Tree number
+```
+
+
 #### The Fischer-Heun RMQ Structure
+```rust
+/// WIP: The Whole Enchilada
+```
+Thus, our final data structure has the following features:
+|Block Size|Macro Array Method|Micro Array Method|Runtime|
+|----------|------------------|------------------|-------|
+|`0.25 lg n`| Sparse Table| Sparse Table with Cartesian Tree based caching|`<O(n), O(1)>`|
+As discussed earlier, although this method has impressive  asymptotic numbers, it is often outperformed in practice by the hybrid with logarithmic query time. Furthermore, this method is a lot more complex. That is another reason, from an engineering standpoint, to prefer the `<O(n), O(lg)>` -- much less code, and just as fast.
