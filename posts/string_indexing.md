@@ -114,7 +114,62 @@ Now that we our suffix array, how can we use it to do substring search? In parti
 #### The LCP Array: Kasai's Procedure
 Suffix arrays are fairly useful on their own. However, they become even more useful when coupled with information about the lengths of common prefixes. In particular, the time to do substring matching is greatly reduced if we know the length of the longest common prefixes between all pairs of adjacent suffixes in the suffix array. How can we get that information? We explore that here.
 
-#### The Suffix Array: A Liner Time Solution
+**A Naive Solution:** Given a suffix array, the most straightforward way to construct an LCP array is to scan over the elements of the array, calculating the lengths of common prefixes for all adjacent suffixes. We implement that below.
+```rust
+/// The length of the longest common prefix between the
+/// suffixes that start at `left` and `right`. These
+/// suffixes are adjacent to each other in the suffix array
+#[derive(Debug)]
+pub struct LCPHeight {
+    left: SuffixIndex,
+    right: SuffixIndex,
+    height: usize,
+}
+
+impl<'a> SuffixArray<'a> {
+    /// Retrieve the index of the siffic array stored at this location
+    /// in the suffix array. Put another way, we retrieve the id
+    /// of the (idx + 1) smallest suffix in the string
+    pub fn get_suffix_idx_at(&self, idx: usize) -> SuffixIndex {
+        // These clones are quite cheap
+        self.suffix_array[idx].clone()
+    }
+}
+
+/// Calculate the length of the longest common prefix
+/// between the two string slices in linear time
+fn calculate_lcp_len(left: &str, right: &str) -> usize {
+    let mut len = 0;
+    for (l, r) in left.as_bytes().iter().zip(right.as_bytes()) {
+        if l != r {
+            break;
+        }
+        len += 1;
+    }
+    len
+}
+
+/// The naive procedure described in the preceding section
+fn make_lcp_by_scanning(sa: &SuffixArray) -> Vec<LCPHeight> {
+    let mut lcp_len_array = Vec::with_capacity(sa.len());
+    for i in 1..sa.len() - 1 {
+        let prev_sa_idx = SuffixArrayIndex(i - 1);
+        let cur_sa_idx = SuffixArrayIndex(i);
+        let lcp_len = calculate_lcp_len(&sa[prev_sa_idx], &sa[cur_sa_idx]);
+        lcp_len_array.push(LCPHeight {
+            left: sa.get_suffix_idx_at(i - 1),
+            right: sa.get_suffix_idx_at(i),
+            height: lcp_len,
+        });
+    }
+    lcp_len_array
+}
+```
+How fast is this procedure? Well, clearly it takes at least `O(n)`. To get a tighter bound, we need to investigate the worst case behavior of the inner loop tha calculates the `LCP` between two suffixes. Suppose that the two strings are identical except that one is one character shorter than the other. In tha case, the inner loop will iterate `n-1` times. this means that the runtime of this procedure is <!-- $O(n^2)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/I7UitjU2R1.svg">. This is bad. Do note that the example used is not a degenerate case, it is quite likely to occur when dealing with really long strings (for example 3 billion characters) from a really small alphabet (for instance <!-- $\Sigma = 4$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/rRwYDAdqVg.svg">). We need a faster method. 
+
+**[Kasai's Procedure:](http://web.cs.iastate.edu/~cs548/references/linear_lcp.pdf)** The main reason why the naive solution is sub-optimal is the inner loop. If we could somehow reduce the time needed to compute `LCP` values, we could markedly improve the overall runtime.
+
+#### The Suffix Array: A Linear Time Solution
 In the first section, we implemented a suffix array construction algorithm (SACA) that worked by sorting the suffixes. During that discussion, we noted that the runtime of that scheme is lower bounded by the time it takes to sort the suffixes. For long sequences, this time can be quite large. For example, may want to build a suffix array of the human genome approx: 3 bilion characters. Can we do better? [Can we shave off a log factor](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#the-method-of-four-russians)? Yes. Yes we can. We won't use the method of four russians though (I should note that sometimes whenever I stare at SA-IS, the algorithm we're about to discuss, I'm almost convinced that it can be characterized using the method of four russians). 
 
 **SA-IS: A suffix array via Induced Sorting**

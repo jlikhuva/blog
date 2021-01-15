@@ -346,9 +346,9 @@ The median of medians procedure has a few key structures:
 * The input is divided into blocks or equal size. This is called block partitioning and each block is called the micro array.
 * The original problem (median in this case) is solved for each block using a naive method that works well for small input sizes. With this scheme, we are able to solve the problem for each block in constant time and for all blocks in linear time.
 * The solutions to all blocks are aggregated into a single array. We call this the macro array. The macro array, just like the micro arrays, are smaller instances of the original problem.
-* By combining, in some bespoke fashion, the macro and micro array solutions, we are able to solve the original problem with a log factor shaved off. In `MoM` we went from `Quickselect's` `O(n lg n)` to `O(n)`.  
+* By combining, in some bespoke fashion, the macro and micro array solutions, we are able to solve the original problem with a log factor shaved off. In `MoM` we went from `Quickselect's` `O(n lg n)` to `O(n)` (For a rigorous runtime analysis of the median of medians method, please refer to CLRS chapter 9).  
   
-The structures above are the major motifs in the method of four russians. How can we use this method to reduce the pre-processing time of our RMQ algorithm? We discuss that next.
+The structures above are the four major motifs in the method of four russians. How can we use this method to reduce the pre-processing time of our RMQ algorithm? We discuss that next.
 
 **Two-Level Structures**
 
