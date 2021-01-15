@@ -453,4 +453,5 @@ Thus, our final data structure has the following features:
 |Block Size|Macro Array Method|Micro Array Method|Runtime|
 |----------|------------------|------------------|-------|
 |`0.25 lg n`| Sparse Table| Sparse Table with Cartesian Tree based caching|`<O(n), O(1)>`|
+
 As discussed earlier, although this method has impressive  asymptotic numbers, it is often outperformed in practice by the hybrid with logarithmic query time. Furthermore, this method is a lot more complex. That is another reason, from an engineering standpoint, to prefer the `<O(n), O(lg)>` -- much less code, and just as fast.
