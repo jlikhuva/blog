@@ -93,7 +93,7 @@ Any positive integer can be factored into a sum of powers of two. This binary fa
 
 **Preprocessing**
 
-How can we use these observations to construct a solution to our problem? To see how, let us first consider  how we would construct a sparse table. To create the sparse table, we simply precompute the RMQ answers to all ranges whose length is a power of 2. For an array of length `n`, there are `O(lg n)` such ranges. To cover all possible ranges, we have to perform this precomputation for all `n` possible starting positions. Therefore, the time needed to create the sparse table is <!-- $\mathcal{O}(n \log n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/CEiOpX0Hzv.svg">.We implement this scheme below.
+How can we use these observations to construct a solution to our problem? First, note that powers of two are sparsely distributed among positive integers. Also, because they can be combined to form any other number, if we had a table with answers to all possible ranges whose size is a power of two, we would be able to get answers for any range. How can we construct such sparse table? For an array of length `k`, there are `O(lg k)`  ranges whose size is a power of two (just as there are `lg x` bits in the binary representation of `x`).We shall thus construct the sparse table by computing answers to all `lg k` ranges for all `n` possible values of `k`. Therefore, the time needed to create the sparse table is <!-- $\mathcal{O}(n \log n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/CEiOpX0Hzv.svg">.We implement this scheme below.
 ```rust
 /// An index into our sparse table
 pub struct SparseTableIdx {
@@ -369,7 +369,7 @@ So, we set `b` to the square root of `n`. This gives us a query time of <!-- $\m
 ```rust
 /// The abstraction for a single block. This is exactly like
 /// we had for median_of_medians
-pub struct RMQBlock<'a, T> {
+struct RMQBlock<'a, T> {
     /// The starting index. This is 0-indexed and should be
     /// less than or equal to the end_idx
     start_idx: usize,
