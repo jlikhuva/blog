@@ -1,3 +1,4 @@
+# String Indexing
 #### Introduction
 I lied. We will not talk about Tries. We will, however, discuss two structures that are foundational to tasks that need to do substring matching: The Suffix Array and The Longest Common Prefix Array. We'll explore two linear time procedures (SA-IS & Kasai's Algorithm) for constructing these data structures given some underlying, fairly static string from some alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">.
 
@@ -73,7 +74,7 @@ pub struct SuffixArray<'a> {
 }
 
 /// This is an index into the suffix array
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Ord, PartialOrd)]
 pub struct SuffixArrayIndex(usize);
 
 /// This allows us to easily retrieve the suffix strings by using bracket
@@ -152,7 +153,7 @@ fn calculate_lcp_len(left: &str, right: &str) -> usize {
 /// The naive procedure described in the preceding section
 fn make_lcp_by_scanning(sa: &SuffixArray) -> Vec<LCPHeight> {
     let mut lcp_len_array = Vec::with_capacity(sa.len());
-    for i in 1..sa.len() - 1 {
+    for i in 1..sa.len() {
         let prev_sa_idx = SuffixArrayIndex(i - 1);
         let cur_sa_idx = SuffixArrayIndex(i);
         let lcp_len = calculate_lcp_len(&sa[prev_sa_idx], &sa[cur_sa_idx]);
@@ -167,10 +168,69 @@ fn make_lcp_by_scanning(sa: &SuffixArray) -> Vec<LCPHeight> {
 ```
 How fast is this procedure? Well, clearly it takes at least `O(n)`. To get a tighter bound, we need to investigate the worst case behavior of the inner loop that calculates the `LCP` between two suffixes. Suppose that the two strings are identical except that one is one character shorter than the other. In that case, the inner loop will iterate `n-1` times. This means that the runtime of this procedure is <!-- $O(n^2)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/I7UitjU2R1.svg">. This is bad. Do note that the example used is not a degenerate case, it is quite likely to occur when dealing with really long strings (for example 3 billion characters) from a really small alphabet (for instance <!-- $\Sigma = 4$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/rRwYDAdqVg.svg">). We need a faster method. 
 
-**[Kasai's Procedure:](http://web.cs.iastate.edu/~cs548/references/linear_lcp.pdf)** The main reason why the naive solution is sub-optimal is the inner loop. If we could somehow reduce the time needed to compute `LCP` values, we could markedly improve the overall runtime. The first thing to observe is that when implementing the naïve procedure, we iterated over the suffix array -- not the underlying string. Because of this,  
+**[Kasai's Procedure:](http://web.cs.iastate.edu/~cs548/references/linear_lcp.pdf)** The main reason why the naive solution is sub-optimal is the inner loop. If we could somehow reduce the time needed to compute `LCP` values, we could markedly improve the overall runtime. The first thing to observe is that when implementing the naïve procedure, we iterated over the suffix array -- not the underlying string. Because of this,  we are unable to exploit the fact that the only difference between two suffixes $S_i, \text { and } S_{i + 1}$ that are adjacent to each other _in the string_ is that one has one more character at the start. Suppose we have already found the `lcp` length between `S_i` and the `S_k`, a suffix adjacent to it _in the suffix array_, to be `h > 1`. How can we use this information to calculate the lcp length between $S_{i +1}$ and `S_j`, the suffix adjacent to it in the suffix array? The key insight stems from observing that if we delete the first character from $S_i$ we get $S_{i + 1}$, and since `h > 1` deleting that character from `S_j` yields another suffix that is adjacent to $S_{i + 1}$ with overlap in at least `h-1` location. Therefore, to calculate the `lcp` between the shorter suffixes, we do not need to compare the first `h-1` suffixes for we already know that they are the same. This effectively reduced the number of times the inner loop iterates and results in a linear time solution. We implement this scheme below.
 ```rust
-/// WIP: Kasai's LCP Construction Algorithm
+impl From<(SuffixIndex, SuffixIndex, usize)> for LCPHeight {
+    fn from((l, r, h): (SuffixIndex, SuffixIndex, usize)) -> Self {
+        LCPHeight {
+            left: l,
+            right: r,
+            height: h,
+        }
+    }
+}
+/// Computes the lcp array in O(n) using Kasai's algorithm. This procedure assumes that
+/// the sentinel character has been appended onto `s`.
+fn make_lcp_by_kasai(s: &str, sa: &SuffixArray) -> Vec<LCPHeight> {
+    let s_ascii = s.as_bytes();
+    let mut lcp_array = Vec::with_capacity(s.len());
+    // We need a quick way to move from the index of the suffix in the
+    // string (the `SuffixIndex`) to the index of that same string in the
+    // suffix array (the `SuffixArrayIndex` aka the rank). This map
+    // will allow us to do that once populated.
+    let mut suffix_index_to_rank = HashMap::with_capacity(s.len());
+    for i in 1..s.len() {
+        suffix_index_to_rank.insert(sa.get_suffix_idx_at(i), SuffixArrayIndex(i));
+        lcp_array.push((sa.get_suffix_idx_at(i - 1), sa.get_suffix_idx_at(i), 0).into())
+    }
+    let mut h = 0;
+    // We then loop over all the suffixes one by one. One thing to note that we
+    // are looping over the suffixes in the order they occur in the underlying
+    // string. This order is different from the order in which they occur in
+    // the suffix array. This means that we will not fill the `lcp_array`
+    // in order
+    for i in 0..s.len()-1 {
+        let cur_suffix_index = SuffixIndex(i);
+        // We are currently processing the suffix that starts at index `i` in
+        // the underlying string. We'd like to know where this suffix
+        // is located in the lexicographically sorted suffix array
+        let location_in_sa = suffix_index_to_rank.get(&cur_suffix_index).unwrap();
+
+        // grab a hold of the id of the suffix that is just before `location_in_sa`
+        // in the suffix array
+        let left_adjacent_suffix = sa.get_suffix_idx_at(location_in_sa.0 - 1);
+
+        // Here, we compute the length of the longest common prefix between
+        // the current suffix and the suffix that is left of it in the suffix
+        // array
+        while s_ascii[cur_suffix_index.0 + h] == s_ascii[left_adjacent_suffix.0 + h] {
+            h += 1
+        }
+        lcp_array[location_in_sa.0 - 1] = (left_adjacent_suffix, cur_suffix_index, h).into();
+
+        // When we move from i to i+1, we are effectively moving from processing the suffix
+        // A[i..] to processing the suffix A[i+1..]. Notice how this is the same as moving
+        // to processing a suffix formed by dropping the first character of A[i..]. Therefore,
+        // Theorem 1 from Kasai et al. tells us that the lcp between the new shorter suffix
+        // and the suffix adjacent to its left in the suffix array is at least `h-1`
+        if h > 0 {
+            h -= 1
+        }
+    }
+    lcp_array
+}
 ```
+
 
 #### The Suffix Array: A Linear Time Solution
 In the first section, we implemented a suffix array construction algorithm (SACA) that worked by sorting the suffixes. During that discussion, we noted that the runtime of that scheme is lower bounded by the time it takes to sort the suffixes. For long sequences, this time can be quite large. For example, may want to build a suffix array of the human genome approx: 3 bilion characters. Can we do better? [Can we shave off a log factor](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#the-method-of-four-russians)? Yes. Yes we can. We won't use the method of four russians though (I should note that sometimes whenever I stare at SA-IS, the algorithm we're about to discuss, I'm almost convinced that it can be characterized using the method of four russians). 
