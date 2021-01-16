@@ -235,9 +235,36 @@ fn make_lcp_by_kasai(s: &str, sa: &SuffixArray) -> Vec<LCPHeight> {
 #### The Suffix Array: A Linear Time Solution
 In the first section, we implemented a suffix array construction algorithm (SACA) that worked by sorting the suffixes. During that discussion, we noted that the runtime of that scheme is lower bounded by the time it takes to sort the suffixes. For long sequences, this time can be quite large. For example, may want to build a suffix array of the human genome approx: 3 bilion characters. Can we do better? [Can we shave off a log factor](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#the-method-of-four-russians)? Yes. Yes we can. We won't use the method of four russians though (I should note that sometimes whenever I stare at SA-IS, the algorithm we're about to discuss, I'm almost convinced that it can be characterized using the method of four russians). 
 
-**SA-IS: A suffix array via Induced Sorting:**
+##### SA-IS: A suffix array via Induced Sorting
 What is `induced sorting?` and how does it differ from normal sorting? The word `induce` in the title of this procedure refers to inductive reasoning or, more plainly, inference. `induced sorting` is thus sorting by inference. Note that I'm using the term `inference` in its natural language sense, not its statistical sense. As we shall see, in induced sorting, we are able to infer the order of certain suffixes once we know the order of some specific suffixes. This means that we can sort without comparisons and can thus beat the `n lg n` lower bound that hamstrung the naive SACA method. 
+
+###### Foundational Concepts
+**The Alphabet $\Sigma$**
 ```rust
-/// WIP: SA-IS
+/// WIP
+```
+**L-Type & S-Type Suffixes** 
+```rust
+/// WIP
+```
+**LMS Suffixes and Substrings**
+```rust
+/// WIP
+```
+**Buckets**
+```rust
+/// WIP
+```
+**Induced Sorting**
+```rust
+/// WIP
+```
+**Substring Renaming**
+```rust
+/// WIP
+```
+###### The Whole Enchilada
+```rust
+/// WIP
 ```
 

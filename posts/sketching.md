@@ -1,4 +1,4 @@
-#### Introduction
+# Sketching Algorithms
 #### The Foundational Idea: Hashing
 #### Fingerprints & Probability Amplification
 #### Bloom Filters

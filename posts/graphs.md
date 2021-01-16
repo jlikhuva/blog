@@ -1,4 +1,4 @@
-#### Introduction
+# Graphs: All Foundational Methods
 #### Type States In Rust
 #### Representing Graph with Indexes
 #### Adding Nodes
@@ -17,7 +17,7 @@
 4. ###### Graph Cuts + DFS: SCC
    
 #### Minimum Weight Spanning Trees
-1. ###### Prim's Algorithm
+1. ###### Prim's Algorithms
 2. ###### Kruskal's Algorithm
 
 #### APSP
