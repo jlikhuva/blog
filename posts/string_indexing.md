@@ -234,7 +234,7 @@ fn make_lcp_by_kasai(s: &str, sa: &SuffixArray) -> Vec<LCPHeight> {
 #### The Suffix Array: A Linear Time Solution
 In the first section, we implemented a suffix array construction algorithm (SACA) that worked by sorting the suffixes. During that discussion, we noted that the runtime of that scheme is lower bounded by the time it takes to sort the suffixes. For long sequences, this time can be quite large. For example, we may want to build a suffix array of the human genome approx: 3 bilion characters. Can we do better? [Can we shave off a log factor](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#the-method-of-four-russians)? Yes. Yes we can. We won't use the method of four russians though (I should note that sometimes whenever I stare at SA-IS, the algorithm we're about to discuss, I'm almost convinced that it can be characterized using the method of four russians). 
 
-##### SA-IS: A suffix array via Induced Sorting
+##### [SA-IS: A suffix array via Induced Sorting](https://ieeexplore.ieee.org/document/4976463)
 What is `induced sorting?` and how does it differ from normal sorting? The word `induce` in the title of this procedure refers to inductive reasoning or, more plainly, inference. `induced sorting` is thus sorting by inference. Note that I'm using the term `inference` in its natural language sense, not its statistical sense. As we shall see, in induced sorting, we are able to infer the order of certain suffixes once we know the order of some specific suffixes. This means that we can sort without comparisons and can thus beat the `n lg n` lower bound that hamstrung the naive SACA method. 
 
 ###### Foundational Concepts
@@ -244,7 +244,11 @@ Below, we briefly discuss some key ideas that we need in order to fully understa
 ```rust
 /// WIP
 ```
-**L-Type & S-Type Suffixes:** A suffix starting at some position `k` in some text `T` is an `S-type` suffix if: `T[k] < T[k + 1]` OR `T[k] == T[K + 1] AND k + 1 is an S-type suffix` OR `T[k] = $`, the sentinel character. Similarly, A suffix starting at some position `k` in some text `T` is an `L-type` suffix if `T[k] > T[k + 1]` OR `T[k] == T[K + 1] AND k + 1 is an L-type suffix`. Below we introduce abstractions that encode these ideas.
+**L-Type & S-Type Suffixes:** A suffix starting at some position `k` in some text `T` is an `S-type` suffix if: `T[k] < T[k + 1]` OR `T[k] == T[K + 1] AND k + 1 is an S-type suffix` OR `T[k] = $`, the sentinel character. Similarly, A suffix starting at some position `k` in some text `T` is an `L-type` suffix if `T[k] > T[k + 1]` OR `T[k] == T[K + 1] AND k + 1 is an L-type suffix`. 
+
+**LMS Suffixes and Substrings:** An `S` type suffix is said to be a Left Most S-suffix (LMS suffix for short) if it is an `S` type suffix that has an `L` type suffix as its left neighbor. The sentinel `$` is an `LMS` suffix by definition. An `LMS substring` is a contiguous slice of the underlying string that starts at the starting index of some `LMS` suffix and runs up to the start of the next, closest `LMS` suffix.
+
+What's the purpose of all these concepts? Well, SA-IS is based on two key ideas. The first one is that if we know the locations of the `LMS` suffixes in the suffix array, then we can infer the location of all the other suffixes (induced sorting). The second one is divide and conquer. Since SA-IS is a divide an conquer method it needs a way of reducing the problem space. This is called `substring renaming` in the literature. Since `LMS` suffixes are sparsely distributed in a string, SA-IS leverages the substrings that they produce (`LMS Substrings`) to reduce the problem size. We shall discuss how `substring renaming` is done later on. For now, let us introduce abstractions that allow us to work with the concepts we have seen so far.
 ```rust
 #[derive(Debug, PartialEq, Eq)]
 enum SuffixType {
@@ -292,20 +296,93 @@ impl<'a> Suffix<'a> {
     }
 }
 
+
 impl<'a> SuffixArray<'a> {
-    /// Create a list of the suffixes in the string.
-    fn create_suffixes(&self) -> Vec<Suffix> {
-        todo!()
+    /// Create a list of the suffixes in the string. We scan the underlying string left to right and
+    /// mark each corresponding suffix as either `L` or `S(false)`. Then we do a second right to left
+    /// scan and mark all LMS suffixes as `S(true)`. We also keep track of the locations of the lms
+    /// suffixes
+    fn create_suffixes(&self) -> (Vec<Suffix>, Vec<SuffixIndex>) {
+        let s_len = self.underlying.len();
+        let mut tags = vec![SuffixType::S(false); s_len];
+        let mut suffixes = Vec::with_capacity(s_len);
+        let mut lms_locations = Vec::with_capacity(s_len/2);
+        let s_ascii = self.underlying.as_bytes();
+
+        // We tag each chatacter as either `S` type or `L` type. Since
+        // we initialized everything as `S` type, we only need to mark
+        // the `L` type suffixes
+        for i in (0..s_len - 1).rev() {
+            let (cur, next) = (s_ascii[i], s_ascii[i + 1]);
+            if (cur > next) || (cur == next && tags[i + 1] == SuffixType::L) {
+                tags[i] = SuffixType::L;
+            }
+        }
+        // The first character can never be an `lms` suffix, so we skip it
+        // Similary, the last character, which is the sentinel `$` is definitely
+        // an lms suffix, so we deal with it outside the loop
+        for i in 1..s_len-1 {
+            match (tags[i - 1].clone(), &mut tags[i]) {
+                // If the left character is the start of an `L-type` suffix
+                // and the current character is an `S-type` suffix, then
+                // we mark the current suffix as an `lms` suffix. We
+                // ignore all other cases
+               (SuffixType::L, SuffixType::S(is_lms)) => {
+                   *is_lms = true;
+                   lms_locations.push(SuffixIndex(i));
+               },
+               _ => {} 
+            }
+        }
+        tags[s_len - 1] = SuffixType::S(true);
+        lms_locations.push(SuffixIndex(s_len - 1));
+
+        // Now that we have all the suffix tags in place, we can construct
+        // the list of suffixes in the string
+        for (i, suffix_type) in tags.into_iter().enumerate() {
+            suffixes.push((SuffixIndex(i), suffix_type, self.underlying).into())
+        }
+        (suffixes, lms_locations)
     }
 }
+
 ```
-**LMS Suffixes and Substrings**
+**Buckets:** A bucket is a contiguous region of the suffix array where all suffixes begin with the same character. That starting character serves as the label for that bucket. Buckets are important in SA-IS because, as we'll soon see, we use them for induced sorting. Specifically, by placing `LMS` suffixes in their buckets at the right locations, we are able to infer the appropriate locations of the other suffixes in those buckets. Below we introduce the abstraction for a bucket
 ```rust
-/// WIP
-```
-**Buckets**
-```rust
-/// WIP
+/// The first character of the suffixes in a bucket
+/// uniquely identifies that bucket
+pub struct BucketId<T>(T);
+
+impl<'a> Suffix<'a> {
+    /// We'll need a way to quickly tell what bucket a suffix belongs
+    /// to for us to insert it in that bucket at the appropriate
+    /// index
+    pub fn get_bucket(&self) -> BucketId<char> {
+        let first_char = self.underlying.chars().next();
+        debug_assert!(first_char.is_some());
+        BucketId(first_char.unwrap())
+    }
+}
+
+struct Bucket {
+    /// Index in suffix array where this bucket begins
+    start: SuffixArrayIndex,
+
+    /// Region in suffix array where this bucket ends.
+    /// Note that these indexes are 0-based and inclusive
+    end: SuffixArrayIndex,
+
+    /// Tells us how many suffixes have been inserted at the start
+    /// of this bucket. Doing `start + offset_from_start` gives us
+    /// the next empty index within this bucket from the start
+    /// The utility of this will become clear once we look at
+    /// the mechanics of induced sorting
+    offset_from_start: usize,
+
+    /// Used in a similar manner as `offset_from_start` just
+    /// from the end index
+    offset_from_end: usize,
+}
 ```
 **Induced Sorting**
 ```rust
