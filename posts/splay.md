@@ -147,7 +147,7 @@ impl<K: Ord, V> SplayTree<K, V> {
     }
 }
 ```
-#### Zig, ZigZig, & ZigZag
+#### Zig, ZigZig, & ZigZag [WIP]
 ```rust
 /// The three configurations that dictate the number, order,
 /// and nature of the rotations we perform during the splay operation
@@ -168,9 +168,8 @@ pub enum NodeConfig {
     ZigZag(ChildType),
 }
 ```
-#### The Splay Operation
+#### The Splay Operation[WIP]
 ```rust
-
 /// Implementation of the bottom up splay operation
 impl<K: Ord, V> SplayTree<K, V> {
     /// Moves the target node to the root of the tree using a series of rotations.
@@ -253,5 +252,14 @@ impl<K: Ord, V> SplayTree<K, V> {
 }
 ```
 #### Splitting & Merging Trees
+```rust
+/// WIP
+```
 #### The Full API
+```rust
+/// WIP
+```
 #### Testing the API
+```rust
+/// WIP
+```
