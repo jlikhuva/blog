@@ -1,5 +1,4 @@
 # String Indexing
-#### Introduction
 I lied. We will not talk about Tries. We will, however, discuss two structures that are foundational to tasks that need to do substring matching: The Suffix Array and The Longest Common Prefix Array. We'll explore two linear time procedures (SA-IS & Kasai's Algorithm) for constructing these data structures given some underlying, fairly static string from some alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">.
 
 #### Substring Search
@@ -168,7 +167,7 @@ fn make_lcp_by_scanning(sa: &SuffixArray) -> Vec<LCPHeight> {
 ```
 How fast is this procedure? Well, clearly it takes at least `O(n)`. To get a tighter bound, we need to investigate the worst case behavior of the inner loop that calculates the `LCP` between two suffixes. Suppose that the two strings are identical except that one is one character shorter than the other. In that case, the inner loop will iterate `n-1` times. This means that the runtime of this procedure is <!-- $O(n^2)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/I7UitjU2R1.svg">. This is bad. Do note that the example used is not a degenerate case, it is quite likely to occur when dealing with really long strings (for example 3 billion characters) from a really small alphabet (for instance <!-- $\Sigma = 4$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/rRwYDAdqVg.svg">). We need a faster method. 
 
-**[Kasai's Procedure:](http://web.cs.iastate.edu/~cs548/references/linear_lcp.pdf)** The main reason why the naive solution is sub-optimal is the inner loop. If we could somehow reduce the time needed to compute `LCP` values, we could markedly improve the overall runtime. The first thing to observe is that when implementing the naïve procedure, we iterated over the suffix array -- not the underlying string. Because of this,  we are unable to exploit the fact that the only difference between two suffixes <!-- $S_i, \text { and } S_{i + 1}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cUBE3Nhoei.svg"> that are adjacent to each other _in the string_ is that one has one more character at the start. Suppose we have already found the `lcp` length between `S_i` and the `S_k`, a suffix adjacent to it _in the suffix array_, to be `h > 1`. How can we use this information to calculate the lcp length between <!-- $S_{i +1}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/dXwLj9E9Lo.svg"> and `S_j`, the suffix adjacent to it in the suffix array? The key insight stems from observing that if we delete the first character from `S_i` we get <!-- $S_{i +1}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/dXwLj9E9Lo.svg">, and since `h > 1` deleting that character from `S_j` yields another suffix that is adjacent to <!-- $S_{i +1}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/dXwLj9E9Lo.svg"> with overlap in at least `h-1` location. Therefore, to calculate the `lcp` between the shorter suffixes, we do not need to compare the first `h-1` suffixes for we already know that they are the same. This effectively reduced the number of times the inner loop iterates and results in a linear time solution. We implement this scheme below.
+**[Kasai's Procedure:](http://web.cs.iastate.edu/~cs548/references/linear_lcp.pdf)** The main reason why the naive solution is sub-optimal is the inner loop. If we could somehow reduce the time needed to compute `LCP` values, we could markedly improve the overall runtime. The first thing to observe is that when implementing the naïve procedure, we iterated over the suffix array -- not the underlying string. Because of this,  we are unable to exploit the fact that the only difference between two suffixes <!-- $S_i, \text { and } S_{i + 1}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cUBE3Nhoei.svg"> that are adjacent to each other _in the string_ is that one has one more character at the start. Suppose we have already found the `lcp` length between `S_i` and the `S_k`, a suffix adjacent to it _in the suffix array_, to be `h > 1`. How can we use this information to calculate the lcp length between <!-- $S_{i +1}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/dXwLj9E9Lo.svg"> and `S_j`, the suffix adjacent to it in the suffix array? The key insight stems from observing that if we delete the first character from `S_i` we get <!-- $S_{i +1}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/dXwLj9E9Lo.svg">, and since `h > 1` deleting that character from `S_j` yields another suffix that is adjacent to <!-- $S_{i +1}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/dXwLj9E9Lo.svg"> with overlap in at least `h-1` location. Therefore, to calculate the `lcp` between the shorter suffixes, we do not need to compare the first `h-1` suffixes for we already know that they are the same. This effectively reduces the number of times the inner loop iterates and results in a linear time solution. See the linked paper for a proof of correctness and runtime analysis. We implement this scheme below.
 ```rust
 impl From<(SuffixIndex, SuffixIndex, usize)> for LCPHeight {
     fn from((l, r, h): (SuffixIndex, SuffixIndex, usize)) -> Self {
@@ -233,19 +232,72 @@ fn make_lcp_by_kasai(s: &str, sa: &SuffixArray) -> Vec<LCPHeight> {
 
 
 #### The Suffix Array: A Linear Time Solution
-In the first section, we implemented a suffix array construction algorithm (SACA) that worked by sorting the suffixes. During that discussion, we noted that the runtime of that scheme is lower bounded by the time it takes to sort the suffixes. For long sequences, this time can be quite large. For example, may want to build a suffix array of the human genome approx: 3 bilion characters. Can we do better? [Can we shave off a log factor](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#the-method-of-four-russians)? Yes. Yes we can. We won't use the method of four russians though (I should note that sometimes whenever I stare at SA-IS, the algorithm we're about to discuss, I'm almost convinced that it can be characterized using the method of four russians). 
+In the first section, we implemented a suffix array construction algorithm (SACA) that worked by sorting the suffixes. During that discussion, we noted that the runtime of that scheme is lower bounded by the time it takes to sort the suffixes. For long sequences, this time can be quite large. For example, we may want to build a suffix array of the human genome approx: 3 bilion characters. Can we do better? [Can we shave off a log factor](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#the-method-of-four-russians)? Yes. Yes we can. We won't use the method of four russians though (I should note that sometimes whenever I stare at SA-IS, the algorithm we're about to discuss, I'm almost convinced that it can be characterized using the method of four russians). 
 
 ##### SA-IS: A suffix array via Induced Sorting
 What is `induced sorting?` and how does it differ from normal sorting? The word `induce` in the title of this procedure refers to inductive reasoning or, more plainly, inference. `induced sorting` is thus sorting by inference. Note that I'm using the term `inference` in its natural language sense, not its statistical sense. As we shall see, in induced sorting, we are able to infer the order of certain suffixes once we know the order of some specific suffixes. This means that we can sort without comparisons and can thus beat the `n lg n` lower bound that hamstrung the naive SACA method. 
 
 ###### Foundational Concepts
-**The Alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">**
+Below, we briefly discuss some key ideas that we need in order to fully understand the SA-IS procedure.
+
+**The Alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">**: An alphabet, simply put, is the ordered unique list of all the characters that can ever appear in our strings. For instance, if our problem domain is genomics, then our alphabet could be `{A, T, U, C, G}`. If it is proteomics, the alphabet could be the 20 amino acids. For our case, our alphabet is the `255` ascii characters.
 ```rust
 /// WIP
 ```
-**L-Type & S-Type Suffixes** 
+**L-Type & S-Type Suffixes:** A suffix starting at some position `k` in some text `T` is an `S-type` suffix if: `T[k] < T[k + 1]` OR `T[k] == T[K + 1] AND k + 1 is an S-type suffix` OR `T[k] = $`, the sentinel character. Similarly, A suffix starting at some position `k` in some text `T` is an `L-type` suffix if `T[k] > T[k + 1]` OR `T[k] == T[K + 1] AND k + 1 is an L-type suffix`. Below we introduce abstractions that encode these ideas.
 ```rust
-/// WIP
+#[derive(Debug, PartialEq, Eq)]
+enum SuffixType {
+    /// A variant for S-type suffixes. The associatef boolen
+    /// indicates whether this suffix is an `LMS` suffix. We
+    /// discuss what that means below.
+    S(bool),
+
+    /// A variant for L-type suffixes
+    L
+}
+
+pub struct Suffix<'a> {
+    /// The index in the underlying where this suffix
+    /// begins. This uniquely identifies the suffix
+    start: SuffixIndex,
+
+    /// Is this an `L` type or `S` type suffix?
+    suffix_type: SuffixType,
+
+    /// A reference to the underlying string. Helps ensure
+    /// that suffixes don't outlive the strings to which
+    /// they refer.
+    underlying: &'a str
+}
+
+impl<'a> From<(SuffixIndex, SuffixType, &'a str)> for Suffix<'a> {
+    /// Turn a 3-tuple into a Suffix object
+    fn from((start, suffix_type, underlying): (SuffixIndex, SuffixType, &'a str)) -> Self {
+        Suffix {
+            start,
+            suffix_type,
+            underlying,
+        }
+    }
+}
+
+impl<'a> Suffix<'a> {
+    /// Is this suffix a left most `S-type` suffix?
+    pub fn is_lms(&self) -> bool {
+        match self.suffix_type {
+            SuffixType::L => false,
+            SuffixType::S(lms) => lms,
+        }
+    }
+}
+
+impl<'a> SuffixArray<'a> {
+    /// Create a list of the suffixes in the string.
+    fn create_suffixes(&self) -> Vec<Suffix> {
+        todo!()
+    }
+}
 ```
 **LMS Suffixes and Substrings**
 ```rust
