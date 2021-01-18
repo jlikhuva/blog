@@ -348,7 +348,130 @@ The median of medians procedure has a few key structures:
 * The solutions to all blocks are aggregated into a single array. We call this the macro array. The macro array, just like the micro arrays, are smaller instances of the original problem.
 * By combining, in some bespoke fashion, the macro and micro array solutions, we are able to solve the original problem with a log factor shaved off. In `MoM` we went from `Quickselect's` `O(n lg n)` to `O(n)` (For a rigorous runtime analysis of the median of medians method, please refer to CLRS chapter 9).  
   
-The structures above are the four major motifs in the method of four russians. How can we use this method to reduce the pre-processing time of our RMQ algorithm? We discuss that next.
+The structures above are the four major motifs in the method of four russians. How can we use this method to reduce the pre-processing time of our RMQ algorithm? We discuss that after the following interlude.
+
+
+***
+Thus far, we've implemented procedures to solve the `rmq` problem as free standing functions. Before we move forward, lets take a step back and see if we can come up with a much more elegant abstraction that unifies all the different solution methods. This will become more crucial as we start talking about 2-level structures that use multiple solution methods.
+```rust
+#[derive(Debug, Eq, PartialEq, Hash)]
+pub struct SparseTableIdx {
+    /// The index where the range in question begins
+    start_idx: usize,
+
+    /// The length of the range. This has to always be a power of
+    /// two
+    len: usize,
+}
+
+type DenseTable<'a, T> = HashMap<RMQRange<'a, T>, RMQResult<'a, T>>;
+type SparseTable<'a, T> = HashMap<SparseTableIdx, DenseTable<'a, T>>;
+
+#[derive(Debug)]
+pub struct RMQResult<'a, T> {
+    min_idx: usize,
+    min_value: &'a T,
+}
+
+/// All structures capable of answering range min queries should
+/// expose the solve method.
+pub trait RMQSolver<'a, T: Ord> {
+    fn build(&mut self, underlying: &'a [T]);
+    fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T>;
+}
+```
+We introduce a trait that encodes the necessary and sufficient API that any  `rmq` solver should expose. We need to be able to build the solver and to invoke the solve method with a given range. Below, we introduce the varios solvers, all of which we have already seen before -- we simply present them here in a unified manner.
+```rust
+
+/// A solver that answers range min queries by  doing no preprocessing. At query time, it
+/// simply does a linear scan of the range in question to get the answer. This is an
+/// <O(1), O(n)> solver
+#[derive(Debug)]
+pub struct ScanningSolver<'a, T> {
+    underlying: &'a [T],
+}
+
+/// A solver that answers `rmq` queries by first pre-computing
+/// the answers to all possible ranges. At query time, it simply
+/// makes a table lookup. This is the <O(n*n), O(1)> solver
+#[derive(Debug)]
+pub struct DenseTableSolver<'a, T> {
+    underlying: &'a [T],
+    lookup_table: DenseTable<'a, T>,
+}
+
+/// A solver that answers rmq queries by first precomputing
+/// the answers to ranges whose length is a power of 2
+/// At query time, it uses a lookup table of `msb(n)` values to
+/// factor the length of the requested query into powers of
+/// 2 and then looks up the answers in the sparse table.
+/// This is the <O(n lg n), O(1)> solver
+#[derive(Debug)]
+pub struct SparseTableSolver<'a, T> {
+    underlying: &'a [T],
+    sparse_table: SparseTable<'a, T>,
+
+    /// The precomputed and cached array of msb(n)
+    /// answers for all n between 1 and 1 << 16
+    msb_sixteen_lookup: [u8; 1 << 16],
+}
+```
+
+Below, we implemet the `RMQSolver` trait for each of our solvers. We leverage functions that we already implemented in preceding segments.
+```rust
+impl<'a, T: Ord> RMQSolver<'a, T> for ScanningSolver<'a, T> {
+    fn build(&mut self, underlying: &'a [T]) {
+        todo!()
+    }
+
+    fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
+        todo!()
+    }
+}
+
+impl<'a, T: Ord> RMQSolver<'a, T> for DenseTableSolver<'a, T> {
+    fn build(&mut self, underlying: &'a [T]) {
+        todo!()
+    }
+
+    fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
+        todo!()
+    }
+}
+
+impl<'a, T: Ord> RMQSolver<'a, T> for SparseTableSolver<'a, T> {
+    fn build(&mut self, underlying: &'a [T]) {
+        todo!()
+    }
+
+    fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
+        todo!()
+    }
+}
+
+/// Since we unified our various solve, we can succinctly represent
+/// a solver that follows the method of four russians scheme.
+/// Notice how we allow one to set the block_size, and solvers
+pub struct FourRussiansRMQ<'a, T: Ord, S1: RMQSolver<'a, T>, S2: RMQSolver<'a, T>> {
+    /// This is the entire array. The solvers only operate on slices of
+    /// this array
+    static_array: &'a [T],
+
+    /// As discussed already, block decomposition is at the
+    /// heart of the method of four russians. We thus
+    /// allow the client to set how large a single block should be
+    block_size: usize,
+
+    /// We call the solve method of this object when we want to
+    /// answer an `rmq` query over the macro array
+    macro_level_solver: S1,
+
+    /// We call the solve method of this object when we want to
+    /// answer an `rmq` query over a single block (ie a micro arrsy)
+    block_level_solver: S2,
+}
+```
+***
 
 **Two-Level Structures**
 
@@ -367,45 +490,9 @@ $$ -->
 
 So, we set `b` to the square root of `n`. This gives us a query time of <!-- $\mathcal{O}(\sqrt{n})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qSsMnsGYC0.svg"> and an overall time of <!-- $\left<O(n), O(n^{0.5})\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cgFTCzGhAr.svg">. We implement this scheme below.
 ```rust
-/// The abstraction for a single block. This is exactly like
-/// we had for median_of_medians
-struct RMQBlock<'a, T> {
-    /// The starting index. This is 0-indexed and should be
-    /// less than or equal to the end_idx
-    start_idx: usize,
-
-    /// The ending index. This should be strictly less than the
-    /// length of the underlying array
-    end_idx: usize,
-
-    /// The index of the smallest value in the given range. To move from this
-    /// index to an idx in the underlying, we simply calculate
-    /// `start_idx + min_idx`
-    min_idx: usize,
-
-    /// The minimal value of this block
-    min: &'a T,
-}
-
-/// We are essentially constructing a new data structure.
-/// This abstracts the logic for constructing
-/// the two level structure and answering range queries
-pub struct RMQBlockDecomposition<'a, T> {
-    /// An aggregation of the minimal values in each of our
-    /// (n/b) blocks.
-    macro_array: Vec<RMQBlock<'a, T>>,
-
-    /// The size of each block
-    block_size: usize,
-
-    /// The static array onto which this data structure is layered
-    underlying: &'a [T]
-}
-
-impl <'a, T> RMQBlockDecomposition<'a, T> {}
-
-/// WIP: The naive hybrid
-
+/// WIP: The FourRussiansRMQ that uses the ScanningSolver 
+/// for both the micro and macro arrays along with a block
+/// size of sqrt(n)
 ```
 So, Block decomposition allowed us to have linear pre-processing time. However, in the process, we lost our constant query time? Can we do better than <!-- $\sqrt{n}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k4Mu0nuOVP.svg"> while still maintaining a linear pre-processing time? Yes. We can use a mix of block decomposition and sparse tables to achieve this. Let's see how. 
 
@@ -421,7 +508,9 @@ To create a hybrid structure, we need to decide which method we want to use to s
 
 Below, we implement the first hybrid method
 ```rust
-/// WIP: The cool hybrid
+/// WIP: The FourRussiansRMQ that uses the ScanningSolver 
+/// for both the micro and a SparseTableSolver for the macro 
+/// array along with a block size of lg (n)
 ```
 By this point we have a cool and quite efficient algorithm for the offline range min query problem. However, the title of the note did promise an `<O(n), O(1)>` solution. We discuss that in the next section with the caveat that the added constant factors that give us assymptotic constant query time may slow down the algorithm in practice. As noted [here](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf), the preceding `<O(n), O(lg)>` hybrid solution outperforms the `<O(n), O(1)>` solution in practice.
 
@@ -441,13 +530,14 @@ Why are cartesian trees important, and how are they related to the `RMQ` problem
 When do two cartesian trees for two different arrays, <!-- $B_1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pCi7uET35K.svg">, <!-- $B_2$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/1b0Fxslia6.svg"> have the same shape? How can we tell this efficiently?
 
 ```rust
-/// WIP: Cartesian Tree number
+/// WIP: Calculating The Cartesian Tree Number
 ```
-
 
 #### The Fischer-Heun RMQ Structure
 ```rust
-/// WIP: The Whole Enchilada
+/// WIP: The FourRussiansRMQ that uses the SparseTableSolver for the
+/// macro array and a DenseTableSolver for the micro arrays along with
+/// cartesian tree based memoization and a block size of 0.25 lg n 
 ```
 Thus, our final data structure has the following features:
 |Block Size|Macro Array Method|Micro Array Method|Runtime|

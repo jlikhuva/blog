@@ -15,7 +15,7 @@ A distillation of some of the most elegant ideas in computer science. The collec
 6. [Algorithms for Discrete Optimization](https://github.com/jlikhuva/blog/blob/main/posts/optimization.md)
 7. [The Lazy Binomial Heap](https://github.com/jlikhuva/blog/blob/main/posts/binomial.md)
 8. [Specialized Containers for Integers](https://github.com/jlikhuva/blog/blob/main/posts/integer.md)
-9.  [Persistent & Retroactive Data Structures + Dataflow Programming](https://github.com/jlikhuva/blog/blob/main/posts/splay.md)
+9.  [Persistent & Retroactive Data Structures + Dataflow Programming](https://github.com/jlikhuva/blog/blob/main/posts/persistent.md)
 10. [Assorted ideas from Compuational Geometry](https://github.com/jlikhuva/blog/blob/main/posts/comp_geom.md)
 
 #####  Investment Science [WIP]

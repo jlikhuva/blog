@@ -231,7 +231,7 @@ fn make_lcp_by_kasai(s: &str, sa: &SuffixArray) -> Vec<LCPHeight> {
 ```
 
 
-#### The Suffix Array: A Linear Time Solution
+#### The Suffix Array: A Linear Time Solution[WIP]
 In the first section, we implemented a suffix array construction algorithm (SACA) that worked by sorting the suffixes. During that discussion, we noted that the runtime of that scheme is lower bounded by the time it takes to sort the suffixes. For long sequences, this time can be quite large. For example, we may want to build a suffix array of the human genome approx: 3 bilion characters. Can we do better? [Can we shave off a log factor](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#the-method-of-four-russians)? Yes. Yes we can. We won't use the method of four russians though (I should note that sometimes whenever I stare at SA-IS, the algorithm we're about to discuss, I'm almost convinced that it can be characterized using the method of four russians). 
 
 ##### [SA-IS: A suffix array via Induced Sorting](https://ieeexplore.ieee.org/document/4976463)
@@ -240,10 +240,6 @@ What is `induced sorting?` and how does it differ from normal sorting? The word 
 ###### Foundational Concepts
 Below, we briefly discuss some key ideas that we need in order to fully understand the SA-IS procedure.
 
-**The Alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">**: An alphabet, simply put, is the ordered unique list of all the characters that can ever appear in our strings. For instance, if our problem domain is genomics, then our alphabet could be `{A, T, U, C, G}`. If it is proteomics, the alphabet could be the 20 amino acids. For our case, our alphabet is the `255` ascii characters.
-```rust
-/// WIP
-```
 **L-Type & S-Type Suffixes:** A suffix starting at some position `k` in some text `T` is an `S-type` suffix if: `T[k] < T[k + 1]` OR `T[k] == T[K + 1] AND k + 1 is an S-type suffix` OR `T[k] = $`, the sentinel character. Similarly, A suffix starting at some position `k` in some text `T` is an `L-type` suffix if `T[k] > T[k + 1]` OR `T[k] == T[K + 1] AND k + 1 is an L-type suffix`. 
 
 **LMS Suffixes and Substrings:** An `S` type suffix is said to be a Left Most S-suffix (LMS suffix for short) if it is an `S` type suffix that has an `L` type suffix as its left neighbor. The sentinel `$` is an `LMS` suffix by definition. An `LMS substring` is a contiguous slice of the underlying string that starts at the starting index of some `LMS` suffix and runs up to the start of the next, closest `LMS` suffix.
@@ -253,8 +249,7 @@ What's the purpose of all these concepts? Well, SA-IS is based on two key ideas.
 #[derive(Debug, PartialEq, Eq)]
 enum SuffixType {
     /// A variant for S-type suffixes. The associatef boolen
-    /// indicates whether this suffix is an `LMS` suffix. We
-    /// discuss what that means below.
+    /// indicates whether this suffix is an `LMS` suffix.
     S(bool),
 
     /// A variant for L-type suffixes
@@ -384,15 +379,59 @@ struct Bucket {
     offset_from_end: usize,
 }
 ```
-**Induced Sorting**
+
+**The Alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">**: An alphabet, simply put, is the ordered unique list of all the characters that can ever appear in our strings. For instance, if our problem domain is genomics, then our alphabet could be `{A, T, U, C, G}`. If it is proteomics, the alphabet could be the 20 amino acids. For our case, our alphabet is the `256` ascii characters. To create a bucket, we need to know where it starts and where it ends. For each unique character in the underlying string, we can obtain this information by leveraging the associated alphabet to implement a modified version of couting sort. In particular, we start by keeping a count of how many times each character appears in the underlying string — just as we do in counting sort. We then scan across this array of counts using the count information to generate our buckett. We implement this functionality below.
+```rust
+pub struct AlphabetCounter([usize; 1 << 8]);
+
+impl AlphabetCounter {
+    /// Initialize the counter from a string slice. This procedure expects
+    /// the give slice to only have ascii characters
+    pub fn from_ascii_str(s: &str) -> Self {
+        let mut alphabet = [0_usize; 1 << 8];
+        for byte in s.as_bytes() {
+            alphabet[*byte as usize] += 1;
+        }
+        Self(alphabet)
+    }
+
+    /// We shall rely on the count of each character in the alphabet to
+    /// determine our buckets and their order in the suffix array
+    pub fn create_buckets(&self) -> HashMap<BucketId<u8>, Bucket> {
+        let mut buckets = HashMap::new();
+        let mut start_location = 0;
+        let alphabet_counter = self.0;
+        for i in 0..alphabet_counter.len() {
+            if alphabet_counter[i] > 0 {
+                let end_location = start_location + alphabet_counter[i] - 1;
+                let bucket = Bucket {
+                    start: SuffixArrayIndex(start_location),
+                    end: SuffixArrayIndex(end_location),
+                    offset_from_end: 0,
+                    offset_from_start: 0,
+                };
+                buckets.insert(BucketId(i as u8), bucket);
+                start_location = end_location + 1;
+            }
+        }
+        buckets
+    }
+```
+**Induced Sorting Part One:** Once we know the nature of all our suffixes and the locations of all our buckets, we can begin slotting suffixes in place. First, we place all `lms` suffixes in their buckets. Because they are `S` type suffixes, we now that they will occupy the latter portions of their respective buckets. Why is this so? Well, think about how the suffixes in a given bucket compare if we exclude the first character. Once we have all the `lms` suffixes in position, we proceed to place `L` type suffixes at their appropriate location, after which we do the same for `S` type suffixes. We implement this logic below.
 ```rust
 /// WIP
 ```
-**Substring Renaming**
+**Substring Renaming:** In substring renaming, we'd like to reduce the size of our input. We do so by forming a new string out of our `LMS substrings`. That is, all the characters that belong to a single substring are reduced to a single label. We implement substring renaming below. 
 ```rust
 /// WIP
 ```
-###### The Whole Enchilada
+After obtaining the shorter substring, we check to see if it contains any repeated labels. If it does not, then we are done, we can go ahead and create a sufffix array for the reduced string. If it contains duplicates, we recurse on the reduced string and alphabet. In the next section we discuss how to compute the suffix array given the suffix array of the reduced string.
+
+**Inducing the SA from an approximate SA:**  
+```rust
+/// WIP
+```
+##### The Whole Enchilada
 ```rust
 /// WIP
 ```
