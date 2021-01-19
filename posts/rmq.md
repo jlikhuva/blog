@@ -373,10 +373,16 @@ pub struct RMQResult<'a, T> {
     min_value: &'a T,
 }
 
+impl<'a, T> From<(usize, &'a T)> for RMQResult<'a, T> {
+    fn from((min_idx, min_value): (usize, &'a T)) -> Self {
+        RMQResult { min_idx, min_value }
+    }
+}
+
 /// All structures capable of answering range min queries should
-/// expose the solve method.
+/// expose a method for prerocessing and querying.
 pub trait RMQSolver<'a, T: Ord> {
-    fn build(&mut self, underlying: &'a [T]);
+    fn preprocess(&mut self);
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T>;
 }
 ```
@@ -419,30 +425,37 @@ pub struct SparseTableSolver<'a, T> {
 
 Below, we implemet the `RMQSolver` trait for each of our solvers. We leverage functions that we already implemented in preceding segments.
 ```rust
+fn get_min_by_scanning<T: Ord>(block: &[T]) -> RMQResult<T> {
+    let (min_idx, min_value) = block.iter().enumerate().min_by_key(|x| x.1).unwrap();
+    RMQResult { min_idx, min_value }
+}
+
 impl<'a, T: Ord> RMQSolver<'a, T> for ScanningSolver<'a, T> {
-    fn build(&mut self, underlying: &'a [T]) {
-        todo!()
-    }
+    /// The scanning solver does no preprocessing
+    fn preprocess(&mut self) {}
 
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
-        todo!()
+        let range_slice = &self.underlying[range.start_idx..=range.end_idx];
+        get_min_by_scanning(range_slice)
     }
 }
 
-impl<'a, T: Ord> RMQSolver<'a, T> for DenseTableSolver<'a, T> {
-    fn build(&mut self, underlying: &'a [T]) {
-        todo!()
+impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for DenseTableSolver<'a, T> {
+    fn preprocess(&mut self) {
+        // Note that we are using a modified version of the `compute_rmq_all_ranges`
+        // function. The only change is in the return type -- changing the
+        // usize to an `RMQResult`
+        self.lookup_table = compute_rmq_all_ranges(self.underlying);
     }
 
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
-        todo!()
+        let res = self.lookup_table.get(&range).unwrap();
+        (res.min_idx, res.min_value.clone()).into()
     }
 }
 
 impl<'a, T: Ord> RMQSolver<'a, T> for SparseTableSolver<'a, T> {
-    fn build(&mut self, underlying: &'a [T]) {
-        todo!()
-    }
+    fn preprocess(&mut self) {}
 
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
         todo!()
