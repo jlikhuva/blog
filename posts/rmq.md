@@ -409,10 +409,9 @@ impl<'a, T> From<(usize, &'a T)> for RMQResult<'a, T> {
     }
 }
 
-/// All structures capable of answering range min queries should
-/// expose a method for prerocessing and querying.
+/// All structures capable of answeing range min queries should
+/// expose the solve method.
 pub trait RMQSolver<'a, T: Ord> {
-    fn preprocess(&mut self);
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T>;
 }
 ```
@@ -427,6 +426,12 @@ pub struct ScanningSolver<'a, T> {
     underlying: &'a [T],
 }
 
+impl<'a, T> ScanningSolver<'a, T> {
+    pub fn new(underlying: &'a [T]) -> Self {
+        ScanningSolver { underlying }
+    }
+}
+
 /// A solver that answers `rmq` queries by first pre-computing
 /// the answers to all possible ranges. At query time, it simply
 /// makes a table lookup. This is the <O(n*n), O(1)> solver
@@ -434,6 +439,16 @@ pub struct ScanningSolver<'a, T> {
 pub struct DenseTableSolver<'a, T> {
     underlying: &'a [T],
     lookup_table: DenseTable<'a, T>,
+}
+
+impl<'a, T: Ord + Hash> DenseTableSolver<'a, T> {
+    pub fn new(underlying: &'a [T]) -> Self {
+        let lookup_table = compute_rmq_all_ranges(underlying);
+        DenseTableSolver {
+            underlying,
+            lookup_table,
+        }
+    }
 }
 
 /// A solver that answers rmq queries by first precomputing
@@ -451,6 +466,18 @@ pub struct SparseTableSolver<'a, T> {
     /// answers for all n between 1 and 1 << 16
     msb_sixteen_lookup: [u8; 1 << 16],
 }
+
+impl<'a, T: Ord + Hash> SparseTableSolver<'a, T> {
+    pub fn new(underlying: &'a [T]) -> Self {
+        let sparse_table = compute_rmq_sparse(underlying);
+        let msb_sixteen_lookup = MSBLookupTable::build();
+        SparseTableSolver {
+            underlying,
+            sparse_table,
+            msb_sixteen_lookup,
+        }
+    }
+}
 ```
 
 Below, we implemet the `RMQSolver` trait for each of our solvers. We leverage functions that we already implemented in preceding segments.
@@ -465,9 +492,6 @@ fn get_min_by_scanning<T: Ord>(block: &[T]) -> RMQResult<T> {
 }
 
 impl<'a, T: Ord> RMQSolver<'a, T> for ScanningSolver<'a, T> {
-    /// The scanning solver does no preprocessing
-    fn preprocess(&mut self) {}
-
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
         let range_slice = &self.underlying[range.start_idx..=range.end_idx];
         get_min_by_scanning(range_slice)
@@ -475,13 +499,6 @@ impl<'a, T: Ord> RMQSolver<'a, T> for ScanningSolver<'a, T> {
 }
 
 impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for DenseTableSolver<'a, T> {
-    fn preprocess(&mut self) {
-        // Note that we are using a modified version of the `compute_rmq_all_ranges`
-        // function. The only change is in the return type -- changing the
-        // usize to an `RMQResult`
-        self.lookup_table = compute_rmq_all_ranges(self.underlying);
-    }
-
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
         let res = self.lookup_table.get(&range).unwrap();
         (res.min_idx, res.min_value.clone()).into()
@@ -489,11 +506,6 @@ impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for DenseTableSolver<'a, T> {
 }
 
 impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for SparseTableSolver<'a, T> {
-    fn preprocess(&mut self) {
-        self.sparse_table = compute_rmq_sparse(self.underlying);
-        self.msb_sixteen_lookup = MSBLookupTable::build();
-    }
-
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
         let (i, j) = (range.start_idx, range.end_idx);
         let range_len = (j - i) + 1;
@@ -506,7 +518,28 @@ impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for SparseTableSolver<'a, T> {
         get_prev_min(self.underlying, left_res, right_res)
     }
 }
+```
+***
 
+**Two-Level Structures**
+
+To apply the method of four russians to the RMQ problem, we begin by dividing the input array into blocks of length <!-- $b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fCJxfN2Ysc.svg">. If the length of the array is <!-- $n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k2Z6CavdDQ.svg">, this results in <!-- $\mathcal{O}(\frac{n}{b})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/gwfsqBuBks.svg"> blocks. For each of these blocks, we find the index of the smallest value bu doing a simple scan. This takes <!-- $\mathcal{O}(b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Dqg8jnCq0o.svg"> in each block and <!-- $\mathcal{O}(\frac{n}{b}) * \mathcal{O}(b) = \mathcal{O}(n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/oI85zP1xyG.svg"> for all the blocks. We aggregate these min values in a new macro array. Given a qeury range `[i, j]` how can we use the blocks and the macro array to satisfy the query? Also, what value of `b` should we use? To query, we start by figuring out which block the ends of the query fall into. We do that by dividing each end with the block size, i.e `start_block = i/b, end_block = j/b`. We then scan the items in `start_block` that appear after `i` and the items in `end_block` that appear before `j` and take the minimal value over them. Let's call this value, the smallest value at the ends of the range, <!-- $\lambda$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/w3irZZ0Jg1.svg"> Then we scan the macro array to find the minimal value among all blocks between `start_block` and `end_block`. let's call this value <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/6bXEiZZAEX.svg">. The answer to our query is the `min` (or `argmin`) between these two values: <!-- $RMQ_A(i, j) = \min(\lambda, \alpha)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/KHSI90DMS3.svg"> How long does this take? Well, finding the `min` in the end blocks take `O(b)` and scanning the intermediate blocks takes `O(n/b)`. This gives us `O(b + n/b)`. Therefpre, to properly characterize the runtime, we need to find the value of `b` that minimized the expression `b + n/b`. We do so below
+<!-- $$
+\begin{array}{c}
+    f(b) = b + \dfrac{n}{b} \\
+    f'(b) = 1 - \dfrac{n}{b^2}\\
+    0 = 1 - \dfrac{n}{b^2}\\
+    b^2 = n \\
+    b = \sqrt{n}
+\end{array}
+$$ --> 
+
+<div align="center"><img style="background: white;" src="../svg/7i3PLJolgh.svg"></div>
+
+So, we set `b` to the square root of `n`. This gives us a query time of <!-- $\mathcal{O}(\sqrt{n})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qSsMnsGYC0.svg"> and an overall time of <!-- $\left<O(n), O(n^{0.5})\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cgFTCzGhAr.svg">. 
+
+Since our two level structure solutions will eventually mix and match the solvers that they use at each level, we begin by introducing an abstraction to facilitate that. Below, we implement an object that can answer any range min query using parameters that can be set by the client. 
+```rust
 /// Since we unified our various solve, we can succinctly represent
 /// a solver that follows the method of four russians scheme.
 /// Notice how we allow one to set the block_size, and solvers
@@ -528,25 +561,31 @@ pub struct FourRussiansRMQ<'a, T: Ord, S1: RMQSolver<'a, T>, S2: RMQSolver<'a, T
     /// answer an `rmq` query over a single block (ie a micro arrsy)
     block_level_solver: S2,
 }
+
+impl<'a, T: Ord, S1, S2> FourRussiansRMQ<'a, T, S1, S2>
+where
+    S1: RMQSolver<'a, T>,
+    S2: RMQSolver<'a, T>,
+{
+    /// Create a new RMQ solver for `static_array` that uses block decomposition
+    /// with a block size of `b`. The solver will use the `macro_solver` to
+    /// solve the instance of the problem on the array of aggregate solutions from
+    /// the blocks and `micro_solver` to solve the solution in each individual block
+    pub fn new(static_array: &'a [T], b: usize, macro_solver: S1, micro_solver: S2) -> Self {
+        todo!()
+    }
+
+    /// Find the smallest element in the range provided (i, j). This works by finding the
+    /// minimum among three answers:
+    ///     (a) The smallest value in the valid portion of i's block
+    ///     (b) The smallest value in the valid portion of j's block
+    ///     (c) The smallest value in the intermediate blocks
+    pub fn rmq(range: RMQRange<'a, T>) -> RMQResult<'a, T> {
+        todo!()
+    }
+}
 ```
-***
-
-**Two-Level Structures**
-
-To apply the method of four russians to the RMQ problem, we begin by dividing the input array into blocks of length <!-- $b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fCJxfN2Ysc.svg">. If the length of the array is <!-- $n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k2Z6CavdDQ.svg">, this results in <!-- $\mathcal{O}(\frac{n}{b})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/gwfsqBuBks.svg"> blocks. For each of these blocks, we find the index of the smallest value bu doing a simple scan. This takes <!-- $\mathcal{O}(b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Dqg8jnCq0o.svg"> in each block and <!-- $\mathcal{O}(\frac{n}{b}) * \mathcal{O}(b) = \mathcal{O}(n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/oI85zP1xyG.svg"> for all the blocks. We aggregate these min values in a new macro array. Given a qeury range `[i, j]` how can we use the blocks and the macro array to satisfy the query? Also, what value of `b` should we use? To query, we start by figuring out which block the ends of the query fall into. We do that by dividing each end with the block size, i.e `start_block = i/b, end_block = j/b`. We then scan the items in `start_block` that appear after `i` and the items in `end_block` that appear before `j` and take the minimal value over them. Let's call this value, the smallest value at the ends of the range, <!-- $\lambda$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/w3irZZ0Jg1.svg"> Then we scan the macro array to find the minimal value among all blocks between `start_block` and `end_block`. let's call this value <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/6bXEiZZAEX.svg">. The answer to our query is the `min` (or `argmin`) between these two values: <!-- $RMQ_A(i, j) = \min(\lambda, \alpha)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/KHSI90DMS3.svg"> How long does this take? Well, finding the `min` in the end blocks take `O(b)` and scanning the intermediate blocks takes `O(n/b)`. This gives us `O(b + n/b)`. Therefpre, to properly characterize the runtime, we need to find the value of `b` that minimized the expression `b + n/b`. We do so below
-<!-- $$
-\begin{array}{c}
-    f(b) = b + \dfrac{n}{b} \\
-    f'(b) = 1 - \dfrac{n}{b^2}\\
-    0 = 1 - \dfrac{n}{b^2}\\
-    b^2 = n \\
-    b = \sqrt{n}
-\end{array}
-$$ --> 
-
-<div align="center"><img style="background: white;" src="../svg/7i3PLJolgh.svg"></div>
-
-So, we set `b` to the square root of `n`. This gives us a query time of <!-- $\mathcal{O}(\sqrt{n})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qSsMnsGYC0.svg"> and an overall time of <!-- $\left<O(n), O(n^{0.5})\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cgFTCzGhAr.svg">. We implement this scheme below.
+With the above abstraction in place, we can implement the two-level solution discussed in the preceeding section as an instance of the `FourRussiansRMQ` with both `macro_solver` and `micro_solver` set to `ScanningSolver` and `b` set to `sqrt(n)`. We do so below.
 ```rust
 /// WIP: The FourRussiansRMQ that uses the ScanningSolver 
 /// for both the micro and macro arrays along with a block
