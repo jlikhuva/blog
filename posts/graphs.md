@@ -1,5 +1,5 @@
 # Graphs: All Foundational Methods [WIP: Draft]
-In this note, we shall take a detailed look at perhaps the most versatile combinatoric structure: the graph. We'll examine key foundational ideas that allow us to reason about graphs. Although this note aims to be as detailed as possible, it does not seek to be comprehensive. To that end, we constrain ourselves to ideas that one would find in an introductory algorithms textbook (with the observation that all other complex methods are derived from these ideas). In particular, we deeply explore ideas and methods presented in `CLRS 22 – 26`, with occassional references to interesting blog posts.
+In this note, we shall take a detailed look at, perhaps, the most versatile combinatoric structure: the graph. We'll examine key foundational ideas that allow us to reason about graphs. Although this note aims to be as detailed as possible, it does not seek to be comprehensive. To that end, we constrain ourselves to ideas that one would find in an introductory algorithms textbook (with the observation that all other complex methods are derived from these ideas). In particular, we deeply explore ideas and methods presented in `CLRS 22 – 26`, with occassional references to interesting blog posts.
 
 #### Type States In Rust
 Before we begin, let's briefly explore a neat idea that we'll make use of later on. When writing programs, we often have a set of invariants that once broken we end up with an illegal program – so to speak. For instance, if you're working with files, you cannot read from a file that was not previously opened. Similary, you cannot read from a file that has already been closed. Furthermore, we need to ensure that we close our files once we're done with them  so as to avoid leaking memory. In languages without a rich type system, such invariants are enforced by doing runtime error checks. Languages with a rich type system, on the other hand, allow us to encode these invariants as types. This then ensures that operations that may result in our program entering an illegal state do not compile. We thus make illegal states unrepresentable. For a better, and much more refined discussion of the type state programming pattern, please refer to these two excelent notes: [Will Crichton's CS 242 Lecture Note](https://stanford-cs242.github.io/f19/lectures/08-2-typestate) and [this blog post from the systems group at ETH Zurich](https://blog.systems.ethz.ch/blog/2018/a-hammer-you-can-only-hold-by-the-handle.html). We'll only make use of this rudimentary understanding when implementing our graph data structure.
@@ -243,7 +243,7 @@ pub mod edge {
     }
 }
 ```
-Talks about graph states. talk about how they aren't really states
+The 
 
 ```rust
 /// Types representing the different types

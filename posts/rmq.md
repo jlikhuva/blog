@@ -118,38 +118,68 @@ impl From<(usize, usize)> for SparseTableIdx {
 ```
 
 ```rust
-/// A sparse table is simply a collection of lookup tables for ranges whose
+/// A sparse table is simply a collection of rmq answers for ranges whose
 /// length is a power of two. We precompute such ranges for all possible starting
 /// positions
-type SparseTable<'a, T> = HashMap<SparseTableIdx, LookupTable<'a, T>>;
+type SparseTable<'a, T> = HashMap<SparseTableIdx, RMQResult<'a, T>>;
+
+/// The DP update rule for populating the sparse table. The
+/// smallest value in a range whose length is 1 << k is
+/// the min of the two ranges that form that range
+/// each of length 1 << (k - 1)
+fn get_prev_min<'a, T: Hash + Eq + Ord>(
+    array: &'a [T],
+    left_res: &RMQResult<T>,
+    right_res: &RMQResult<T>,
+) -> RMQResult<'a, T> {
+    if left_res.min_value < right_res.min_value {
+        (left_res.min_idx, &array[left_res.min_idx]).into()
+    } else {
+        (right_res.min_idx, &array[right_res.min_idx]).into()
+    }
+}
 
 /// For each index `i`, compute RMQ answers for ranges starting at `i` of
 /// size `1, 2, 4, 8, 16, …, 2^k` as long as the resultant ending index
 /// fits in the underlying array in the array.
 /// For each array index, we compute lg n ranges. Therefore,
 /// the total cost of the procedure is O(n lg n)
-fn compute_rmq_sparse_table<'a, T: Hash + Eq + Ord>(array: &'a [T]) -> SparseTable<'a, T> {
+fn compute_rmq_sparse<'a, T: Hash + Eq + Ord>(array: &'a [T]) -> SparseTable<'a, T> {
     let len = array.len();
     let mut sparse_table = HashMap::new();
-    for start_idx in 0..len {
-        let mut power = 0;
+    let mut power = 0;
+    while 1 << power <= len {
+        let mut start_idx = 0;
         let mut end_idx = start_idx + (1 << power) - 1;
         while end_idx < len {
-            let cur_range_idx: SparseTableIdx = (start_idx, 1 << power).into();
-            let cur_range_lookup_table = compute_rmq_all_ranges(&array[start_idx..=end_idx]);
-            sparse_table.insert(cur_range_idx, cur_range_lookup_table);
-            power += 1;
-            end_idx = start_idx + (1 << power) - 1;
+            if start_idx == end_idx {
+                let idx = (start_idx, 1 << power).into();
+                let rmq_res = (start_idx, &array[start_idx]).into();
+                sparse_table.insert(idx, rmq_res);
+            } else {
+                let idx = (start_idx, 1 << power).into();
+                let prev_len = 1 << (power - 1);
+                let left: SparseTableIdx = (start_idx, prev_len).into();
+                let right: SparseTableIdx = (start_idx + prev_len, prev_len).into();
+                let left_res = sparse_table.get(&left).unwrap();
+                let right_res = sparse_table.get(&right).unwrap();
+                let rmq_res = get_prev_min(array, left_res, right_res);
+                sparse_table.insert(idx, rmq_res);
+            }
+            start_idx += 1;
+            end_idx += 1;
         }
+        power += 1;
     }
     sparse_table
 }
+
 ```
 **Querying the Sparse Table**
 
 Now that we have our sparse table, how can we query from it given an arbitrary range `R = [i, j]`? From our initial discussion of binary factorization, you can imagine computing all subranges of `R` whose length is a power of 2 and then taking the min over these values. For an arbitrary length `n`, there are <!-- $O(\lg n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/wfptrCDR1m.svg"> such subranges. Thus, this scheme would give us a <!-- $\left<\Theta(n\lg n), \Theta(\lg n)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Z802R6ewbT.svg"> solution to the `RMQ`problem. 
 
-Computing all subranges, however, is overkill. All we need are two sub-ranges that fully cover the underlying segment. How do we find the two covering segments? First, observe that if the length of the range is an exact power of two, then we do not need to do any further computation since we already precomputed answers for all such ranges. If its not, we start by finding the largest subrange that is an exact power of two. Specifically, we find the value `k` such that <!-- $2^k \leq (j - i) + 1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/SyXeSDNkuL.svg">. Note that this value `k` is the index of the most significant bit of the range's length. The first range is thus <!-- $[i, i + 2^k - 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/RsDV0G7oU5.svg">. That is, a range whose length is `2^(k-1)`. After finding the largest subrange, the remaining portion's length certainly be not be a power of two. To proceed, we use a neat trick: we construct a range whose length is the smallest power of two larger than the remaining portion length. To prevent this subrange from overflowing the underlying range, we shift it over to the left, overlapping the first subrange, until it is full contained in the original range. The second range is thus <!-- $[j - 2^k + 1, j]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/2eOUcbNTa4.svg">, with a length of `2^(k-1)` as well.
+Computing all subranges, however, is overkill. All we need are two sub-ranges that fully cover the underlying segment. How do we find the two covering segments? First, observe that if the length of the range is an exact power of two, then we do not need to do any further computation since we already precomputed answers for all such ranges. If its not, we start by finding the largest subrange that is an exact power of two. Specifically, we find the value `k` such that <!-- $2^k \leq (j - i) + 1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/SyXeSDNkuL.svg">. Note that this value `k` is the index of the most significant bit of the range's length. The first range is thus <!-- $[i, i + 2^k - 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/RsDV0G7oU5.svg">. That is, a range whose length is `2^(k) - 1`. After finding the largest subrange, the remaining portion's length certainly be not be a power of two. To proceed, we use a neat trick: we construct a range whose length is the smallest power of two larger than the remaining portion length. To prevent this subrange from overflowing the underlying range, we shift it over to the left, overlapping the first subrange, until it is full contained in the original range. The second range is thus <!-- $[j - 2^k + 1, j]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/2eOUcbNTa4.svg">, with a length of `2^(k) - 1` as well.
 
 To recapitulate, we query from the sparse table by finding the `argmin` of two overlapping ranges whose answers have already been computed. Figuring out which ranges to use involves finding the `MSB(n)` where `n` is the length of the range in the query. How so we calculate `MSB(n)`? To compute `MSB(n)` in constant time, we can use a lookup table. Later on, when discussing specialized integer containers, we'll implement a complex but straightforward method for finding `k` in constant time. For now, a lookup table suffices. Thus, with this scheme, we have a <!-- $\left<\Theta(n\lg n), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/WpCYNtMQVL.svg"> solution to the `RMQ` problem. Below, we implement a procedure to compute the lookup table.
 ```rust
@@ -163,8 +193,8 @@ pub struct MSBLookupTable([u8; 1 << 16]);
 
 impl MSBLookupTable {
     /// Build the lookup table. To fill up the table, we simply subdivide
-    /// it into segements whose sizes are powers of two. The MSB for a segment
-    /// are the same for instance:
+    /// it into segements whose sizes are powers of two. The MSBa in a segment
+    /// are the same. For instance:
     ///   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /// n       |1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|...
     /// msb(n)  |0|1|1|2|2|2|2|3|3|3 |3 |3 |3 |3 |3 |4 |4 |4 |4 |...
@@ -425,6 +455,10 @@ pub struct SparseTableSolver<'a, T> {
 
 Below, we implemet the `RMQSolver` trait for each of our solvers. We leverage functions that we already implemented in preceding segments.
 ```rust
+/// Calculates the location and value of the smallest element
+/// in the given block by iterating over the elements. This takes
+/// linear time and is extremely fast for small block sizes (or
+/// more generally, blocks that can fit in a single cache line)
 fn get_min_by_scanning<T: Ord>(block: &[T]) -> RMQResult<T> {
     let (min_idx, min_value) = block.iter().enumerate().min_by_key(|x| x.1).unwrap();
     RMQResult { min_idx, min_value }
@@ -454,11 +488,22 @@ impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for DenseTableSolver<'a, T> {
     }
 }
 
-impl<'a, T: Ord> RMQSolver<'a, T> for SparseTableSolver<'a, T> {
-    fn preprocess(&mut self) {}
+impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for SparseTableSolver<'a, T> {
+    fn preprocess(&mut self) {
+        self.sparse_table = compute_rmq_sparse(self.underlying);
+        self.msb_sixteen_lookup = MSBLookupTable::build();
+    }
 
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T> {
-        todo!()
+        let (i, j) = (range.start_idx, range.end_idx);
+        let range_len = (j - i) + 1;
+        let k = self.msb_sixteen_lookup.get_msb_idx_of(range_len);
+        let right_start = j - (1 << k) + 1;
+        let left: SparseTableIdx = (i, 1 << k).into();
+        let right: SparseTableIdx = (right_start, 1 << k).into();
+        let left_res = self.sparse_table.get(&left).unwrap();
+        let right_res = self.sparse_table.get(&right).unwrap();
+        get_prev_min(self.underlying, left_res, right_res)
     }
 }
 
