@@ -395,7 +395,7 @@ pub struct SparseTableIdx {
 }
 
 type DenseTable<'a, T> = HashMap<RMQRange<'a, T>, RMQResult<'a, T>>;
-type SparseTable<'a, T> = HashMap<SparseTableIdx, DenseTable<'a, T>>;
+type SparseTable<'a, T> = HashMap<SparseTableIdx, RMQResult<'a, T>>;
 
 #[derive(Debug)]
 pub struct RMQResult<'a, T> {
@@ -540,10 +540,18 @@ So, we set `b` to the square root of `n`. This gives us a query time of <!-- $\m
 
 Since our two level structure solutions will eventually mix and match the solvers that they use at each level, we begin by introducing an abstraction to facilitate that. Below, we implement an object that can answer any range min query using parameters that can be set by the client. 
 ```rust
+
+/// The primary solvers available.
+pub enum RMQSolverKind {
+    ScanningSolver,
+    DenseTableSolver,
+    SparseTableSolver,
+}
+
 /// Since we unified our various solve, we can succinctly represent
 /// a solver that follows the method of four russians scheme.
 /// Notice how we allow one to set the block_size, and solvers
-pub struct FourRussiansRMQ<'a, T: Ord, S1: RMQSolver<'a, T>, S2: RMQSolver<'a, T>> {
+pub struct FourRussiansRMQ<'a, T: Ord> {
     /// This is the entire array. The solvers only operate on slices of
     /// this array
     static_array: &'a [T],
@@ -555,23 +563,19 @@ pub struct FourRussiansRMQ<'a, T: Ord, S1: RMQSolver<'a, T>, S2: RMQSolver<'a, T
 
     /// We call the solve method of this object when we want to
     /// answer an `rmq` query over the macro array
-    macro_level_solver: S1,
+    macro_level_solver: RMQSolverKind,
 
     /// We call the solve method of this object when we want to
     /// answer an `rmq` query over a single block (ie a micro arrsy)
-    block_level_solver: S2,
+    block_level_solver: RMQSolverKind,
 }
 
-impl<'a, T: Ord, S1, S2> FourRussiansRMQ<'a, T, S1, S2>
-where
-    S1: RMQSolver<'a, T>,
-    S2: RMQSolver<'a, T>,
-{
+impl<'a, T: Ord> FourRussiansRMQ<'a, T> {
     /// Create a new RMQ solver for `static_array` that uses block decomposition
     /// with a block size of `b`. The solver will use the `macro_solver` to
     /// solve the instance of the problem on the array of aggregate solutions from
     /// the blocks and `micro_solver` to solve the solution in each individual block
-    pub fn new(static_array: &'a [T], b: usize, macro_solver: S1, micro_solver: S2) -> Self {
+    pub fn new(static_array: &'a [T], b: usize, macro_solver: RMQSolverKind, micro_solver: RMQSolverKind) -> Self {
         todo!()
     }
 

@@ -359,7 +359,7 @@ impl<'a> Suffix<'a> {
     }
 }
 
-struct Bucket {
+struct Bucket { -- over the suffix array. actually start impl of sais
     /// Index in suffix array where this bucket begins
     start: SuffixArrayIndex,
 
