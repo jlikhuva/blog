@@ -648,8 +648,8 @@ Thus, our final data structure has the following features:
 As discussed earlier, although this method has impressive  asymptotic numbers, it is often outperformed in practice by the hybrid with logarithmic query time. Furthermore, this method is a lot more complex. That is another reason, from an engineering standpoint, to prefer the `<O(n), O(lg)>` -- much less code, and just as fast.
 
 #### References
-1. [CS 166 Lecture 1](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/02/Small02.pdf)
-1. [CS 166 Lecture 2](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/02/Small02.pdf)
+1. [CS 166 Lecture 1](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/00/Small00.pdf)
+1. [CS 166 Lecture 2](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf)
 
 ###### Cite As
 ```latex
