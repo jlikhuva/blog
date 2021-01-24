@@ -1,4 +1,4 @@
-# String Indexing
+# String Indexing: A Rust Implementation
 I lied. We will not talk about Tries. We will, however, discuss two structures that are foundational to tasks that need to do substring matching: The Suffix Array and The Longest Common Prefix Array. We'll explore two linear time procedures (SA-IS & Kasai's Algorithm) for constructing these data structures given some underlying, fairly static string from some alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">.
 
 #### Substring Search
@@ -297,12 +297,12 @@ impl<'a> SuffixArray<'a> {
     /// mark each corresponding suffix as either `L` or `S(false)`. Then we do a second right to left
     /// scan and mark all LMS suffixes as `S(true)`. We also keep track of the locations of the lms
     /// suffixes
-    fn create_suffixes(&self) -> (Vec<Suffix>, Vec<SuffixIndex>) {
-        let s_len = self.underlying.len();
+       fn create_suffixes(underlying: &'a str) -> (Vec<Suffix>, Vec<SuffixIndex>) {
+        let s_len = underlying.len();
         let mut tags = vec![SuffixType::S(false); s_len];
         let mut suffixes = Vec::with_capacity(s_len);
-        let mut lms_locations = Vec::with_capacity(s_len/2);
-        let s_ascii = self.underlying.as_bytes();
+        let mut lms_locations = Vec::with_capacity(s_len / 2);
+        let s_ascii = underlying.as_bytes();
 
         // We tag each chatacter as either `S` type or `L` type. Since
         // we initialized everything as `S` type, we only need to mark
@@ -316,17 +316,17 @@ impl<'a> SuffixArray<'a> {
         // The first character can never be an `lms` suffix, so we skip it
         // Similary, the last character, which is the sentinel `$` is definitely
         // an lms suffix, so we deal with it outside the loop
-        for i in 1..s_len-1 {
+        for i in 1..s_len - 1 {
             match (tags[i - 1].clone(), &mut tags[i]) {
                 // If the left character is the start of an `L-type` suffix
                 // and the current character is an `S-type` suffix, then
                 // we mark the current suffix as an `lms` suffix. We
                 // ignore all other cases
-               (SuffixType::L, SuffixType::S(is_lms)) => {
-                   *is_lms = true;
-                   lms_locations.push(SuffixIndex(i));
-               },
-               _ => {} 
+                (SuffixType::L, SuffixType::S(is_lms)) => {
+                    *is_lms = true;
+                    lms_locations.push(SuffixIndex(i));
+                }
+                _ => {}
             }
         }
         tags[s_len - 1] = SuffixType::S(true);
@@ -335,7 +335,7 @@ impl<'a> SuffixArray<'a> {
         // Now that we have all the suffix tags in place, we can construct
         // the list of suffixes in the string
         for (i, suffix_type) in tags.into_iter().enumerate() {
-            suffixes.push((SuffixIndex(i), suffix_type, self.underlying).into())
+            suffixes.push((SuffixIndex(i), suffix_type, underlying).into())
         }
         (suffixes, lms_locations)
     }
@@ -359,7 +359,7 @@ impl<'a> Suffix<'a> {
     }
 }
 
-struct Bucket { -- over the suffix array. actually start impl of sais
+pub struct Bucket<'a> {
     /// Index in suffix array where this bucket begins
     start: SuffixArrayIndex,
 
@@ -377,6 +377,10 @@ struct Bucket { -- over the suffix array. actually start impl of sais
     /// Used in a similar manner as `offset_from_start` just
     /// from the end index
     offset_from_end: usize,
+
+    /// The region of the suffix array that this bucket
+    /// refers to
+    bucket: &'a [SuffixIndex]
 }
 ```
 
@@ -397,7 +401,7 @@ impl AlphabetCounter {
 
     /// We shall rely on the count of each character in the alphabet to
     /// determine our buckets and their order in the suffix array
-    pub fn create_buckets(&self) -> HashMap<BucketId<u8>, Bucket> {
+    pub fn create_buckets<'a>(&self, array: &'a [SuffixIndex]) -> HashMap<BucketId<u8>, Bucket<'a>> {
         let mut buckets = HashMap::new();
         let mut start_location = 0;
         let alphabet_counter = self.0;
@@ -409,6 +413,7 @@ impl AlphabetCounter {
                     end: SuffixArrayIndex(end_location),
                     offset_from_end: 0,
                     offset_from_start: 0,
+                    bucket: &array[start_location..=end_location]
                 };
                 buckets.insert(BucketId(i as u8), bucket);
                 start_location = end_location + 1;
@@ -416,10 +421,57 @@ impl AlphabetCounter {
         }
         buckets
     }
+}
 ```
 **Induced Sorting Part One:** Once we know the nature of all our suffixes and the locations of all our buckets, we can begin slotting suffixes in place. First, we place all `lms` suffixes in their buckets. Because they are `S` type suffixes, we now that they will occupy the latter portions of their respective buckets. Why is this so? Well, think about how the suffixes in a given bucket compare if we exclude the first character. Once we have all the `lms` suffixes in position, we proceed to place `L` type suffixes at their appropriate location, after which we do the same for `S` type suffixes. We implement this logic below.
 ```rust
-/// WIP
+impl <'a> Bucket<'a> {
+    /// Put the provided s_type suffix into its rightful location.
+    /// In a bucket, S-type suffixes appear after all L-Type suffixes
+    /// because they are lexicographically larger. Furthermore, in a given bucket,
+    /// `lms` suffixes are larger than all other suffixes.
+    fn insert_stype_suffix(&mut self, suffix: &Suffix) {
+        debug_assert!(suffix.suffix_type != SuffixType::L);
+        todo!()
+    }
+
+    /// Put the provided l_type suffix in its approximate location in this
+    /// bucket
+    fn insert_ltype_suffix(&mut self, suffix: &Suffix) {
+        debug_assert!(suffix.suffix_type == SuffixType::L);
+        todo!()
+    }
+}
+
+type Buckets<'a> = HashMap<BucketId<u8>, Bucket<'a>>;
+
+impl<'a> SuffixArray<'a> {
+    fn induced_lms_sort(s: &'a str, buckets: &mut Buckets) {
+        let (suffixes, lms_locations) = Self::create_suffixes(s);
+        for lms_idx in lms_locations {
+            let cur_lms_suffix: Suffix = (lms_idx, SuffixType::S(true), s).into();
+            let id = cur_lms_suffix.get_bucket();
+            buckets
+                .get_mut(&id)
+                .unwrap()
+                .insert_stype_suffix(&cur_lms_suffix);
+        }
+        // 2. Place L-type suffixes in position
+        for suffix in &suffixes {
+            if suffix.suffix_type == SuffixType::L {
+                let id = suffix.get_bucket();
+                buckets.get_mut(&id).unwrap().insert_ltype_suffix(&suffix);
+            }
+        }
+        // 3. Place non lms S-type suffixes in positions
+        for suffix in &suffixes {
+            if suffix.suffix_type == SuffixType::S(false) {
+                let id = suffix.get_bucket();
+                buckets.get_mut(&id).unwrap().insert_ltype_suffix(&suffix);
+            }
+        }
+    }
+}
 ```
 **Substring Renaming:** In substring renaming, we'd like to reduce the size of our input. We do so by forming a new string out of our `LMS substrings`. That is, all the characters that belong to a single substring are reduced to a single label. We implement substring renaming below. 
 ```rust
@@ -434,4 +486,20 @@ After obtaining the shorter substring, we check to see if it contains any repeat
 ##### The Whole Enchilada
 ```rust
 /// WIP
+```
+
+#### References
+1. [CS 166 Lecture 3](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/03/Small03.pdf)
+1. [CS 166 Lecture 4](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/04/Small04.pdf)
+2. [This Exposition](https://zork.net/~st/jottings/sais.html#induced-sorting-l-type-suffixes)
+
+###### Cite As
+```latex
+@article{jlikhuva2021string_indexing,
+  title   = "String Indexing: A Rust Implementation.",
+  author  = "Okonda, Joseph",
+  journal = "https://github.com/jlikhuva/blog",
+  year    = "2021",
+  url     = "https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md"
+}
 ```

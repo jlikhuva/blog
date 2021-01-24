@@ -1,4 +1,4 @@
-# The Range-Min Query Problem
+# Rusty Solutions to the Range-Min Query Problem 
 
 #### A Naïve Solution
 The most straightforward way to solve this problem is to create a lookup table with all the RMQ answers precomputed. This will allow us to answer any RMQ in constant time by doing a table lookup. How can we build such a table? The first thing to notice is that this is a discrete optimization problem - we are interested in the minimal (aka the optimal) value in a given range. A quick reference to [common algorithmic patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) should tell us that we may be able to use dynamic programming to solve the problem. All we need to do is come up with an update rule. In particular, suppose our array is <!-- $A$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fT4Y6ki4ih.svg">,  if we know the smallest value in some range <!-- $(i, j)$ --> <img style="transform: translateY(0.1em); background: white;" src="https://render.githubusercontent.com/render/math?math=(i%2C%20j)"> to be <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg">, we can easily figure out the answer on a larger range <!-- $(i, j+1)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/BR28J51dHP.svg"> by comparing <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg"> with <!-- $A[i + 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/DVfAuKZf2r.svg">. That is:
@@ -646,3 +646,18 @@ Thus, our final data structure has the following features:
 |`0.25 lg n`| Sparse Table| Sparse Table with Cartesian Tree based caching|`<O(n), O(1)>`|
 
 As discussed earlier, although this method has impressive  asymptotic numbers, it is often outperformed in practice by the hybrid with logarithmic query time. Furthermore, this method is a lot more complex. That is another reason, from an engineering standpoint, to prefer the `<O(n), O(lg)>` -- much less code, and just as fast.
+
+#### References
+1. [CS 166 Lecture 1](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/02/Small02.pdf)
+1. [CS 166 Lecture 2](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/02/Small02.pdf)
+
+###### Cite As
+```latex
+@article{jlikhuva2021rmq,
+  title   = "Rusty Solutions to the Range-Min Query Problem.",
+  author  = "Okonda, Joseph",
+  journal = "https://github.com/jlikhuva/blog",
+  year    = "2021",
+  url     = "https://github.com/jlikhuva/blog/blob/main/posts/rmq.md"
+}
+```
