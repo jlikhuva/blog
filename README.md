@@ -20,9 +20,9 @@ A distillation of some of the most elegant ideas in computer science. The collec
 
 #####  Investment Science [WIP]
 A distillation of some of the most compelling ideas in finance, as presented by Luenberger in `Investment Science` 
-1. [Mean-Variance Portfolio Theory](https://github.com/jlikhuva/blog/blob/main/posts/mvpt.md)
-2. [How to Price Securities](https://github.com/jlikhuva/blog/blob/main/posts/pricing.md)
-3. [Options Theory](https://github.com/jlikhuva/blog/blob/main/posts/options.md)
-4. [Capital Asset Pricing Model](https://github.com/jlikhuva/blog/blob/main/posts/capm.md)
-5. [Fowards, Futures, and Swaps](https://github.com/jlikhuva/blog/blob/main/posts/ffs.md)
+1. Mean-Variance Portfolio Theory
+2. How to Price Securities
+3. Options Theory
+4. Capital Asset Pricing Model
+5. Fowards, Futures, and Swaps
 
