@@ -9,14 +9,14 @@ A distillation of some of the most elegant ideas in computer science. The collec
 1. [Common Algorithmic Patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
 1. [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
 2. [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
-3. [A Bottom-up Splay Tree](https://github.com/jlikhuva/blog/blob/main/posts/splay.md)
-4. [Graphs: All Foundational Methods](https://github.com/jlikhuva/blog/blob/main/posts/graphs.md)
-5. [Sketching Algorithms](https://github.com/jlikhuva/blog/blob/main/posts/sketching.md)
-6. [Algorithms for Discrete Optimization](https://github.com/jlikhuva/blog/blob/main/posts/optimization.md)
-7. [The Lazy Binomial Heap](https://github.com/jlikhuva/blog/blob/main/posts/binomial.md)
-8. [Specialized Containers for Integers](https://github.com/jlikhuva/blog/blob/main/posts/integer.md)
-9.  [Persistent & Retroactive Data Structures](https://github.com/jlikhuva/blog/blob/main/posts/persistent.md)
-10. [Assorted ideas from Compuational Geometry](https://github.com/jlikhuva/blog/blob/main/posts/comp_geom.md)
+3. [The Bottom-up Splay Tree](https://github.com/jlikhuva/blog/blob/main/posts/splay.md)
+4. Graphs: All Foundational Methods
+5. Sketching Algorithms
+6. Algorithms for Discrete Optimization
+7. The Lazy Binomial Heap
+8. Specialized Containers for Integers
+9.  Persistent & Retroactive Data Structures
+10. Assorted ideas from Compuational Geometry
 
 #####  Investment Science [WIP]
 A distillation of some of the most compelling ideas in finance, as presented by Luenberger in `Investment Science` 
