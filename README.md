@@ -1,6 +1,6 @@
 Hello! I am scientist working in NYC. 
 
-Below, you'll find a random collection of notes that I made over the course of my study and work. Although most of the notes are about core ideas in computer science (Data Structures & Algorithms, Reinforcement Learning, and Computational Geometry), a few are about ideas from Molecular Biology and Investment Science.  I wrote the notes in order to _deeply_ understand the foundational ideas in these areas of knowledge. I am distilling them here for future reference. If you find any errors, feel free to open a PR with the intended fix.
+Below, you'll find a random collection of notes that I made over the course of my study and work. Although most of the notes are about core ideas in computer science (Data Structures & Algorithms, Reinforcement Learning, and Computational Geometry), a few are about ideas from Molecular Biology and Bioinformatics.  I wrote the notes in order to _deeply_ understand the foundational ideas in these areas of knowledge. I am distilling them here for future reference. If you find any errors, feel free to open a PR with the intended fix.
 
 If it isn't obvious by now, this blog format was inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
 
@@ -18,11 +18,11 @@ A distillation of some of the most elegant ideas in computer science. The collec
 9.  Persistent & Retroactive Data Structures
 10. Assorted ideas from Compuational Geometry
 
-#####  Investment Science [WIP]
-A distillation of some of the most compelling ideas in finance, as presented by Luenberger in `Investment Science` 
-1. Mean-Variance Portfolio Theory
-2. How to Price Securities
-3. Options Theory
-4. Capital Asset Pricing Model
-5. Fowards, Futures, and Swaps
+#####  Bioinformatics [WIP]
+A distillation of some of the most compelling ideas in bioinformatics, as presented by Compeau et al. in `Bioinformatics Algorithms` 
+1. DNA Replication
+2. Comparing Biological Sequences
+3. Molecular Clocks
+4. Genome Assemby
+5. Antibiotic Sequenceing
 
