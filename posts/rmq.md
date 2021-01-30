@@ -65,27 +65,33 @@ type LookupTable<'a, T> = HashMap<RMQRange<'a, T>, usize>;
 /// is lower bounded by the starting index, the resulting lookup table is an
 /// upper triangular matrix. Therefore, instead of representing it as a matrix,
 /// we use a hashmap instead (to save space)
-fn compute_rmq_all_ranges<'a, T: Hash + Eq + Ord>(array: &'a [T]) -> LookupTable<'a, T> {
+/// Computes the answers to all possible queries. Since the ending index of a query
+/// is lower bounded by the starting index, the resulting lookup table is an
+/// upper triangular matrix. Therefore, instead of representing it as a matrix,
+/// we use a hashmap instead (to save space)
+fn compute_rmq_all_ranges<T: Hash + Eq + Ord>(array: &[T]) -> LookupTable<'_, T> {
     let len = array.len();
-    let mut lookup_table = HashMap::with_capacity((len * len)/2);
+    let mut lookup_table = HashMap::with_capacity((len * len) / 2);
     for start in 0..len {
         for end in start..len {
             if start == end {
                 lookup_table.insert((start, end, array).into(), start);
             } else {
-                let prev_range = (start, end-1, array).into();
+                let prev_range = (start, end - 1, array).into();
                 let new_range = (start, end, array).into();
                 let mut min_idx = *lookup_table.get(&prev_range).unwrap();
                 if array[min_idx] > array[end] {
                     min_idx = end;
                 }
                 lookup_table.insert(new_range, min_idx);
-            } 
+            }
         }
     }
     lookup_table
 }
 ```
+You can play around with the code so far [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=ccb49819827b6e1834765389f7ecf12b)
+
 Can we do better than <!-- $\left<\Theta(n^2), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/8UBwqFAqMg.svg">? The query time is the best we can ever hope for. However, we can reduce the processing time. Let's see how we can do that in the next section.
 
 #### Binary Representation & Sparse Tables
@@ -237,6 +243,10 @@ impl MSBLookupTable {
 ```
 Once again, the query time is the best possible. However, even though the pre-processing time reduced from quadtratic to `O(n lg n)`, we can still do better. In particular, we can shave off a log factor and arrive at a linear time pre-processing algorithm. To figure out how to do that, we shall take a detour to discuss the method of four russians.
 
+If you'd like to take a breather, feel free to play around with the sparse table code in [the rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=7f9c152dee95816d7ef8ef9d14bc1f72).
+
+---
+
 ##### The Method of Four Russians
 We begin this detour by taking another detour. Let us discuss the algorithms used to find the median (or more generally, the `i_th` order statistic) of a collection of pairwise comparable items. `Quickselect` can solve this problem in expected linear time. However, if we want a worst case linear time solution, we need to use the `Median of Medians` procedure.
 
@@ -372,6 +382,9 @@ fn kth_order_statistic<'a, T: Ord + Clone>(array: &'a mut [T], k: usize) -> &T {
     }
 } 
 ```
+You can play around with the code for computing the `kth_order_statistic` [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=02f915a79be3e7b6aadf53cfc1f29156).
+
+---
 The median of medians procedure has a few key structures:
 * The input is divided into blocks or equal size. This is called block partitioning and each block is called the micro array.
 * The original problem (median in this case) is solved for each block using a naive method that works well for small input sizes. With this scheme, we are able to solve the problem for each block in constant time and for all blocks in linear time.
@@ -548,6 +561,8 @@ pub enum RMQSolverKind {
     SparseTableSolver,
 }
 
+type BlockLevelSolvers<'a, T> = HashMap<RMQBlock<'a, T>, Box<dyn RMQSolver<'a, T>>>;
+
 /// Since we unified our various solve, we can succinctly represent
 /// a solver that follows the method of four russians scheme.
 /// Notice how we allow one to set the block_size, and solvers
@@ -563,11 +578,11 @@ pub struct FourRussiansRMQ<'a, T: Ord> {
 
     /// We call the solve method of this object when we want to
     /// answer an `rmq` query over the macro array
-    macro_level_solver: RMQSolverKind,
+    macro_level_solver: Box<dyn RMQSolver<'a, T>>,
 
     /// We call the solve method of this object when we want to
-    /// answer an `rmq` query over a single block (ie a micro arrsy)
-    block_level_solver: RMQSolverKind,
+    /// answer an `rmq` query over a single block (ie a micro array)
+    block_level_solvers: BlockLevelSolvers<'a, T>,
 }
 
 impl<'a, T: Ord> FourRussiansRMQ<'a, T> {
@@ -575,7 +590,27 @@ impl<'a, T: Ord> FourRussiansRMQ<'a, T> {
     /// with a block size of `b`. The solver will use the `macro_solver` to
     /// solve the instance of the problem on the array of aggregate solutions from
     /// the blocks and `micro_solver` to solve the solution in each individual block
-    pub fn new(static_array: &'a [T], b: usize, macro_solver: RMQSolverKind, micro_solver: RMQSolverKind) -> Self {
+    pub fn new(
+        static_array: &'a [T],
+        block_size: usize,
+        macro_solver: RMQSolverKind,
+        micro_solver: RMQSolverKind,
+    ) -> Self {
+        let macro_level_solver = Self::create_macro_solver(static_array, block_size, macro_solver);
+        let block_level_solvers = Self::create_micro_solvers(static_array, block_size, micro_solver);
+        FourRussiansRMQ {
+            static_array,
+            block_size,
+            macro_level_solver,
+            block_level_solvers,
+        }
+    }
+
+    n create_macro_solver(array: &'a [T], b: usize, kind: RMQSolverKind) -> Box<dyn RMQSolver<'a, T>> {
+        todo!()
+    }
+
+    fn create_micro_solvers(array: &'a [T], b: usize, kinds: RMQSolverKind) -> BlockLevelSolvers<'a, T> {
         todo!()
     }
 
@@ -621,14 +656,157 @@ To fully understand the upcoming `<O(n), O(1)>` solution, we need to to first ge
 ##### Cartesian Trees
 A cartesian tree is a derivative data structure. It is derived from an underlying array. More formally, the cartesian tree `T` of an array `A` is a min binary heap of the elements of `A` organized such that an in order traversal of the tree yields the original array. How can we construct such a tree given some input array? The main observations that will guide our construction will be the requirement that an in-order traversal must yield the array elements in their positional order, and the requirement that the tree be a min heap. During an in-order traversal, the right child is retrieved after both the parent and the left child -- consequently, the right-most node will be the last node retrieved. We can thus build the tree [incrementaly](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f), adding each new element as the rightmost node of the tree.
 
-More specifically,  we'll build the cartesian tree incrementally -- adding in elements in the order that they appear in the array. To add an element <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg">, we inspect the right spine of the tree starting with the right most node. We follow parent pointers until we find an element, <!-- $\psi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qPR3FOEHUn.svg">,  in the tree that is smaller that <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg">. We modify the tree, making <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg"> a right child of <!-- $\psi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qPR3FOEHUn.svg">. We also make the rest of the right subtree that is below <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg"> a left subtree of the new node. We implement this scheme below.
+More specifically,  we'll build the cartesian tree incrementally -- adding in elements in the order that they appear in the array. To add an element <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg">, we inspect the right spine of the tree starting with the right most node. We follow parent pointers until we find an element, <!-- $\psi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qPR3FOEHUn.svg">,  in the tree that is smaller than <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg">. We modify the tree, making <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg"> a right child of <!-- $\psi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qPR3FOEHUn.svg">. We also make the rest of the right subtree that is below <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg"> a left subtree of the new node. Traversing the right spine of tree from the right-most node can be done efficiently by keeping nodes on the right spine in a stack. That way, the rightmost node is always at the top of the stack. Below, we use this observation to implement a procedure for creating a cartesian tree from some array.
 ```rust
-/// WIP: Cartesian Tree construction
+/// As always, we use the `wrapped index pattern`
+///
+/// An index into a collection of cartesian tree nodes
+#[derive(Debug, Ord, PartialOrd, Eq, PartialEq, Clone)]
+struct CartesianNodeIdx(usize);
+
+#[derive(Debug)]
+struct CartesianTreeNode<'a, T: Ord> {
+    /// A reference to the array value that this node represents
+    value: &'a T,
+
+    /// The locations of the children and parent of this node.
+    left_child_idx: Option<CartesianNodeIdx>,
+    right_child_idx: Option<CartesianNodeIdx>,
+}
+
+impl<'a, T: Ord> std::ops::Index<CartesianNodeIdx> for Vec<CartesianTreeNode<'a, T>> {
+    type Output = CartesianTreeNode<'a, T>;
+    fn index(&self, index: CartesianNodeIdx) -> &Self::Output {
+        &self[index.0]
+    }
+}
+
+impl<'a, T: Ord> std::ops::IndexMut<CartesianNodeIdx> for Vec<CartesianTreeNode<'a, T>> {
+    fn index_mut(&mut self, index: CartesianNodeIdx) -> &mut Self::Output {
+        &mut self[index.0]
+    }
+}
+/// A cartesian tree is a heap ordered binary tree
+/// derived from some underlying array. An in-order
+/// traversal of the tree yields the underlyng tree.
+#[derive(Debug)]
+struct CartesianTree<'a, T: Ord> {
+    nodes: Vec<CartesianTreeNode<'a, T>>,
+    root_idx: Option<CartesianNodeIdx>,
+    action_profile: Vec<CartesianTreeAction>,
+}
+
+/// When constructing a cartesian tree, we either
+/// push a node to or pop a node from a stack.
+/// We keep track of these actions because we can
+/// use them to generate the cartesian tree number.
+#[derive(Debug)]
+enum CartesianTreeAction {
+    Push,
+    Pop,
+}
+
+impl<'a, T: Ord> From<&'a T> for CartesianTreeNode<'a, T> {
+    fn from(value: &'a T) -> Self {
+        CartesianTreeNode {
+            value,
+            left_child_idx: None,
+            right_child_idx: None,
+        }
+    }
+}
+
+// To create the cartesian tree, we pop the stack until either
+// it's empty or the element atop the stack has a smaller value
+// than the element we are currently trying to add to the stack.
+// Once we break out of the `pop` loop, we make the item we popped
+// a left child of the new item we are adding. Additionally, we make
+// this new item a right/left child of the item atop the stack
+impl<'a, T: Ord> From<&'a [T]> for CartesianTree<'a, T> {
+    fn from(underlying: &'a [T]) -> Self {
+        let len = underlying.len();
+        let mut nodes = Vec::with_capacity(len);
+        let mut stack = Vec::<CartesianNodeIdx>::with_capacity(len);
+        let mut action_profile = Vec::with_capacity(len * 2);
+        for (idx, value) in underlying.iter().enumerate() {
+            nodes.push(value.into());
+            let node_idx = CartesianNodeIdx(idx);
+            add_node_to_cartesian_tree(&mut nodes, &mut stack, &mut action_profile, node_idx);
+        }
+        let root_idx = stack.first().map(|min| min.clone());
+        CartesianTree {
+            nodes,
+            root_idx,
+            action_profile,
+        }
+    }
+}
+
+type Nodes<'a, T> = Vec<CartesianTreeNode<'a, T>>;
+type Stack = Vec<CartesianNodeIdx>;
+type Actions = Vec<CartesianTreeAction>;
+/// Adds the node at the given idx into the tree by wiring up the
+/// child and parent pointers. it is assumed that the
+/// node has already been added to `nodes` the list of nodes.
+/// This procedure returns an optional index value
+/// that is populated if the root changed.
+fn add_node_to_cartesian_tree<T: Ord>(
+    nodes: &mut Nodes<T>,
+    stack: &mut Stack,
+    actions: &mut Actions,
+    new_idx: CartesianNodeIdx,
+) {
+    let mut last_popped = None;
+    loop {
+        match stack.last() {
+            None => break,
+            Some(top_node_idx) => {
+                // If the new node is greater than the value atop the stack,
+                // we make the new node a right child of that value
+                if nodes[top_node_idx.clone()].value < nodes[new_idx.clone()].value {
+                    nodes[top_node_idx.clone()].right_child_idx = Some(new_idx.clone());
+                    break;
+                }
+                last_popped = stack.pop();
+                actions.push(CartesianTreeAction::Pop);
+            }
+        }
+    }
+    // We make the last item we popped a left child of the
+    // new node
+    if let Some(last_popped_idx) = last_popped {
+        nodes[new_idx.clone()].left_child_idx = Some(last_popped_idx);
+    }
+    stack.push(new_idx);
+    actions.push(CartesianTreeAction::Push);
+}
+
+impl<'a, T: Ord> CartesianTree<'a, T> {
+    fn in_order_traversal(&self) -> Vec<&T> {
+        let mut res = Vec::with_capacity(self.nodes.len());
+        self.traversal_helper(&self.root_idx, &mut res);
+        res
+    }
+
+    fn traversal_helper(&self, cur_idx: &Option<CartesianNodeIdx>, res: &mut Vec<&'a T>) {
+        let nodes = &self.nodes;
+        match cur_idx {
+            None => {}
+            Some(cur_sub_root) => {
+                self.traversal_helper(&nodes[cur_sub_root.clone()].left_child_idx, res);
+                res.push(&nodes[cur_sub_root.clone()].value);
+                self.traversal_helper(&nodes[cur_sub_root.clone()].right_child_idx, res);
+            }
+        }
+    }
+}
 ```
+You can play around with the code for constructing a cartesian tree in [the rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=c51356cba92f48f0434c64abd21d7162).
+
 Why are cartesian trees important, and how are they related to the `RMQ` problem? First, notice that once we have a cartesian tree for an array, we can answer any `RMQ` on that array. In particular, <!-- $RMQ_A(i, j) = LCA_T(A[i], A[j])$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/s3WLVY6DAX.svg">. That is we can answer `RMQ` by doing lowest common ancerstor searches in the cartesian tree. Although this idea is intrinsically interesting, we do not explore it further. To fully appreciate the importance of cartesian trees and their relation to the data structure design problem at hand, we have to explore when and how two arrays have isomorphic trees. This will lead us to a way of figuring out when two blocks can share the same pre-processed index -- a thing that will lead us to an `RMQ` data structure with constant query time.
 
 ##### Cartesian Tree Isomorphisms
-When do two cartesian trees for two different arrays, <!-- $B_1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pCi7uET35K.svg">, <!-- $B_2$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/1b0Fxslia6.svg"> have the same shape? How can we tell this efficiently?
+When do two cartesian trees for two different arrays, <!-- $B_1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pCi7uET35K.svg">, <!-- $B_2$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/1b0Fxslia6.svg"> have the same shape? How can we tell this efficiently? Put simply, if two blocks have the same shape, then their minimal values of any range in both blocks occur at the same index. This means that, the sequence of `Push` and `Pop` operations when constructing the cartesian trees for the two blocks are exactly the same. Therefore, to know if two blocks are isomorphic, we could simply compare their action profiles. Note, however, when we are only interested in whether two blocks have isomorphic trees, we don't even need to construct the tree. We also do not need to allocate space for the action profile vector. The idea is to create a a bitstring from the sequence of `Push` and `Pop` operations. The number formed by this bitstring is called the cartesian tree number. Therefore, with this scheme, two blocks have isomorphic trees if they have the same cartesian tree number. Below, we show how to calculate such a number from the action profile. 
 
 ```rust
 /// WIP: Calculating The Cartesian Tree Number
