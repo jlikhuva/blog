@@ -700,7 +700,7 @@ struct CartesianTree<'a, T: Ord> {
 /// push a node to or pop a node from a stack.
 /// We keep track of these actions because we can
 /// use them to generate the cartesian tree number.
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 enum CartesianTreeAction {
     Push,
     Pop,
@@ -803,27 +803,66 @@ impl<'a, T: Ord> CartesianTree<'a, T> {
 ```
 You can play around with the code for constructing a cartesian tree in [the rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=c51356cba92f48f0434c64abd21d7162).
 
-Why are cartesian trees important, and how are they related to the `RMQ` problem? First, notice that once we have a cartesian tree for an array, we can answer any `RMQ` on that array. In particular, <!-- $RMQ_A(i, j) = LCA_T(A[i], A[j])$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/s3WLVY6DAX.svg">. That is we can answer `RMQ` by doing lowest common ancerstor searches in the cartesian tree. Although this idea is intrinsically interesting, we do not explore it further. To fully appreciate the importance of cartesian trees and their relation to the data structure design problem at hand, we have to explore when and how two arrays have isomorphic trees. This will lead us to a way of figuring out when two blocks can share the same pre-processed index -- a thing that will lead us to an `RMQ` data structure with constant query time.
+---
+
+Why are cartesian trees important, and how are they related to the `RMQ` problem? First, notice that once we have a cartesian tree for an array, we can answer any `RMQ` on that array. In particular, <!-- $RMQ_A(i, j) = LCA_T(A[i], A[j])$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/s3WLVY6DAX.svg">. That is we can answer `RMQ` by doing lowest common ancerstor searches in the cartesian tree. Although this idea is intrinsically interesting, we do not explore it further. Feel free to check out [this note for further details](http://courses.csail.mit.edu/6.851/fall17/scribe/lec15.pdf). 
+
+To fully appreciate the importance of cartesian trees and their relation to the data structure design problem at hand, we have to explore when and how two arrays have isomorphic trees. This will lead us to a way of figuring out when two blocks can share the same pre-processed index -- a thing that will lead us to an `RMQ` data structure with constant query time.
 
 ##### Cartesian Tree Isomorphisms
 When do two cartesian trees for two different arrays, <!-- $B_1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pCi7uET35K.svg">, <!-- $B_2$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/1b0Fxslia6.svg"> have the same shape? How can we tell this efficiently? Put simply, if two blocks have the same shape, then their minimal values of any range in both blocks occur at the same index. This means that, the sequence of `Push` and `Pop` operations when constructing the cartesian trees for the two blocks are exactly the same. Therefore, to know if two blocks are isomorphic, we could simply compare their action profiles. Note, however, when we are only interested in whether two blocks have isomorphic trees, we don't even need to construct the tree. We also do not need to allocate space for the action profile vector. The idea is to create a a bitstring from the sequence of `Push` and `Pop` operations. The number formed by this bitstring is called the cartesian tree number. Therefore, with this scheme, two blocks have isomorphic trees if they have the same cartesian tree number. Below, we show how to calculate such a number from the action profile. 
 
 ```rust
-/// WIP: Calculating The Cartesian Tree Number
+impl<'a, T: Ord> CartesianTree<'a, T> {
+    /// Calculates the cartesian tree number of this tree
+    /// using the sequence of `push` and `pop` operations
+    /// stored in the `action_profile`. Note that calculating this
+    /// value only makes sense when the underlying array is small.
+    /// More specifically, this procedure assumes that the underlying
+    /// array has at most 32 items. This makes sense in our context
+    /// since we're mostly intersted in the cartesian tree numbers
+    /// of RMQ blocks
+    fn cartesian_tree_number(&self) -> u64 {
+        let mut number = 0;
+        let mut offset = 0;
+        for action in &self.action_profile {
+            if action == &CartesianTreeAction::Push {
+                number |= 1 << offset;
+            }
+            offset += 1;
+        }
+        number
+    }
+}
 ```
+A nice consequence of the preceding discussion is that we can say something about the number of possible cartesian trees for an array of a given length `b`. Note that, the maximum length of the action profile is `2b`. Therefore, the largest cartesian tree number that can be produced is <!-- $2^{2b} = 4^b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/xIDYHrCQR2.svg">. This number will come in handy when we analyze the runtime of the `<O(n), O(1)>` solution.
 
 #### The Fischer-Heun RMQ Structure
-```rust
-/// WIP: The FourRussiansRMQ that uses the SparseTableSolver for the
-/// macro array and a DenseTableSolver for the micro arrays along with
-/// cartesian tree based memoization and a block size of 0.25 lg n 
-```
+How does all this talk of cartesian trees and cartesian numbers translate into an `<O(n), O(1)>` range min query solution? Let's discuss that next.
+
+As with the other methods, we begin by dividing the underlyng aray into blocks of `b` items. For each of our `ceil(n/b)` blocks, we find the location of the smallest element by scanning. We then aggregate the min locations for all blocks in what we call the macro array. To answer an `rmq` query, we simply return the smallest value from three smaller `rmqs`: (a) The block of the starting index, (b) The block of the ending index, and (c) The macro array. So far, this is just a recap from the previos discussion.
+
+We are yet to answer two key questions though: (a) What should our block size `b` be? and (b) What methods (`SolverKinds`) should we use to answer queries on the macro and micro arrays? The judiciosly picking the block size and cleverly applying our solvers, we shall arrive at an `<O(n), O(1)>` method.
+
+We shall use the `SparseTableSolver` to solve queries on the macro array. For each block, we shall use the `DenseTableSolver`. However, if two blocks have the same cartesian tree number, we shall have them share solvers. We can do this because, as mentioned earlier, two blocks have the same cartesian numbers iff they have isomorphic cartesian trees which further implies that min values for both blocks occur at the exact same indexes. Since we use precomputed lookup tables, the query time is obviously `O(1)`. How about the preprocessing time?
+
+The preprocessing time is an amalgamation of three terms:
+  1. The time used to divide the input into blocks and create the blocks. This, as we saw earlier, is `O(n)`
+  2. The time used to create the solver for the macro array. Since we are using the `SparseTableSolver` we know that this will be `O(n/b lg n)`. Note that in past sections, we picked `b = lg n`. We have yet to choose the value of `b`.
+  3. And finally, the time used to create solvers for each block. Since we are using the `DenseTableSolver`, we know that this time will be quadratic. That is, the time to create a solver for a single block will be `b^2`. Since we are sharing solvers between blocks, we need to multiply the time we spend on each block by the number of distnct blocks of size `b`. As we saw earlier, this value is <!-- $2^{2b} = 4^b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/xIDYHrCQR2.svg">. 
+
+Therefore, our expression for the preprocessing time is <!-- $\mathcal{O}(n + \lceil\frac{n}{b}\rceil + b^24^b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/MiWMTJnLcq.svg">. Our final task is thus to pick a value of `b` that will make this expression evaluate to `O(n)`. Long story short, we pick <!-- $b = 0.5 \lg_4 n = O.25 \lg_2 n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/u3vbuw4bn2.svg">.
+
+To summarize, by choosing a block size of `0.25 lg n` and using shared dense table solvers to solve the micro level `rmqs` (where we use cartesian tree numbers to figure out when to share solvers), and a sparse table solver for the macro array, we're able to solve the `RMQ` problem in `<O(n), O(1)>`. However, the `O(n)` preprocessing time does hide a large constant factor. Think of the trouble we went through to compute the to calculate cartesian trees.
+
 Thus, our final data structure has the following features:
 |Block Size|Macro Array Method|Micro Array Method|Runtime|
 |----------|------------------|------------------|-------|
 |`0.25 lg n`| Sparse Table| Sparse Table with Cartesian Tree based caching|`<O(n), O(1)>`|
 
 As discussed earlier, although this method has impressive  asymptotic numbers, it is often outperformed in practice by the hybrid with logarithmic query time. Furthermore, this method is a lot more complex. That is another reason, from an engineering standpoint, to prefer the `<O(n), O(lg)>` -- much less code, and just as fast.
+
+We leave the implementation of this scheme as an exercise. Using the abstractions from above, the implementation should be a simple extension. We simply have to keep track of a mapping from blocks to cartesian tree numbers and modify `BlockLevelSolvers` to map from cartesian tree numbers intead of blocks.
 
 #### References
 1. [CS 166 Lecture 1](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/00/Small00.pdf)
