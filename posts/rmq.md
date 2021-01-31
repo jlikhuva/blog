@@ -867,7 +867,7 @@ We leave the implementation of this scheme as an exercise. Using the abstraction
 #### References
 1. [CS 166 Lecture 1](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/00/Small00.pdf)
 1. [CS 166 Lecture 2](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf)
-
+2. [6.851](http://courses.csail.mit.edu/6.851/fall17/lectures/L15.pdf)
 ###### Cite As
 ```latex
 @article{jlikhuva2021rmq,
