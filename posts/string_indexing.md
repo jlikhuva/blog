@@ -246,28 +246,21 @@ Below, we briefly discuss some key ideas that we need in order to fully understa
 
 What's the purpose of all these concepts? Well, SA-IS is based on two key ideas. The first one is that if we know the locations of the `LMS` suffixes in the suffix array, then we can infer the location of all the other suffixes (induced sorting). The second one is divide and conquer. Since SA-IS is a divide an conquer method it needs a way of reducing the problem space. This is called `substring renaming` in the literature. Since `LMS` suffixes are sparsely distributed in a string, SA-IS leverages the substrings that they produce (`LMS Substrings`) to reduce the problem size. We shall discuss how `substring renaming` is done later on. For now, let us introduce abstractions that allow us to work with the concepts we have seen so far.
 ```rust
-#[derive(Debug, PartialEq, Eq)]
-enum SuffixType {
-    /// A variant for S-type suffixes. The associatef boolen
-    /// indicates whether this suffix is an `LMS` suffix.
-    S(bool),
-
-    /// A variant for L-type suffixes
-    L
+#[derive(Debug)]
+pub struct Suffix<'a> {
+    start: SuffixIndex,
+    suffix_type: SuffixType,
+    underlying: &'a str,
 }
 
-pub struct Suffix<'a> {
-    /// The index in the underlying where this suffix
-    /// begins. This uniquely identifies the suffix
-    start: SuffixIndex,
-
-    /// Is this an `L` type or `S` type suffix?
-    suffix_type: SuffixType,
-
-    /// A reference to the underlying string. Helps ensure
-    /// that suffixes don't outlive the strings to which
-    /// they refer.
-    underlying: &'a str
+impl<'a> Suffix<'a> {
+    /// Is this suffix a left most `S-type` suffix?
+    pub fn is_lms(&self) -> bool {
+        match self.suffix_type {
+            SuffixType::L => false,
+            SuffixType::S(lms) => lms,
+        }
+    }
 }
 
 impl<'a> From<(SuffixIndex, SuffixType, &'a str)> for Suffix<'a> {
@@ -281,23 +274,23 @@ impl<'a> From<(SuffixIndex, SuffixType, &'a str)> for Suffix<'a> {
     }
 }
 
-impl<'a> Suffix<'a> {
-    /// Is this suffix a left most `S-type` suffix?
-    pub fn is_lms(&self) -> bool {
-        match self.suffix_type {
-            SuffixType::L => false,
-            SuffixType::S(lms) => lms,
-        }
-    }
-}
+#[derive(Debug, PartialEq, Eq, Clone)]
+enum SuffixType {
+    /// A variant for S-type suffixes. The associated boolen
+    /// indicates whether this suffix is an `LMS` suffix. We
+    /// discuss what that means below.
+    S(bool),
 
+    /// A variant for L-type suffixes
+    L,
+}
 
 impl<'a> SuffixArray<'a> {
     /// Create a list of the suffixes in the string. We scan the underlying string left to right and
     /// mark each corresponding suffix as either `L` or `S(false)`. Then we do a second right to left
     /// scan and mark all LMS suffixes as `S(true)`. We also keep track of the locations of the lms
     /// suffixes
-       fn create_suffixes(underlying: &'a str) -> (Vec<Suffix>, Vec<SuffixIndex>) {
+    fn create_suffixes(underlying: &'a str) -> (Vec<Suffix>, Vec<SuffixIndex>) {
         let s_len = underlying.len();
         let mut tags = vec![SuffixType::S(false); s_len];
         let mut suffixes = Vec::with_capacity(s_len);
@@ -346,20 +339,11 @@ impl<'a> SuffixArray<'a> {
 ```rust
 /// The first character of the suffixes in a bucket
 /// uniquely identifies that bucket
+#[derive(Eq, PartialEq, Hash, Debug)]
 pub struct BucketId<T>(T);
 
-impl<'a> Suffix<'a> {
-    /// We'll need a way to quickly tell what bucket a suffix belongs
-    /// to for us to insert it in that bucket at the appropriate
-    /// index
-    pub fn get_bucket(&self) -> BucketId<char> {
-        let first_char = self.underlying.chars().next();
-        debug_assert!(first_char.is_some());
-        BucketId(first_char.unwrap())
-    }
-}
-
-pub struct Bucket<'a> {
+#[derive(Debug)]
+pub struct Bucket {
     /// Index in suffix array where this bucket begins
     start: SuffixArrayIndex,
 
@@ -378,16 +362,22 @@ pub struct Bucket<'a> {
     /// from the end index
     offset_from_end: usize,
 
-    /// The region of the suffix array that this bucket
-    /// refers to
-    bucket: &'a [SuffixIndex]
+    /// Used for inserting `lms` suffixes in a bucket
+    lms_offset_from_end: usize,
+}
+
+impl<'a> Suffix<'a> {
+    pub fn get_bucket(&self) -> BucketId<u8> {
+        let first_char = self.underlying.chars().nth(self.start.0);
+        debug_assert!(first_char.is_some());
+        BucketId(first_char.unwrap() as u8)
+    }
 }
 ```
 
 **The Alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">**: An alphabet, simply put, is the ordered unique list of all the characters that can ever appear in our strings. For instance, if our problem domain is genomics, then our alphabet could be `{A, T, U, C, G}`. If it is proteomics, the alphabet could be the 20 amino acids. For our case, our alphabet is the `256` ascii characters. To create a bucket, we need to know where it starts and where it ends. For each unique character in the underlying string, we can obtain this information by leveraging the associated alphabet to implement a modified version of couting sort. In particular, we start by keeping a count of how many times each character appears in the underlying string — just as we do in counting sort. We then scan across this array of counts using the count information to generate our buckett. We implement this functionality below.
 ```rust
 pub struct AlphabetCounter([usize; 1 << 8]);
-
 impl AlphabetCounter {
     /// Initialize the counter from a string slice. This procedure expects
     /// the give slice to only have ascii characters
@@ -399,9 +389,7 @@ impl AlphabetCounter {
         Self(alphabet)
     }
 
-    /// We shall rely on the count of each character in the alphabet to
-    /// determine our buckets and their order in the suffix array
-    pub fn create_buckets<'a>(&self, array: &'a [SuffixIndex]) -> HashMap<BucketId<u8>, Bucket<'a>> {
+    pub fn create_buckets<'a>(&self, array: &'a [SuffixIndex]) -> HashMap<BucketId<u8>, Bucket> {
         let mut buckets = HashMap::new();
         let mut start_location = 0;
         let alphabet_counter = self.0;
@@ -413,7 +401,7 @@ impl AlphabetCounter {
                     end: SuffixArrayIndex(end_location),
                     offset_from_end: 0,
                     offset_from_start: 0,
-                    bucket: &array[start_location..=end_location]
+                    lms_offset_from_end: 0,
                 };
                 buckets.insert(BucketId(i as u8), bucket);
                 start_location = end_location + 1;
@@ -425,53 +413,59 @@ impl AlphabetCounter {
 ```
 **Induced Sorting Part One:** Once we know the nature of all our suffixes and the locations of all our buckets, we can begin slotting suffixes in place. First, we place all `lms` suffixes in their buckets. Because they are `S` type suffixes, we now that they will occupy the latter portions of their respective buckets. Why is this so? Well, think about how the suffixes in a given bucket compare if we exclude the first character. Once we have all the `lms` suffixes in position, we proceed to place `L` type suffixes at their appropriate location, after which we do the same for `S` type suffixes. We implement this logic below.
 ```rust
-impl <'a> Bucket<'a> {
+impl Bucket {
     /// Put the provided s_type suffix into its rightful location.
     /// In a bucket, S-type suffixes appear after all L-Type suffixes
     /// because they are lexicographically larger. Furthermore, in a given bucket,
     /// `lms` suffixes are larger than all other suffixes.
-    fn insert_stype_suffix(&mut self, suffix: &Suffix) {
-        debug_assert!(suffix.suffix_type != SuffixType::L);
-        todo!()
+    fn insert_stype_suffix(&mut self, suffix: &Suffix, sa: &mut Vec<SuffixIndex>) {
+        sa[self.end.0 - self.offset_from_end] = suffix.start.clone();
+        self.offset_from_end += 1;
+    }
+
+    fn insert_lms_suffix(&mut self, suffix: &Suffix, sa: &mut Vec<SuffixIndex>) {
+        sa[self.end.0 - self.lms_offset_from_end] = suffix.start.clone();
+        self.lms_offset_from_end += 1;
     }
 
     /// Put the provided l_type suffix in its approximate location in this
     /// bucket
-    fn insert_ltype_suffix(&mut self, suffix: &Suffix) {
-        debug_assert!(suffix.suffix_type == SuffixType::L);
-        todo!()
+    fn insert_ltype_suffix(&mut self, suffix: &Suffix, sa: &mut Vec<SuffixIndex>) {
+        sa[self.start.0 + self.offset_from_start] = suffix.start.clone();
+        self.offset_from_start += 1;
     }
 }
 
 type Buckets<'a> = HashMap<BucketId<u8>, Bucket<'a>>;
 
 impl<'a> SuffixArray<'a> {
-    fn induced_lms_sort(s: &'a str, buckets: &mut Buckets) {
+    fn induced_lms_sort(s: &'a str, buckets: &mut Buckets, sa: &mut Vec<SuffixIndex>) {
         let (suffixes, lms_locations) = Self::create_suffixes(s);
+        // Place LMS suffixes in position.
         for lms_idx in lms_locations {
             let cur_lms_suffix: Suffix = (lms_idx, SuffixType::S(true), s).into();
             let id = cur_lms_suffix.get_bucket();
-            buckets
-                .get_mut(&id)
-                .unwrap()
-                .insert_stype_suffix(&cur_lms_suffix);
+            buckets.get_mut(&id).unwrap().insert_lms_suffix(&cur_lms_suffix, sa);
         }
+
         // 2. Place L-type suffixes in position
         for suffix in &suffixes {
             if suffix.suffix_type == SuffixType::L {
                 let id = suffix.get_bucket();
-                buckets.get_mut(&id).unwrap().insert_ltype_suffix(&suffix);
+                buckets.get_mut(&id).unwrap().insert_ltype_suffix(&suffix, sa);
             }
         }
-        // 3. Place non lms S-type suffixes in positions
-        for suffix in &suffixes {
-            if suffix.suffix_type == SuffixType::S(false) {
+
+        // 3. Place S-type suffixes in position. This operation
+        //    may change the location of the `lms` suffixes that
+        //    (1) ordered.
+        for suffix in suffixes.iter().rev() {
+            if suffix.suffix_type != SuffixType::L {
                 let id = suffix.get_bucket();
-                buckets.get_mut(&id).unwrap().insert_ltype_suffix(&suffix);
+                buckets.get_mut(&id).unwrap().insert_stype_suffix(&suffix, sa);
             }
         }
     }
-}
 ```
 **Substring Renaming:** In substring renaming, we'd like to reduce the size of our input. We do so by forming a new string out of our `LMS substrings`. That is, all the characters that belong to a single substring are reduced to a single label. We implement substring renaming below. 
 ```rust
