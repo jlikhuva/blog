@@ -553,7 +553,37 @@ So, we set `b` to the square root of `n`. This gives us a query time of <!-- $\m
 
 Since our two level structure solutions will eventually mix and match the solvers that they use at each level, we begin by introducing an abstraction to facilitate that. Below, we implement an object that can answer any range min query using parameters that can be set by the client. 
 ```rust
+/// The abstraction for a single block.
+#[derive(Debug)]
+pub struct RMQBlock<'a, T> {
+    /// The starting index. This is 0-indexed and should be
+    /// less than or equal to the end_idx
+    start_idx: usize,
 
+    /// The ending index. This should be strictly less than the
+    /// length of the underlying array. Further, end_idx - start_idx should
+    /// be 5 for all except possibly the last block
+    end_idx: usize,
+
+    /// The index of the median value in the given range. To move from this
+    /// index to an indx in the underlying, we simply calculate
+    /// `start_idx + median_idx`
+    min_idx: usize,
+
+    /// The median of this block
+    min: &'a T,
+}
+
+impl <'a, T: Ord> From<(usize, usize, RMQResult<'a, T>)> for RMQBlock<'a, T> {
+    fn from((start_idx, end_idx, res): (usize, usize, RMQResult<'a, T>)) -> Self {
+        RMQBlock {
+            start_idx,
+            end_idx,
+            min_idx: res.min_idx,
+            min: res.min_value
+        }
+    }
+}
 /// The primary solvers available.
 pub enum RMQSolverKind {
     ScanningSolver,
@@ -596,7 +626,8 @@ impl<'a, T: Ord> FourRussiansRMQ<'a, T> {
         macro_solver: RMQSolverKind,
         micro_solver: RMQSolverKind,
     ) -> Self {
-        let macro_level_solver = Self::create_macro_solver(static_array, block_size, macro_solver);
+        let blocks = Self::create_blocks(static_array, block_size);
+        let macro_level_solver = Self::create_macro_solver(blocks, macro_solver);
         let block_level_solvers = Self::create_micro_solvers(static_array, block_size, micro_solver);
         FourRussiansRMQ {
             static_array,
@@ -606,11 +637,22 @@ impl<'a, T: Ord> FourRussiansRMQ<'a, T> {
         }
     }
 
-    n create_macro_solver(array: &'a [T], b: usize, kind: RMQSolverKind) -> Box<dyn RMQSolver<'a, T>> {
+    fn create_blocks(array: &[T], b: usize) -> Vec<RMQBlock<'_, T>> {
+        let mut blocks = Vec::<RMQBlock<T>>::with_capacity(array.len() / b);
+        for start_idx in (0..array.len()).step_by(b) {
+            let end_idx = (start_idx + b) - 1;
+            let block = array[start_idx..=end_idx].as_ref();
+            let rmq_res = get_min_by_scanning(block);
+            blocks.push((start_idx, end_idx, rmq_res).into())
+        }
+        blocks
+    }
+
+    fn create_macro_solver(array: Vec<RMQBlock<'a, T>>, kind: RMQSolverKind) -> Box<dyn RMQSolver<'_, RMQBlock<'_, T>>> {
         todo!()
     }
 
-    fn create_micro_solvers(array: &'a [T], b: usize, kinds: RMQSolverKind) -> BlockLevelSolvers<'a, T> {
+    fn create_micro_solvers(array: &[T], b: usize, kinds: RMQSolverKind) -> BlockLevelSolvers<'_, T> {
         todo!()
     }
 
