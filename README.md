@@ -9,7 +9,7 @@ A distillation of some of the most elegant ideas in computer science. The collec
 1. [Common Algorithmic Patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
 1. [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
 2. [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
-3. [The Bottom-up Splay Tree](https://github.com/jlikhuva/blog/blob/main/posts/splay.md)
+3. [The Bottom-up Splay Tree](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 4. Graphs: All Foundational Methods
 5. Sketching Algorithms
 6. Algorithms for Discrete Optimization
