@@ -12,7 +12,7 @@ pub fn top_k_bits_of(x: usize, k: usize) -> usize {
     // Shift the 1 to the index that is `k`
     // positions from the last index location.
     // That is `k` away from 64
-    mask = mask << (USIZE_BITS - k);
+    mask <<= USIZE_BITS - k;
 
     // Turn that one into a zero. And all
     // the other 63 zeros into ones.
@@ -31,6 +31,8 @@ pub fn top_k_bits_of(x: usize, k: usize) -> usize {
     x & mask
 }
 ```
+You can play around with the code so far [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=186242f8f5e9267430438fcb3119606c)
+
 #### Background
 Arithmetic and logical operations take, for all intents and purposes, constant time. Such operations operate on whole words.  (A word is the size of a single memory segment. In this exposition, we assume a word size width of `64`. For a more indepth discussion of computer memory, refer to [this note](https://akkadia.org/drepper/cpumemory.pdf)). For instance, it takes constant time to add two `64` bit numbers. The central idea of the methods we're about to discuss is this: If you have a bunch of small integers -- each smaller that sixty four bits, e.g. a bunch of bytes, we can pack many of them into a single sixty four bit integer. Then, we can operate on that packed integer as if it were a single number. For example, we can fit 8 byte sized numbers in a single word. By operating on the packed integer, we are in effect operating on 8 different integers in parallel. This is what we call world level parallelism. Of course there are intricate details that have been elided, in this broad description. In the next sections, we take a detailed look at those details as we flesh out the different parallel operation.
 <!-- <details>
