@@ -46,6 +46,9 @@ pub mod ori {
         kmers_counter.iter().filter(|(_, &v)| v == max).collect()
     }
 
+    /// Returns the complementary strand of the given
+    /// `dna_strand`. The returned sequence is ordered
+    /// 5' -> 3'
     pub fn reverse_complement(dna_strand: &str, complement_mapper: impl Fn(char) -> char) -> String {
         dna_strand
             .chars()
