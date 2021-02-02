@@ -6,25 +6,31 @@ If it isn't obvious by now, this blog format was inspired by [Frank McSherry's a
 
 ##### Computer Science [WIP]
 A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms, and data structures.
-1. [Common Algorithmic Patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
-1. [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
-2. [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
-3. [The Bottom-up Splay Tree](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
-4. Graphs: All Foundational Methods
-5. Sketching Algorithms
-6. Algorithms for Discrete Optimization
-7. The Lazy Binomial Heap
-8. Word Level Parallelism
-9. Specialized Containers for Integers
-10. Online Algorithms
-11. Persistent & Retroactive Data Structures
-12. Assorted ideas from Compuational Geometry
+- [ ]  [Common Algorithmic Patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
+- [ ]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
+- [ ]  [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
+- [ ]  [The Bottom-up Splay Tree](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
+- [ ]  Graphs: All Foundational Methods
+- [ ]  Sketching Algorithms
+- [ ]  Algorithms for Discrete Optimization
+- [ ]  The Lazy Binomial Heap
+- [ ]  Word Level Parallelism
+- [ ]  Specialized Containers for Integers
+- [ ]  Online Algorithms
+- [ ]  Persistent & Retroactive Data Structures
+- [ ]  Assorted ideas from Compuational Geometry
 
 #####  Bioinformatics [WIP]
 A distillation of some of the most compelling ideas in bioinformatics, as presented by Compeau et al. in `Bioinformatics Algorithms` 
-1. DNA Replication
-2. Comparing Biological Sequences
-3. Molecular Clocks
-4. Genome Assemby
-5. Antibiotic Sequenceing
+- [ ]  Introduction
+- [ ]  Randomized Algorithms
+- [ ]  Graph Algorithms
+- [ ]  Brute-force Algorithms
+- [ ]  Dynamic Programming
+- [ ]  Combinatorial Algorithms
+- [ ]  Evolutionary Tree Reconstruction
+- [ ]  Clustering Algorithms
+- [ ]  Combinatorial Pattern Matching
+- [ ]  Hidden Markov Models
+- [ ]  Computational Proteomics
 
