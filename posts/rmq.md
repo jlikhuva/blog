@@ -1,14 +1,14 @@
-# Rusty Solutions to the Range-Min Query Problem 
+# Rusty Solutions to the Range-Min Query Problem
 
-#### A Naïve Solution
+## A Naïve Solution
+
 The most straightforward way to solve this problem is to create a lookup table with all the RMQ answers precomputed. This will allow us to answer any RMQ in constant time by doing a table lookup. How can we build such a table? The first thing to notice is that this is a discrete optimization problem - we are interested in the minimal (aka the optimal) value in a given range. A quick reference to [common algorithmic patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) should tell us that we may be able to use dynamic programming to solve the problem. All we need to do is come up with an update rule. In particular, suppose our array is <!-- $A$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fT4Y6ki4ih.svg">,  if we know the smallest value in some range <!-- $(i, j)$ --> <img style="transform: translateY(0.1em); background: white;" src="https://render.githubusercontent.com/render/math?math=(i%2C%20j)"> to be <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg">, we can easily figure out the answer on a larger range <!-- $(i, j+1)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/BR28J51dHP.svg"> by comparing <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg"> with <!-- $A[i + 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/DVfAuKZf2r.svg">. That is:
 <!-- $$
 RMQ_A(i, j) = \begin{cases}
       A[j], & \text{if}\ i = j \\
       \min\left(A[j], RMQ_A(i, j - 1)\right), & \text{otherwise}
 \end{cases}
-$$ --> 
-
+$$ -->
 <div align="center"><img style="background: white;" src="../svg/vZtLroTQei.svg"></div>
 
 We can do this for all possible values of `i` and `j` to fill up our lookup table. This takes quadratic time. Thus, with this approach, we cam solve the RMQ problem in <!-- $\left<\Theta(n^2), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/8UBwqFAqMg.svg">.
@@ -35,7 +35,9 @@ pub struct RMQRange<'a, T> {
     underlying: &'a [T]
 }
 ```
+
 To make it easy to construct new range objects, we implement the from trait. This implementation will allow us to construct an `RMQRange` object from a `3-Tuple`  by simply invoking `(a, b, c).into`. We also do error checking here to make sure that we can only ever create valid ranges.
+
 ```rust
 impl <'a, T> From<(usize, usize, &'a [T])> for RMQRange<'a, T> {
     fn from(block: (usize, usize, &'a [T])) -> Self {
@@ -58,6 +60,7 @@ impl <'a, T> From<(usize, usize, &'a [T])> for RMQRange<'a, T> {
 ```
 
 With the abstractions above, we can go ahead and implement our procedure.
+
 ```rust
 type LookupTable<'a, T> = HashMap<RMQRange<'a, T>, usize>;
 
@@ -90,16 +93,19 @@ fn compute_rmq_all_ranges<T: Hash + Eq + Ord>(array: &[T]) -> LookupTable<'_, T>
     lookup_table
 }
 ```
+
 You can play around with the code so far [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=ccb49819827b6e1834765389f7ecf12b)
 
 Can we do better than <!-- $\left<\Theta(n^2), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/8UBwqFAqMg.svg">? The query time is the best we can ever hope for. However, we can reduce the processing time. Let's see how we can do that in the next section.
 
-#### Binary Representation & Sparse Tables
+## Binary Representation & Sparse Tables
+
 Any positive integer can be factored into a sum of powers of two. This binary factorization is the basis of binary representation. For instance, the decimal number 19 can be represented as <!-- $19 = 16 + 2 + 1 = 2^4 + 0*2^3 + 0*2^2 + 2^1 + 2^0 = (10011)_2$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/5zxNilT8JM.svg">. Given some range `[i, j]` we know that its length, `(j - i) + 1` is positive. We can therefore factor it using binary factorization to get shorter ranges. For instance, if our range is `(0, 18)` we see that it has a length of `19` which, as we saw above, can be be factored into `(0, 15) + (16, 17) + (18, 18)`. 
 
-**Preprocessing**
+### Preprocessing
 
 How can we use these observations to construct a solution to our problem? First, note that powers of two are sparsely distributed among positive integers. Also, because they can be combined to form any other number, if we had a table with answers to all possible ranges whose size is a power of two, we would be able to get answers for any range. How can we construct such sparse table? For an array of length `k`, there are `O(lg k)`  ranges whose size is a power of two (just as there are `lg x` bits in the binary representation of `x`).We shall thus construct the sparse table by computing answers to all `lg k` ranges for all `n` possible values of `k`. Therefore, the time needed to create the sparse table is <!-- $\mathcal{O}(n \log n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/CEiOpX0Hzv.svg">.We implement this scheme below.
+
 ```rust
 /// An index into our sparse table
 pub struct SparseTableIdx {
@@ -181,17 +187,19 @@ fn compute_rmq_sparse<'a, T: Hash + Eq + Ord>(array: &'a [T]) -> SparseTable<'a,
 }
 
 ```
-**Querying the Sparse Table**
 
-Now that we have our sparse table, how can we query from it given an arbitrary range `R = [i, j]`? From our initial discussion of binary factorization, you can imagine computing all subranges of `R` whose length is a power of 2 and then taking the min over these values. For an arbitrary length `n`, there are <!-- $O(\lg n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/wfptrCDR1m.svg"> such subranges. Thus, this scheme would give us a <!-- $\left<\Theta(n\lg n), \Theta(\lg n)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Z802R6ewbT.svg"> solution to the `RMQ`problem. 
+### Querying the Sparse Table
 
-Computing all subranges, however, is overkill. All we need are two sub-ranges that fully cover the underlying segment. How do we find the two covering segments? First, observe that if the length of the range is an exact power of two, then we do not need to do any further computation since we already precomputed answers for all such ranges. If its not, we start by finding the largest subrange that is an exact power of two. Specifically, we find the value `k` such that <!-- $2^k \leq (j - i) + 1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/SyXeSDNkuL.svg">. Note that this value `k` is the index of the most significant bit of the range's length. The first range is thus <!-- $[i, i + 2^k - 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/RsDV0G7oU5.svg">. That is, a range whose length is `2^(k) - 1`. After finding the largest subrange, the remaining portion's length certainly be not be a power of two. To proceed, we use a neat trick: we construct a range whose length is the smallest power of two larger than the remaining portion length. To prevent this subrange from overflowing the underlying range, we shift it over to the left, overlapping the first subrange, until it is full contained in the original range. The second range is thus <!-- $[j - 2^k + 1, j]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/2eOUcbNTa4.svg">, with a length of `2^(k) - 1` as well.
+Now that we have our sparse table, how can we query from it given an arbitrary range `R = [i, j]`? From our initial discussion of binary factorization, you can imagine computing all sub-ranges of `R` whose length is a power of 2 and then taking the min over these values. For an arbitrary length `n`, there are <!-- $O(\lg n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/wfptrCDR1m.svg"> such sub-ranges. Thus, this scheme would give us a <!-- $\left<\Theta(n\lg n), \Theta(\lg n)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Z802R6ewbT.svg"> solution to the `RMQ`problem. 
+
+Computing all sub-ranges, however, is overkill. All we need are two sub-ranges that fully cover the underlying segment. How do we find the two covering segments? First, observe that if the length of the range is an exact power of two, then we do not need to do any further computation since we already precomputed answers for all such ranges. If its not, we start by finding the largest sub-range that is an exact power of two. Specifically, we find the value `k` such that <!-- $2^k \leq (j - i) + 1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/SyXeSDNkuL.svg">. Note that this value `k` is the index of the most significant bit of the range's length. The first range is thus <!-- $[i, i + 2^k - 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/RsDV0G7oU5.svg">. That is, a range whose length is `2^(k) - 1`. After finding the largest sub-range, the remaining portion's length certainly be not be a power of two. To proceed, we use a neat trick: we construct a range whose length is the smallest power of two larger than the remaining portion length. To prevent this sub-range from overflowing the underlying range, we shift it over to the left, overlapping the first subr-ange, until it is full contained in the original range. The second range is thus <!-- $[j - 2^k + 1, j]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/2eOUcbNTa4.svg">, with a length of `2^(k) - 1` as well.
 
 To recapitulate, we query from the sparse table by finding the `argmin` of two overlapping ranges whose answers have already been computed. Figuring out which ranges to use involves finding the `MSB(n)` where `n` is the length of the range in the query. How so we calculate `MSB(n)`? To compute `MSB(n)` in constant time, we can use a lookup table. Later on, when discussing specialized integer containers, we'll implement a complex but straightforward method for finding `k` in constant time. For now, a lookup table suffices. Thus, with this scheme, we have a <!-- $\left<\Theta(n\lg n), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/WpCYNtMQVL.svg"> solution to the `RMQ` problem. Below, we implement a procedure to compute the lookup table.
+
 ```rust
 /// Here's the scheme we shall use to implement the lookup table:
 ///     - First, we shall assume that the values we get are 8 bytes (64bits) wide
-///     - We shall precompute all MSB(n) values for all n <= 2^16. This will use
+///     - We shall pre-compute all MSB(n) values for all n <= 2^16. This will use
 ///       65536 bytes which is approximately 66Kb.
 ///     - To find the MSB of any value, we combine answers from the 4 16 bit
 ///       portions using logical shifts and masks
@@ -199,7 +207,7 @@ pub struct MSBLookupTable([u8; 1 << 16]);
 
 impl MSBLookupTable {
     /// Build the lookup table. To fill up the table, we simply subdivide
-    /// it into segements whose sizes are powers of two. The MSBa in a segment
+    /// it into segments whose sizes are powers of two. The MSBa in a segment
     /// are the same. For instance:
     ///   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /// n       |1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|...
@@ -241,7 +249,7 @@ impl MSBLookupTable {
     }
 }
 ```
-Once again, the query time is the best possible. However, even though the pre-processing time reduced from quadtratic to `O(n lg n)`, we can still do better. In particular, we can shave off a log factor and arrive at a linear time pre-processing algorithm. To figure out how to do that, we shall take a detour to discuss the method of four russians.
+Once again, the query time is the best possible. However, even though the pre-processing time reduced from quadratic to `O(n lg n)`, we can still do better. In particular, we can shave off a log factor and arrive at a linear time pre-processing algorithm. To figure out how to do that, we shall take a detour to discuss the method of four russians.
 
 If you'd like to take a breather, feel free to play around with the sparse table code in [the rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=7f9c152dee95816d7ef8ef9d14bc1f72).
 
@@ -251,6 +259,7 @@ If you'd like to take a breather, feel free to play around with the sparse table
 We begin this detour by taking another detour. Let us discuss the algorithms used to find the median (or more generally, the `i_th` order statistic) of a collection of pairwise comparable items. `Quickselect` can solve this problem in expected linear time. However, if we want a worst case linear time solution, we need to use the `Median of Medians` procedure.
 
 `MoM` is exactly similar `Quickselelect`  except, instead of randomly picking the index to partition around, we compute an approximate median value. We begin by dividing the input collection into blocks of `length=5`. This gives us <!-- $\lceil \frac{n}{5}\rceil$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pF1PFO71La.svg"> blocks, with the final block possibly having `< 5` items. For each block, we calculate the median by first sorting and selection the lower median. For a single block, this always takes constant time, meaning that finding the median for all blocks takes linear time. We aggregate all the block-level medians into a single array. This array is of length <!-- $\lceil \frac{n}{5}\rceil$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pF1PFO71La.svg">. Once we have aggregated the lock level medians, we are faced with the xeact same problem we started with -- just on a much smaller array. Therefore, we can recursively find the median of this new array. Once we have this value, we can proceed as usual, using the [prune and conquer](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) strategy. Below, we implement this scheme
+
 ```rust
 /// The abstraction for a single block.
 pub struct MedianBlock<'a, T> {
@@ -296,7 +305,9 @@ impl<'a, T> From<(usize, usize, &'a [T], usize)> for MedianBlock<'a, T> {
     }
 }
 ```
+
 With the above abstractions in place, we can go ahead and implement the main procedure
+
 ```rust
 //! Median of Medians Helper Functions. These will come in handy when implementing
 //! multi-level data structures that use the method of four russians
@@ -317,7 +328,7 @@ fn generate_macro_array<'a, T: Ord>(array: &'a [T]) -> Vec<MedianBlock<'a, T>> {
 /// This solves the problem for a single block. This changes from problem to problem.
 /// For instance, when we solving RMQ, this will be get_min_idx_by_scanning. You can
 /// definitely think of a way of creating an abstraction that can solve any
-/// method of four russians problem by having the client provide a funtion for
+/// method of four russians problem by having the client provide a function for
 /// block partitioning and solving the block level problem. 
 fn get_kth_by_sorting<T: Ord>(block: &[T], k: usize) -> usize {
     let kth = block
@@ -346,7 +357,7 @@ fn partition_at_pivot<T: Ord>(array: &mut [T], pivot_idx: usize) -> usize {
 }
 
 /// recursively calculate the median of the median blocks. This will give us an
-/// approximate median that guranteeds us a roughly even split
+/// approximate median that guarantees us a roughly even split
 fn get_approx_median_idx<'a, T: Ord + Clone>(macro_array: &mut [MedianBlock<'a, T>]) -> usize {
     let median_pos = macro_array.len() / 2;
     let mut medians: Vec<_> = macro_array.iter().map(|x| x.median.clone()).collect();
@@ -393,9 +404,9 @@ The median of medians procedure has a few key structures:
   
 The structures above are the four major motifs in the method of four russians. How can we use this method to reduce the pre-processing time of our RMQ algorithm? We discuss that after the following interlude.
 
-
-***
+---
 Thus far, we've implemented procedures to solve the `rmq` problem as free standing functions. Before we move forward, lets take a step back and see if we can come up with a much more elegant abstraction that unifies all the different solution methods. This will become more crucial as we start talking about 2-level structures that use multiple solution methods.
+
 ```rust
 #[derive(Debug, Eq, PartialEq, Hash)]
 pub struct SparseTableIdx {
@@ -422,13 +433,15 @@ impl<'a, T> From<(usize, &'a T)> for RMQResult<'a, T> {
     }
 }
 
-/// All structures capable of answeing range min queries should
+/// All structures capable of answering range min queries should
 /// expose the solve method.
 pub trait RMQSolver<'a, T: Ord> {
     fn solve(&self, range: &RMQRange<'a, T>) -> RMQResult<T>;
 }
 ```
-We introduce a trait that encodes the necessary and sufficient API that any  `rmq` solver should expose. We need to be able to build the solver and to invoke the solve method with a given range. Below, we introduce the varios solvers, all of which we have already seen before -- we simply present them here in a unified manner.
+
+We introduce a trait that encodes the necessary and sufficient API that any  `rmq` solver should expose. We need to be able to build the solver and to invoke the solve method with a given range. Below, we introduce the various solvers, all of which we have already seen before -- we simply present them here in a unified manner.
+
 ```rust
 
 /// A solver that answers range min queries by  doing no preprocessing. At query time, it
@@ -493,7 +506,8 @@ impl<'a, T: Ord + Hash> SparseTableSolver<'a, T> {
 }
 ```
 
-Below, we implemet the `RMQSolver` trait for each of our solvers. We leverage functions that we already implemented in preceding segments.
+Below, we implement the `RMQSolver` trait for each of our solvers. We leverage functions that we already implemented in preceding segments.
+
 ```rust
 /// Calculates the location and value of the smallest element
 /// in the given block by iterating over the elements. This takes
@@ -532,11 +546,12 @@ impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for SparseTableSolver<'a, T> {
     }
 }
 ```
-***
 
-**Two-Level Structures**
+---
 
-To apply the method of four russians to the RMQ problem, we begin by dividing the input array into blocks of length <!-- $b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fCJxfN2Ysc.svg">. If the length of the array is <!-- $n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k2Z6CavdDQ.svg">, this results in <!-- $\mathcal{O}(\frac{n}{b})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/gwfsqBuBks.svg"> blocks. For each of these blocks, we find the index of the smallest value bu doing a simple scan. This takes <!-- $\mathcal{O}(b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Dqg8jnCq0o.svg"> in each block and <!-- $\mathcal{O}(\frac{n}{b}) * \mathcal{O}(b) = \mathcal{O}(n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/oI85zP1xyG.svg"> for all the blocks. We aggregate these min values in a new macro array. Given a qeury range `[i, j]` how can we use the blocks and the macro array to satisfy the query? Also, what value of `b` should we use? To query, we start by figuring out which block the ends of the query fall into. We do that by dividing each end with the block size, i.e `start_block = i/b, end_block = j/b`. We then scan the items in `start_block` that appear after `i` and the items in `end_block` that appear before `j` and take the minimal value over them. Let's call this value, the smallest value at the ends of the range, <!-- $\lambda$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/w3irZZ0Jg1.svg"> Then we scan the macro array to find the minimal value among all blocks between `start_block` and `end_block`. let's call this value <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/6bXEiZZAEX.svg">. The answer to our query is the `min` (or `argmin`) between these two values: <!-- $RMQ_A(i, j) = \min(\lambda, \alpha)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/KHSI90DMS3.svg"> How long does this take? Well, finding the `min` in the end blocks take `O(b)` and scanning the intermediate blocks takes `O(n/b)`. This gives us `O(b + n/b)`. Therefpre, to properly characterize the runtime, we need to find the value of `b` that minimized the expression `b + n/b`. We do so below
+## Two-Level Structures
+
+To apply the method of four russians to the RMQ problem, we begin by dividing the input array into blocks of length <!-- $b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fCJxfN2Ysc.svg">. If the length of the array is <!-- $n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k2Z6CavdDQ.svg">, this results in <!-- $\mathcal{O}(\frac{n}{b})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/gwfsqBuBks.svg"> blocks. For each of these blocks, we find the index of the smallest value bu doing a simple scan. This takes <!-- $\mathcal{O}(b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Dqg8jnCq0o.svg"> in each block and <!-- $\mathcal{O}(\frac{n}{b}) * \mathcal{O}(b) = \mathcal{O}(n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/oI85zP1xyG.svg"> for all the blocks. We aggregate these min values in a new macro array. Given a query range `[i, j]` how can we use the blocks and the macro array to satisfy the query? Also, what value of `b` should we use? To query, we start by figuring out which block the ends of the query fall into. We do that by dividing each end with the block size, i.e `start_block = i/b, end_block = j/b`. We then scan the items in `start_block` that appear after `i` and the items in `end_block` that appear before `j` and take the minimal value over them. Let's call this value, the smallest value at the ends of the range, <!-- $\lambda$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/w3irZZ0Jg1.svg"> Then we scan the macro array to find the minimal value among all blocks between `start_block` and `end_block`. let's call this value <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/6bXEiZZAEX.svg">. The answer to our query is the `min` (or `argmin`) between these two values: <!-- $RMQ_A(i, j) = \min(\lambda, \alpha)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/KHSI90DMS3.svg"> How long does this take? Well, finding the `min` in the end blocks take `O(b)` and scanning the intermediate blocks takes `O(n/b)`. This gives us `O(b + n/b)`. Therefore, to properly characterize the runtime, we need to find the value of `b` that minimized the expression `b + n/b`. We do so below
 <!-- $$
 \begin{array}{c}
     f(b) = b + \dfrac{n}{b} \\
@@ -545,13 +560,14 @@ To apply the method of four russians to the RMQ problem, we begin by dividing th
     b^2 = n \\
     b = \sqrt{n}
 \end{array}
-$$ --> 
+$$ -->
 
 <div align="center"><img style="background: white;" src="../svg/7i3PLJolgh.svg"></div>
 
 So, we set `b` to the square root of `n`. This gives us a query time of <!-- $\mathcal{O}(\sqrt{n})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qSsMnsGYC0.svg"> and an overall time of <!-- $\left<O(n), O(n^{0.5})\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cgFTCzGhAr.svg">. 
 
 Since our two level structure solutions will eventually mix and match the solvers that they use at each level, we begin by introducing an abstraction to facilitate that. Below, we implement an object that can answer any range min query using parameters that can be set by the client. 
+
 ```rust
 /// The abstraction for a single block.
 #[derive(Debug)]
@@ -566,7 +582,7 @@ pub struct RMQBlock<'a, T> {
     end_idx: usize,
 
     /// The index of the median value in the given range. To move from this
-    /// index to an indx in the underlying, we simply calculate
+    /// index to an idx in the underlying, we simply calculate
     /// `start_idx + median_idx`
     min_idx: usize,
 
@@ -666,16 +682,20 @@ impl<'a, T: Ord> FourRussiansRMQ<'a, T> {
     }
 }
 ```
-With the above abstraction in place, we can implement the two-level solution discussed in the preceeding section as an instance of the `FourRussiansRMQ` with both `macro_solver` and `micro_solver` set to `ScanningSolver` and `b` set to `sqrt(n)`. We do so below.
+
+With the above abstraction in place, we can implement the two-level solution discussed in the preceding section as an instance of the `FourRussiansRMQ` with both `macro_solver` and `micro_solver` set to `ScanningSolver` and `b` set to `sqrt(n)`. We do so below.
+
 ```rust
 /// WIP: The FourRussiansRMQ that uses the ScanningSolver 
 /// for both the micro and macro arrays along with a block
 /// size of sqrt(n)
 ```
+
 So, Block decomposition allowed us to have linear pre-processing time. However, in the process, we lost our constant query time? Can we do better than <!-- $\sqrt{n}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k4Mu0nuOVP.svg"> while still maintaining a linear pre-processing time? Yes. We can use a mix of block decomposition and sparse tables to achieve this. Let's see how. 
 
-#### Hybrid Strucures
-When discussing block decomposition, after decomposing the input into micro arrays, we went ahead and solved the original problem on each block, treating each as a reduced instance of the original. We also did the same for the macro array. In the preceding section, we solved the problem by doing a linear scan. We can, however, use methods from previos sections -- sparse and dense lookup tables to solve the problem on the micro and macro arrays. When we do that, we end up with hybrid solutions that have faster query times. In this section, we shall explore a few hybrid structures and characterize their runtimes. 
+### Hybrid Structures
+
+When discussing block decomposition, after decomposing the input into micro arrays, we went ahead and solved the original problem on each block, treating each as a reduced instance of the original. We also did the same for the macro array. In the preceding section, we solved the problem by doing a linear scan. We can, however, use methods from previous sections -- sparse and dense lookup tables to solve the problem on the micro and macro arrays. When we do that, we end up with hybrid solutions that have faster query times. In this section, we shall explore a few hybrid structures and characterize their runtime.
 
 To create a hybrid structure, we need to decide which method we want to use to solve the problem on the macro array and on each micro array. By mixing and matching methods, we get different hybrids with different runtimes as shown in the table below.
 |Block Size|Macro Array Method|Micro Array Method|Runtime|
@@ -685,20 +705,24 @@ To create a hybrid structure, we need to decide which method we want to use to s
 |<!-- $\lg n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/VfomraIoyi.svg">    | The first hybrid in this table| Sparse Table|<!-- $\left<O(n), O(\lg \lg n\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/cUT7DO2po5.svg">|
 
 Below, we implement the first hybrid method
+
 ```rust
 /// WIP: The FourRussiansRMQ that uses the ScanningSolver 
 /// for both the micro and a SparseTableSolver for the macro 
 /// array along with a block size of lg (n)
 ```
-By this point we have a cool and quite efficient algorithm for the offline range min query problem. However, the title of the note did promise an `<O(n), O(1)>` solution. We discuss that in the next section with the caveat that the added constant factors that give us assymptotic constant query time may slow down the algorithm in practice. As noted [here](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf), the preceding `<O(n), O(lg)>` hybrid solution outperforms the `<O(n), O(1)>` solution in practice.
+By this point we have a cool and quite efficient algorithm for the offline range min query problem. However, the title of the note did promise an `<O(n), O(1)>` solution. We discuss that in the next section with the caveat that the added constant factors that give us asymptotic constant query time may slow down the algorithm in practice. As noted [here](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf), the preceding `<O(n), O(lg)>` hybrid solution outperforms the `<O(n), O(1)>` solution in practice.
 
-#### Cartesian Trees & The LCA-RMQ Equivalence
-To fully understand the upcoming `<O(n), O(1)>` solution, we need to to first get an intimate understanding of Cartesian Trees. They are largely responsible for the constant time lookup. In this section, we begin by discussing what cartesian trees are and how to efficently construct them. We then implement a cartesian tree.
+### Cartesian Trees & The LCA-RMQ Equivalence
 
-##### Cartesian Trees
-A cartesian tree is a derivative data structure. It is derived from an underlying array. More formally, the cartesian tree `T` of an array `A` is a min binary heap of the elements of `A` organized such that an in order traversal of the tree yields the original array. How can we construct such a tree given some input array? The main observations that will guide our construction will be the requirement that an in-order traversal must yield the array elements in their positional order, and the requirement that the tree be a min heap. During an in-order traversal, the right child is retrieved after both the parent and the left child -- consequently, the right-most node will be the last node retrieved. We can thus build the tree [incrementaly](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f), adding each new element as the rightmost node of the tree.
+To fully understand the upcoming `<O(n), O(1)>` solution, we need to to first get an intimate understanding of Cartesian Trees. They are largely responsible for the constant time lookup. In this section, we begin by discussing what cartesian trees are and how to efficiently construct them. We then implement a cartesian tree.
+
+#### Cartesian Trees
+
+A cartesian tree is a derivative data structure. It is derived from an underlying array. More formally, the cartesian tree `T` of an array `A` is a min binary heap of the elements of `A` organized such that an in order traversal of the tree yields the original array. How can we construct such a tree given some input array? The main observations that will guide our construction will be the requirement that an in-order traversal must yield the array elements in their positional order, and the requirement that the tree be a min heap. During an in-order traversal, the right child is retrieved after both the parent and the left child -- consequently, the right-most node will be the last node retrieved. We can thus build the tree [incrementally](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f), adding each new element as the rightmost node of the tree.
 
 More specifically,  we'll build the cartesian tree incrementally -- adding in elements in the order that they appear in the array. To add an element <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg">, we inspect the right spine of the tree starting with the right most node. We follow parent pointers until we find an element, <!-- $\psi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qPR3FOEHUn.svg">,  in the tree that is smaller than <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg">. We modify the tree, making <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg"> a right child of <!-- $\psi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/qPR3FOEHUn.svg">. We also make the rest of the right subtree that is below <!-- $\chi$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EwDBYUim1S.svg"> a left subtree of the new node. Traversing the right spine of tree from the right-most node can be done efficiently by keeping nodes on the right spine in a stack. That way, the rightmost node is always at the top of the stack. Below, we use this observation to implement a procedure for creating a cartesian tree from some array.
+
 ```rust
 /// As always, we use the `wrapped index pattern`
 ///
@@ -730,7 +754,7 @@ impl<'a, T: Ord> std::ops::IndexMut<CartesianNodeIdx> for Vec<CartesianTreeNode<
 }
 /// A cartesian tree is a heap ordered binary tree
 /// derived from some underlying array. An in-order
-/// traversal of the tree yields the underlyng tree.
+/// traversal of the tree yields the underlying tree.
 #[derive(Debug)]
 struct CartesianTree<'a, T: Ord> {
     nodes: Vec<CartesianTreeNode<'a, T>>,
@@ -843,15 +867,17 @@ impl<'a, T: Ord> CartesianTree<'a, T> {
     }
 }
 ```
+
 You can play around with the code for constructing a cartesian tree in [the rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=c51356cba92f48f0434c64abd21d7162).
 
 ---
 
-Why are cartesian trees important, and how are they related to the `RMQ` problem? First, notice that once we have a cartesian tree for an array, we can answer any `RMQ` on that array. In particular, <!-- $RMQ_A(i, j) = LCA_T(A[i], A[j])$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/s3WLVY6DAX.svg">. That is we can answer `RMQ` by doing lowest common ancerstor searches in the cartesian tree. Although this idea is intrinsically interesting, we do not explore it further. Feel free to check out [this note for further details](http://courses.csail.mit.edu/6.851/fall17/scribe/lec15.pdf). 
+Why are cartesian trees important, and how are they related to the `RMQ` problem? First, notice that once we have a cartesian tree for an array, we can answer any `RMQ` on that array. In particular, <!-- $RMQ_A(i, j) = LCA_T(A[i], A[j])$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/s3WLVY6DAX.svg">. That is we can answer `RMQ` by doing lowest common ancestor searches in the cartesian tree. Although this idea is intrinsically interesting, we do not explore it further. Feel free to check out [this note for further details](http://courses.csail.mit.edu/6.851/fall17/scribe/lec15.pdf).
 
 To fully appreciate the importance of cartesian trees and their relation to the data structure design problem at hand, we have to explore when and how two arrays have isomorphic trees. This will lead us to a way of figuring out when two blocks can share the same pre-processed index -- a thing that will lead us to an `RMQ` data structure with constant query time.
 
-##### Cartesian Tree Isomorphisms
+#### Cartesian Tree Isomorphisms
+
 When do two cartesian trees for two different arrays, <!-- $B_1$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pCi7uET35K.svg">, <!-- $B_2$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/1b0Fxslia6.svg"> have the same shape? How can we tell this efficiently? Put simply, if two blocks have the same shape, then their minimal values of any range in both blocks occur at the same index. This means that, the sequence of `Push` and `Pop` operations when constructing the cartesian trees for the two blocks are exactly the same. Therefore, to know if two blocks are isomorphic, we could simply compare their action profiles. Note, however, when we are only interested in whether two blocks have isomorphic trees, we don't even need to construct the tree. We also do not need to allocate space for the action profile vector. The idea is to create a a bitstring from the sequence of `Push` and `Pop` operations. The number formed by this bitstring is called the cartesian tree number. Therefore, with this scheme, two blocks have isomorphic trees if they have the same cartesian tree number. Below, we show how to calculate such a number from the action profile. 
 
 ```rust
@@ -862,7 +888,7 @@ impl<'a, T: Ord> CartesianTree<'a, T> {
     /// value only makes sense when the underlying array is small.
     /// More specifically, this procedure assumes that the underlying
     /// array has at most 32 items. This makes sense in our context
-    /// since we're mostly intersted in the cartesian tree numbers
+    /// since we're mostly interested in the cartesian tree numbers
     /// of RMQ blocks
     fn cartesian_tree_number(&self) -> u64 {
         let mut number = 0;
@@ -882,16 +908,16 @@ A nice consequence of the preceding discussion is that we can say something abou
 #### The Fischer-Heun RMQ Structure
 How does all this talk of cartesian trees and cartesian numbers translate into an `<O(n), O(1)>` range min query solution? Let's discuss that next.
 
-As with the other methods, we begin by dividing the underlyng aray into blocks of `b` items. For each of our `ceil(n/b)` blocks, we find the location of the smallest element by scanning. We then aggregate the min locations for all blocks in what we call the macro array. To answer an `rmq` query, we simply return the smallest value from three smaller `rmqs`: (a) The block of the starting index, (b) The block of the ending index, and (c) The macro array. So far, this is just a recap from the previos discussion.
+As with the other methods, we begin by dividing the underlying array into blocks of `b` items. For each of our `ceil(n/b)` blocks, we find the location of the smallest element by scanning. We then aggregate the min locations for all blocks in what we call the macro array. To answer an `rmq` query, we simply return the smallest value from three smaller `rmqs`: (a) The block of the starting index, (b) The block of the ending index, and (c) The macro array. So far, this is just a recap from the previous discussion.
 
-We are yet to answer two key questions though: (a) What should our block size `b` be? and (b) What methods (`SolverKinds`) should we use to answer queries on the macro and micro arrays? The judiciosly picking the block size and cleverly applying our solvers, we shall arrive at an `<O(n), O(1)>` method.
+We are yet to answer two key questions though: (a) What should our block size `b` be? and (b) What methods (`SolverKinds`) should we use to answer queries on the macro and micro arrays? The judiciously picking the block size and cleverly applying our solvers, we shall arrive at an `<O(n), O(1)>` method.
 
 We shall use the `SparseTableSolver` to solve queries on the macro array. For each block, we shall use the `DenseTableSolver`. However, if two blocks have the same cartesian tree number, we shall have them share solvers. We can do this because, as mentioned earlier, two blocks have the same cartesian numbers iff they have isomorphic cartesian trees which further implies that min values for both blocks occur at the exact same indexes. Since we use precomputed lookup tables, the query time is obviously `O(1)`. How about the preprocessing time?
 
 The preprocessing time is an amalgamation of three terms:
   1. The time used to divide the input into blocks and create the blocks. This, as we saw earlier, is `O(n)`
   2. The time used to create the solver for the macro array. Since we are using the `SparseTableSolver` we know that this will be `O(n/b lg n)`. Note that in past sections, we picked `b = lg n`. We have yet to choose the value of `b`.
-  3. And finally, the time used to create solvers for each block. Since we are using the `DenseTableSolver`, we know that this time will be quadratic. That is, the time to create a solver for a single block will be `b^2`. Since we are sharing solvers between blocks, we need to multiply the time we spend on each block by the number of distnct blocks of size `b`. As we saw earlier, this value is <!-- $2^{2b} = 4^b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/xIDYHrCQR2.svg">. 
+  3. And finally, the time used to create solvers for each block. Since we are using the `DenseTableSolver`, we know that this time will be quadratic. That is, the time to create a solver for a single block will be `b^2`. Since we are sharing solvers between blocks, we need to multiply the time we spend on each block by the number of distinct blocks of size `b`. As we saw earlier, this value is <!-- $2^{2b} = 4^b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/xIDYHrCQR2.svg">. 
 
 Therefore, our expression for the preprocessing time is <!-- $\mathcal{O}(n + \lceil\frac{n}{b}\rceil + b^24^b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/MiWMTJnLcq.svg">. Our final task is thus to pick a value of `b` that will make this expression evaluate to `O(n)`. Long story short, we pick <!-- $b = 0.5 \lg_4 n = O.25 \lg_2 n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/u3vbuw4bn2.svg">.
 
@@ -904,13 +930,14 @@ Thus, our final data structure has the following features:
 
 As discussed earlier, although this method has impressive  asymptotic numbers, it is often outperformed in practice by the hybrid with logarithmic query time. Furthermore, this method is a lot more complex. That is another reason, from an engineering standpoint, to prefer the `<O(n), O(lg)>` -- much less code, and just as fast.
 
-We leave the implementation of this scheme as an exercise. Using the abstractions from above, the implementation should be a simple extension. We simply have to keep track of a mapping from blocks to cartesian tree numbers and modify `BlockLevelSolvers` to map from cartesian tree numbers intead of blocks.
+We leave the implementation of this scheme as an exercise. Using the abstractions from above, the implementation should be a simple extension. We simply have to keep track of a mapping from blocks to cartesian tree numbers and modify `BlockLevelSolvers` to map from cartesian tree numbers instead of blocks.
 
-#### References
+## References
+
 1. [CS 166 Lecture 1](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/00/Small00.pdf)
-1. [CS 166 Lecture 2](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf)
-2. [6.851](http://courses.csail.mit.edu/6.851/fall17/lectures/L15.pdf)
-###### Cite As
+2. [CS 166 Lecture 2](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/01/Small01.pdf)
+3.  [6.851](http://courses.csail.mit.edu/6.851/fall17/lectures/L15.pdf)
+
 ```latex
 @article{jlikhuva2021rmq,
   title   = "Rusty Solutions to the Range-Min Query Problem.",
