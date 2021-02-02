@@ -44,7 +44,7 @@ Suppose we wish to store small sized integers in a B-Tree. And suppose too that 
 Recall that a B-Tree of order `b` is a multiway search tree in which each node is a bucket that must contain between `b - 1` and `2b - 1` keys. Furthermore, each node has one more child than the number of keys it contains. That is, each node must have between `b` and `2b` child nodes. Operations on B-Trees rely on a key operation: `node.rank(x)`. This operation searches through the keys of a single node (which are sorted) and either returns the location of `x` in the bucket, or the index of the child we need to descend into in order to complete the operation at hand. In run of the mill B-Trees, `node.rank(x)` is implemented using binary search and thus takes `O(lg b)`. If we know that our keys are small integers, can we perform `node.rank(x)` in `O(1)`? It turns out we can. Let's see how.
 
 #### Parallel Compare
-The `node.rank(x)` operation depends on an even more basic oparation: `compare(x, y)`. This operation simply tells us if `x >= y`. Supose `x` and `y` are `7-bits` wide (but stored in an 8 byte integer such that the final bit is unoccupied), how could we implement `compare(x, y)`? Well, we could do it the `C-`way - by subtraction. However, instead taking the usual route where we calculate `z = x - y` and if `z` is negative we know that `x < y` otherwise, we conclude that `x >= y`, we'll adopt a much cooler approach. In particular, we'll first set the 8th bit of `y`, the 7-bit number we are comparing against to `1`. We'll also set the 8th bit of `x` to 0. For example, suppose $x = 0000111 \text{ and } y = 1100001$. Below, we show the effect of setting the 8th bit.
+The `node.rank(x)` operation depends on an even more basic oparation: `compare(x, y)`. This operation simply tells us if `x >= y`. Supose `x` and `y` are `7-bits` wide (but stored in an 8 byte integer such that the final bit is unoccupied), how could we implement `compare(x, y)`? Well, we could do it the `C-`way - by subtraction. However, instead of taking the usual route where we calculate `z = x - y` and if `z` is negative we know that `x < y` otherwise, we conclude that `x >= y`, we'll adopt a much cooler approach. In particular, we'll first set the 8th bit of `y`, the 7-bit number we are comparing against to `1`. We'll also set the 8th bit of `x` to 0. For example, suppose <!-- $x = 0000111 \text{ and } y = 1100001$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/r00ard6i01.svg">. Below, we show the effect of setting the 8th bit.
 <!-- $$
 \begin{aligned}
     y = 1100001 \rightarrow \textcolor{red}{1}1100001 \\
@@ -54,7 +54,7 @@ $$ -->
 
 <div align="center"><img style="background: white;" src="../svg/NlyOijlPKY.svg"></div>
 
-Now, if we compute `y - x`, how will that 8th bit behave? Below, we show the reuslt of this subtraction.
+Now, if we compute `y - x`, how will that 8th bit behave? Below, we show the result of this subtraction.
 
 <!-- $$
 \begin{aligned}
@@ -67,9 +67,9 @@ $$ -->
 
 <div align="center"><img style="background: white;" src="../svg/mi1XPKf4L7.svg"></div>
 
-As shown above, when `y >= x` the sentinel bit in the result is turned on. Had `x` been larger than `y`, that bit would have been tuned off. Therefore, we have a sceme for comparing two 7bit numbers using 8 bits of space via subtraction.
+As shown above, when `y >= x` the sentinel bit in the result is turned on. Had `x` been larger than `y`, that bit would have been tuned off. Therefore, to compare two 7-bit integers, we set the 8-th bit to `0` in one of the numbers and to `1` in the other. We then subtruct the resultant number and check the value of the `8-th` bit.
 
-So far, we've been talking about how to compare `x` with a single `7bit` number. However, for our procedure to be useful subroutine in computing `node.rank(x)`, we need to compare `x` with `b` 7-bit numbers. Note that we should choose `b` such that it fits in 64 bits, so we choose `b=7`. That is, a single node holds 7, 7bit numbers, each represented using 8 bits. If those seven numbers are organized such that each number has an associated sentinel bit that is set to 1, we can compare `x` to all of them by comparing the entire word with a number formed by tiling `x` 7 times. 
+So far, we've been talking about how to compare `x` with a single `7bit` number. However, for our procedure to be useful subroutine in computing `node.rank(x)`, we need to compare `x` with `b` 7-bit numbers. Note that we should choose `b` such that it fits in 64 bits, so we choose `b=7`. That is, a single node holds 7, 7bit numbers, each represented using 8 bits. If those seven numbers are organized such that each number has an associated sentinel bit that is set to `0`, we can compare `x` to all of them by comparing the entire word with a number formed by tiling `x` 7 times. 
 
 To recap: Fundamental Primitive: Parallel Compare
  1. Pack a list of values x₁, …, xₖ into a
@@ -88,3 +88,8 @@ For Parallel Compare to work in `O(1)`, the first step, where we pack multiple s
 #### Parallel Rank
 #### `O(1)` Most Significant Bit
 #### `O(1)` Integer LCP
+#### References
+1. [CS 166 Lecture 15](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/15/Slides15.pdf)
+2. [CS 166 Lecture 16](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/16/Slides16.pdf)
+3. [CS 166 Lecture 17](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/17/Slides17.pdf)
+4. [6.851](http://courses.csail.mit.edu/6.851/fall17/scribe/lec12.pdf)
