@@ -1,3 +1,11 @@
-##### Introduction
-##### 2-D Convex Hull Computation Methods
-##### K-D Trees
+# Introduction
+
+## The 2-D Convex Hull
+
+## The Incremental Method
+
+### Graham's Scan
+
+### Jarvis' March
+
+### Kirkpatrick & Seidel
