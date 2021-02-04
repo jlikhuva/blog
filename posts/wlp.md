@@ -92,7 +92,7 @@ To recap, here is how we'd compare two collections of small integers in parallel
 
 - First, we pack the first collection, <!-- $x_1, x_2, \ldots x_n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/TnrJms1Xzk.svg"> into single machine word `X`, separating each integer with a sentinel bit set to `0`.
 - Then we also pack the second collection of small integers , <!-- $y_1, y_2, \ldots y_n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/sgjuOcsbgD.svg">, into another machine word `Y`. However, this time, we separate each integer with a sentinel bit that is set to `1`.
-- Then we calculate `X - Y`. The bit preceding <!-- $x_i, y_i$ is `1` if $xᵢ ≥ yᵢ$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/usrkfNarbf.svg"> and `0` otherwise.
+- Then we calculate `X - Y`. The bit preceding `x_i, y_i` is `1` if `xᵢ ≥ yᵢ`
 
 The scheme above leave two key questions unanswered. First, how do we perform the first and second steps, packing small integers into a single machine word? Can that be done in `O(1)`? Second, after we have done the subtraction, how do we read off the sentinel bits in order to get the actual comparison information that we need? Below, we address the first question. We shall come back to the second question shortly afterwards.
 
