@@ -136,8 +136,6 @@ impl SardineCan {
 }
 ```
 
-For a breather, feel free to play around with the code so far in [the rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=203a0037f26d6b3462f9fa931f003cea)
-
 We've seen how we're going to store our small integers in a single machine word. However, we've yet to fully answer the question of how to pack the integers though. Note that we only know how to pack when adding. How about when we have a single integer and we with to check if it's in the can? That is,  How to perform a lookup in a sardine can? To perform a lookup for the key `k`, we begin by replicating `k` seven times to form a number that is as wide as our can. Furthermore, we separate each small number in the packed integer using a sentinel bit that is set to 1. The act of forming the replicated number is known as tiling. How can we tile the query `k` in `O(1)`? We are going to use multiplication. The key insight comes from the observation that in base 10, multiplying a number by a multiplier that contains ones at specific locations has the effect of replicating that number. For instance, `8 * 11 = 88`, `8 * 101 = 808`, `8 * 1001001001001 = 8008008008008`, `125 * 10000010001 = 1250001250125`. We'd like to use this intuition to tile our query `k`. Before we do that, let's examine the multiplications we deed a bit more. Why does `8 * 111` produce `888`? It does so because:
 <!-- $$
 \begin{aligned}
