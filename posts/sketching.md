@@ -15,21 +15,46 @@ In this note, we discuss an implement several ideas that are useful when designi
 
 Reservoir Sampling is a simple procedure for picking a random uniform sample of size `k` from a datastream whose size is unknown (it could be infinite). This scheme works as follows: We store the first `k` items into a buffer of size `k`. Then for each element that arrives afterwards, with probability <!-- $\dfrac{k}{i}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/w53pBCBLXV.svg"> we decide to keep the <!-- $i_{th}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/XptcTto55U.svg"> sample. If we keep it, we pick an element, uniformly at random, i.e with probability <!-- $\dfrac{1}{k}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/ZAhf8BKElA.svg"> to evict from the buffer and replace it with the new sample. We implement this scheme below.
 
+First, since we may be implementing other samplers later on, we introduce a trait that encapsulates the behavior that we expect from any sampler. Put simply, a sampler is anything that can observe a stream of events and produce a sample from that stream at any time
+
 ```rust
 use rand::{thread_rng, Rng};
 
+/// A sampler will be anything that can observe a possibly infinite
+/// number of items and produce a finite random sample from that
+/// stream
 pub trait Sampler<T> {
+    /// We observe each item as it comes in
     fn observe(&mut self, item: T);
+
+    /// Produce a random uniform sample of the all the items that
+    /// have been observed so far.
     fn sample(&self) -> &[T];
 }
+```
 
-#[derive(Debug, Default)]
+With that out of the way, we can now introduce the reservoir sampling data structures and procedures. The reservoir sampler only needs to keep track of two values: the number of events that have been observed so far and the requested sample size.
+
+```rust
+#[derive(Debug)]
 pub struct ReservoirSampler<T> {
+    /// This is what we produce whenever someone calls sample. It
+    /// maintains this invariant: at any time-step `t`, reservoir
+    /// contains a uniform random sample of the elements seen thus far
     reservoir: Vec<T>,
+
+    /// This determines the size of the reservoir. The
+    /// client sets this value
     sample_size: usize,
+
+    /// The number of items we have seen so far. We use this
+    /// to efficiently update the reservoir in constant time
+    /// while maintaining its invariant.
     count: usize,
 }
-impl<T: Default> ReservoirSampler<T> {
+impl<T> ReservoirSampler<T> {
+    /// Create a new reservoir sampler that will produce a random sample
+    /// of the given size.
     pub fn new(sample_size: usize) -> Self {
         ReservoirSampler {
             reservoir: Vec::with_capacity(sample_size),
@@ -38,36 +63,41 @@ impl<T: Default> ReservoirSampler<T> {
         }
     }
 }
+```
 
+Finally, we turn our `ReservoirSampler` object into a sampler by implementing the appropriate trait
+
+```rust
 impl<T> Sampler<T> for ReservoirSampler<T> {
     fn observe(&mut self, item: T) {
+        // To make sure we that maintain the reservoir invariant,
+        // we have to ensure that each incoming item has an equal
+        // probability of being included in the sample. We do so by
+        // generating a random index `k`, and if `k` falls within
+        // our reservoir, we replace the item at `k` with the
+        // new item
         if self.reservoir.len() == self.sample_size {
-            let keep_probability = self.sample_size as f32 / self.count as f32;
-            if keep_probability < thread_rng().gen_range(0.0, 1.0) {
-                let rand_idx = thread_rng().gen_range(0, self.sample_size);
+            let rand_idx = thread_rng().gen_range(0..self.count);
+            if rand_idx < self.sample_size { 
                 self.reservoir[rand_idx] = item;
             }
         } else {
+            // If the reservoir is not full, no need
+            // to evict items
             self.reservoir.push(item)
         }
         self.count += 1;
     }
 
     fn sample(&self) -> &[T] {
+        // Since we always have a random sample ready to go, we
+        // simply return it
         self.reservoir.as_ref()
     }
 }
-
-#[test]
-fn test_reservoir_sampler() {
-    let mut sampler = ReservoirSampler::new(500);
-    for i in 0..1000 {
-        sampler.observe(i);
-    }
-    println!("{:?}", sampler.sample())
-}
-
 ```
+
+You can find runnable code for the reservoir sampling procedure [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=70732619db2d901ea9bdf832793a9563)
 
 ## Foundational Ideas
 
