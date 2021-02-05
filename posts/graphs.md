@@ -1,4 +1,4 @@
-# Graphs: All Foundational Methods [WIP: Draft]
+# Graphs: All Foundational Methods [WIP: Draft Start Much Simpler]
 In this note, we shall take a detailed look at, perhaps, the most versatile combinatoric structure: the graph. We'll examine key foundational ideas that allow us to reason about graphs. Although this note aims to be as detailed as possible, it does not seek to be comprehensive. To that end, we constrain ourselves to ideas that one would find in an introductory algorithms textbook (with the observation that all other complex methods are derived from these ideas). In particular, we deeply explore ideas and methods presented in `CLRS 22 – 26`, with occassional references to interesting blog posts.
 
 #### Type States In Rust

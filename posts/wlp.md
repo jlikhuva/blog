@@ -171,13 +171,9 @@ impl SardineCan {
 
 At this point, we are able to add small integers into a single node in our hypothetical B-Tree. We are also able to replicate a query `k` to form a number that is as large as the word size we're using. This means that we can do a parallel comparison via subtraction. After we perform the subtraction — subtracting the value stored in the can from our tiled key —, we'll be left with a number whose sentinel bits indicate whether the key is less than or equal to the associated small integer. To be more precise, the sentinel bit for a small integer in the difference will be 1 if the associated small integer is `<=` our key. The next thing we'd like to do is count how many values are `<=` our key. This is the rank of our key. We need to come up with a procedure that does this in `O(1)`. We'll explore that in the next section. Before moving on, feel free to check out the code thus far [here](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=7688364fc546c19abc25f1a6264142dc)
 
-## Parallel Rank
+## Parallel Rank & Parallel Add
 
-Define rank. With rank, we first compare, then descend. In a b-tree the cost of searching within the nodes dominates `O(logb n · log b) = O(log n)`.. If we can fit all the keys in a node into O(1)
-machine words, we can determine rank(k) in time O(1)
-for total lookup cost of `O(logb n)`.
-
-## Parallel Add
+At this point, we can store tiny numbers in a given node and, when a key `x` comes in, we can tile it and perform the first step of a parallel comparison operation. To finish out the `node.rank(x)` operation, we need to discuss how to count up the number of items smaller than or equal to our key. To find this number, we simply need to count how many of the sentinel bits in the difference are set to `1`. The trick is doing so in constant time.
 
 After performing our subtraction, we’re left with a
 number like this one, where the highlighted bits
@@ -190,6 +186,28 @@ adds. It’s equivalent to
 multiplying our original
 number by some well-chosen
 spreader!
+
+```rust
+impl SardineCan {
+    /// Calculate how many items in this can are less than or
+    /// equal to `x`
+    pub fn parallel_rank(&self, x: u8) -> u8 {
+        // Perform the parallel comparison
+        let mut difference = Self::parallel_tile(x) - self.buckets;
+
+        // Ultimately, we're only interested in whether the spacer sentinel bits
+        // are turned on or off. In particular, we just need to know how many are
+        // turned on. Here we use the mask from `parallel_tile` to isolate them
+        let sentinel_mask: u64 = 0b10000000_10000000_10000000_10000000_10000000_10000000_1000000010000000;
+        difference &= sentinel_mask;
+        
+        // There's an alternative method of counting up how many spacer bits are set to 1.
+        // That method involves using a well chosen multiplier. I have yet to get that method
+        // working, so here we use the next best thing (which may be better than the other method)
+        difference.count_ones() as u8
+    }
+}
+```
 
 ## `O(1)` Most Significant Bit
 
@@ -217,3 +235,5 @@ https://rust-lang.github.io/api-guidelines/type-safety.html#newtypes-provide-sta
 2. [CS 166 Lecture 16](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/16/Slides16.pdf)
 3. [CS 166 Lecture 17](http://web.stanford.edu/class/archive/cs/cs166/cs166.1196/lectures/17/Slides17.pdf)
 4. [6.851](http://courses.csail.mit.edu/6.851/fall17/scribe/lec12.pdf)
+5. [The Original Fusion Tree Paper](https://reader.elsevier.com/reader/sd/pii/0022000093900404?token=1610EF62181DAC974715067B85459A4709A9BC64E39827CE0369C6C8E18540DFD1DBAD38BEE35BFF95C4C05E45A1D1D5)
+6. [This StackOverflow Question. Scroll down until you find the answer by user `templatetypedef`](https://stackoverflow.com/questions/3878320/understanding-fusion-trees)
