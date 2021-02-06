@@ -40,6 +40,8 @@ pub fn top_k_bits_of(x: usize, k: usize) -> usize {
 
 You can play around with the code so far [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=186242f8f5e9267430438fcb3119606c)
 
+---
+
 ## Background
 
 Arithmetic and logical operations take, for all intents and purposes, constant time. Such operations operate on whole words.  (A word is the size of a single memory segment. In this exposition, we assume a word size width of `64`. For a more in-depth discussion of computer memory, refer to [this note](https://akkadia.org/drepper/cpumemory.pdf)). For instance, it takes constant time to add two `64` bit numbers. The central idea of the methods we're about to discuss is this: If you have a bunch of small integers -- each smaller that sixty four bits, e.g. a bunch of bytes, we can pack many of them into a single sixty four bit integer. Then, we can operate on that packed integer as if it were a single number. For example, we can fit 8 byte sized numbers in a single word. By operating on the packed integer, we are in effect operating on 8 different integers in parallel. This is what we call world level parallelism. Of course there are intricate details that have been elided, in this broad description. In the next sections, we take a detailed look at those details as we flesh out the different parallel operation.
@@ -171,7 +173,7 @@ impl SardineCan {
 
 At this point, we are able to add small integers into a single node in our hypothetical B-Tree. We are also able to replicate a query `k` to form a number that is as large as the word size we're using. This means that we can do a parallel comparison via subtraction. After we perform the subtraction — subtracting the value stored in the can from our tiled key —, we'll be left with a number whose sentinel bits indicate whether the key is less than or equal to the associated small integer. To be more precise, the sentinel bit for a small integer in the difference will be 1 if the associated small integer is `<=` our key. The next thing we'd like to do is count how many values are `<=` our key. This is the rank of our key. We need to come up with a procedure that does this in `O(1)`. We'll explore that in the next section. Before moving on, feel free to check out the code thus far [here](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=7688364fc546c19abc25f1a6264142dc)
 
-## Parallel Rank & Parallel Add
+## Parallel Rank
 
 At this point, we can store tiny numbers in a given node and, when a key `x` comes in, we can tile it and perform the first step of a parallel comparison operation. To finish out the `node.rank(x)` operation, we need to discuss how to count up the number of items smaller than or equal to our key. To find this number, we simply need to count how many of the sentinel bits in the difference are set to `1`. We want to do this in `O(1)`. One option is to use a series of shifts to align all the sentinel bits, the adding them up. To perform the shifting in a single operation, we use the same idea we used when implementing `parallel_tile` — we multiply with a carefully chosen spreader. While this approach works well, we adopt a much simpler approach. After we have isolated the sentinel bits i the difference by performing a bitwise and with an appropriate mask, we simply call a rust built in procedure to count the number of ones.
 
@@ -190,30 +192,54 @@ impl SardineCan {
         difference &= sentinel_mask;
         
         // There's an alternative method of counting up how many spacer bits are set to 1.
-        // That method involves using a well chosen multiplier. I have yet to get that method
-        // working, so here we use the next best thing (which may be better than the other method)
+        // That method involves using a well chosen multiplier. To check it out look in 
+        // at the `parallel_count` method below
         difference.count_ones() as u8
+    }
+
+    /// Counts up how many of the sentinel bits of `difference` are turned on.
+    /// This could be used instead of using the builtin function `count_ones`.
+    fn parallel_count(difference: u64) -> u8 {
+        let stacker = 0b10000000_10000000_10000000_10000000_10000000_10000000_100000001u64;
+        let mut stacked = difference as u128 * stacker as u128;
+        stacked >>= 63;
+        stacked &= 0b111;
+        stacked as u8
     }
 }
 ```
 
+At this point, we have implemented all the (new) routines that would be needed to implement a B-Tree that uses a `SardineCan` as its node. If we were to implement such a tree, what would be the runtime of each dictionary operation? In a normal B-Tree, all these operations take on the order of <!-- $\mathcal{O}(\lg_b n * \lg_2 b) = O(\lg_2 n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/ZW2JfXLxgl.svg"> (Note, however, that when analyzing B-tree, we often only count the number of blocks that have to be read into memory and consider the time to search within a single block to be near constant). In a B-Tree that packs its keys using techniques discussed above, its runtime would be <!-- $\mathcal{O}(\lg_b n * 1) = O(\lg_b n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/RCUGUHUeAc.svg">. Even more dramatically, its space usage will be <!-- $\Theta(\frac{n}{b})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/83ZJkXuvoi.svg">. Remember, we defined `b` as the number of small integers we could pack in a single machine word — `8` in our case.
+
+[Here's a link](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=9ea0b3715a46d728d9a815e6ce3d9597) to all the methods we've implemented so far.
+
+---
+
 ## `O(1)` Most Significant Bit
 
-Mathematically, msb(n) is the largest value of k
-such that 2k ≤ n.
-There’s a simple O(w)-time algorithm
-We can improve this runtime to O(log w) by using a
-binary search:
-Lookup table
+When we talk of the most significant bit of a number, we're often referring to the 0-indexed location of the highest bit set. Note that this is a more general problem than simply finding the number that would be formed if only the `msb` were set. For instance, `MSB(010010001)` is `7` and not `128`.
 
-## Parallel Pack
+The simplest method for finding this index in by doing a linear scan over the bits of the number in question while keeping a count of the number of bits seen thus far. This scheme runs in `O(lg n)` where `n` is the highest number our function may operate on.
 
-## `O(1)` Integer LCP
+```rust
+/// A procedure for finding the index of the most significant
+/// bit in time linear to the number of bits used
+/// to represent the value.
+fn get_msb_idx_of(query: u64) -> u8 {
+    for i in (0..64).rev() {
+        if query & (1 << i) != 0 {
+            return i;
+        }
+    }
+    panic!("MSB(0) is undefined")
+}
+```
 
-- Given two integers m and n, the longest common
-prefix of m and n, denoted lcp(m, n), is the length
-of the longest bitstring they both start with.
-- 63 - msb(m ⊕ n)
+We can improve upon the linear scanning procedure using bit level binary search. This brings down the running time to `O(lg lg n)`. Often, however, when we know that we'll be doing many `msb` queries, we use a lookup table to compute this value. This is the solution we adopted when discussing sparse tables in the context of [the range min query problem](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#querying-the-sparse-table). Using that method, we're able to locate the index of the highest bit set in constant  `O(1)` time, albeit with an added preprocessing step to build the lookup table. The question we seek to answer in this section is, can we locate the index of the most significant bit in constant time without using a lookup table?
+
+```rust
+/// WIP
+```
 
 ## References
 

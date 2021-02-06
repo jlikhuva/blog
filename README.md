@@ -6,12 +6,12 @@ If it isn't obvious by now, this blog format was inspired by [Frank McSherry's a
 
 ##### Computer Science [WIP]
 
-A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms, and data structures.
+A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms, and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
 
-- [ ]  [Common Algorithmic Patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
+- [ ]  [Common Algorithmic Patterns *](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
 - [ ]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
 - [ ]  [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
-- [ ]  [The Bottom-up Splay Tree](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
+- [ ]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 - [ ]  Graphs: All Foundational Methods
 - [ ]  Sketching Algorithms
 - [ ]  Algorithms for Discrete Optimization
