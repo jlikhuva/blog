@@ -173,19 +173,7 @@ At this point, we are able to add small integers into a single node in our hypot
 
 ## Parallel Rank & Parallel Add
 
-At this point, we can store tiny numbers in a given node and, when a key `x` comes in, we can tile it and perform the first step of a parallel comparison operation. To finish out the `node.rank(x)` operation, we need to discuss how to count up the number of items smaller than or equal to our key. To find this number, we simply need to count how many of the sentinel bits in the difference are set to `1`. The trick is doing so in constant time.
-
-After performing our subtraction, we’re left with a
-number like this one, where the highlighted bits
-are “interesting” to us.
-Goal: Add up these “interesting” values using
-O(1) word operations.
-
-This is a series of shifts and
-adds. It’s equivalent to
-multiplying our original
-number by some well-chosen
-spreader!
+At this point, we can store tiny numbers in a given node and, when a key `x` comes in, we can tile it and perform the first step of a parallel comparison operation. To finish out the `node.rank(x)` operation, we need to discuss how to count up the number of items smaller than or equal to our key. To find this number, we simply need to count how many of the sentinel bits in the difference are set to `1`. We want to do this in `O(1)`. One option is to use a series of shifts to align all the sentinel bits, the adding them up. To perform the shifting in a single operation, we use the same idea we used when implementing `parallel_tile` — we multiply with a carefully chosen spreader. While this approach works well, we adopt a much simpler approach. After we have isolated the sentinel bits i the difference by performing a bitwise and with an appropriate mask, we simply call a rust built in procedure to count the number of ones.
 
 ```rust
 impl SardineCan {
@@ -212,7 +200,7 @@ impl SardineCan {
 ## `O(1)` Most Significant Bit
 
 Mathematically, msb(n) is the largest value of k
-such that 2k ≤ n. 
+such that 2k ≤ n.
 There’s a simple O(w)-time algorithm
 We can improve this runtime to O(log w) by using a
 binary search:
@@ -226,8 +214,6 @@ Lookup table
 prefix of m and n, denoted lcp(m, n), is the length
 of the longest bitstring they both start with.
 - 63 - msb(m ⊕ n)
-
-https://rust-lang.github.io/api-guidelines/type-safety.html#newtypes-provide-static-distinctions-c-newtype
 
 ## References
 

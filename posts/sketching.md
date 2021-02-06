@@ -6,10 +6,10 @@ The way such algorithms provide their answers depends on the kind of query being
 
 The two cases discussed above share two key characteristics:
 
-1. The answers that they produce will be approximate — not exact
+1. The answers that they produce will be approximate — not exact.
 2. They do not seek to store and process all the incoming data. Instead, their goal is to quickly process each observation to create a summary that they can use to answer either standing or ad hoc queries. This summary is often referred to as a Sketch of the data.
 
-In this note, we discuss an implement several ideas that are useful when designing online algorithms. We begin by discussing a classic method for selecting a representative sample from a stream of data. We then discuss the idea that is foundational to most sketching algorithms and show how it's employed to improve the accuracy of approximate online methods. Finally, we discuss a few key algorithms for answering some standing queries.
+In this note, we discuss and implement several ideas that are useful when designing online algorithms. We begin by discussing a classic method for selecting a representative sample from a stream of data. We then discuss the idea that is foundational to most sketching algorithms and show how it's employed to improve the accuracy of approximate online methods. Finally, we discuss a few key algorithms for answering some standing queries.
 
 ## Reservoir Sampling
 
@@ -101,16 +101,26 @@ You can find runnable code for the reservoir sampling procedure [in the playgrou
 
 ## Foundational Ideas
 
+Before we begin discussing strategies for answering standing queries on streaming data, let's first lay the foundation by exploring two key ideas. These ideas are the major motifs that you'll encounter in almost all sketching algorithms.
+
 ### Hashing
 
-### Fingerprints
+Hashing mostly known as the first half of hash tables (the other half being techniques for resolving collisions). Also useful in designing probabilistic sketching algorithms. Introduce randomness use hashing. Takes an arbitrary input and transforms it to an integer. Universal hashing. Perfect hashing. p f(x) = f(y) if x neq y. Hashing as an attack vector (via hashflooding) and the need for using a random hash function.   vs streaming hash functions. Cryprtographic vs non cryptographic hash functions. Tradeoff between speed and security. Examples of common hash functions (xxhash, murmurhash). Demonstrate the hashing interface of rust.
 
-### Probability Amplification
+### Fingerprints & Probability Amplification
+
+Once we apply a hash function to an item, we can use the generated hash value to uniquely identify that object. The hash value can thus be thought of as a fingerprint of the initial object in that it is relatively unique and lightweight identifier of the object -- just like human fingerprints. Because of hash collisions, however, it is not fully unique. Our goal is to reduce the likelihood of a collision. That is where probability amplification comes in. Rerun the hashing experiment `k` times, each time with a different random hash function. Now, the fingerprint is composed of the `k` hash values. This dramatically reduces the probability of fingerprint collision. probability that two fingerprints from two different objects are the same is `m^-k`.
 
 ## Bloom Filters
 
+Suppose you wish to compactly represent a set of items in some universe. Options are a hash set
+
 ## The Count-Min Sketch
 
+A compact structure for estimating the counts for each type of item
+
 ## The Hyper-Log-Log
+
+A method for estimating the cardinality of a multi-set. That is, answering the question, how many distinct items do we have?
 
 ## The Johnson-Lindenstrauss Transform
