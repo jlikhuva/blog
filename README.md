@@ -16,7 +16,7 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [ ]  Sketching Algorithms
 - [ ]  Algorithms for Discrete Optimization
 - [ ]  The Lazy Binomial Heap
-- [ ]  Word Level Parallelism
+- [ ]  [Word Level Parallelism](https://github.com/jlikhuva/blog/blob/main/posts/wlp.md)
 - [ ]  Specialized Containers for Integers
 - [ ]  Online Algorithms
 - [ ]  Persistent & Retroactive Data Structures
