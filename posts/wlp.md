@@ -239,7 +239,7 @@ We can improve upon the linear scanning procedure using bit level binary search.
 
 ### The MSB(x)-Rank(x) Equivalence
 
-As a reminder, `MSB(x)` is the largest value of `k` such that $2^k \leq x$. Remember also the definition of `Rank(x)`: it is the number of items, in some underlying ordered collection, that are less than or equal to `x`. Immediately, we can see how eerily similar these two definitions are. In fact, we can redefine `MSB(x)` in terms of `Rank(x)` by choosing an appropriate underlying collection. If the underlying collection is a list of all the powers of two, $\left<2^0, 2^1, 2^2, \ldots 2^{62}, 2^{63}\right>$, then `MSB(x)` is the same as `Rank(x)` in that array.
+As a reminder, `MSB(x)` is the largest value of `k` such that <!-- $2^k \leq x$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/uzhhDmuges.svg">. Remember also the definition of `Rank(x)`: it is the number of items, in some underlying ordered collection, that are less than or equal to `x`. Immediately, we can see how eerily similar these two definitions are. In fact, we can redefine `MSB(x)` in terms of `Rank(x)` by choosing an appropriate underlying collection. If the underlying collection is a list of all the powers of two, <!-- $\left<2^0, 2^1, 2^2, \ldots 2^{62}, 2^{63}\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/ZqzlYTM8sR.svg">, then `MSB(x)` is the same as `Rank(x)` in that array.
 
 ### Parallel Pack
 
