@@ -239,11 +239,23 @@ We can improve upon the linear scanning procedure using bit level binary search.
 
 ### The MSB(x)-Rank(x) Equivalence
 
-```rust
-/// WIP
-```
+As a reminder, `MSB(x)` is the largest value of `k` such that $2^k \leq x$. Remember also the definition of `Rank(x)`: it is the number of items, in some underlying ordered collection, that are less than or equal to `x`. Immediately, we can see how eerily similar these two definitions are. In fact, we can redefine `MSB(x)` in terms of `Rank(x)` by choosing an appropriate underlying collection. If the underlying collection is a list of all the powers of two, $\left<2^0, 2^1, 2^2, \ldots 2^{62}, 2^{63}\right>$, then `MSB(x)` is the same as `Rank(x)` in that array.
 
 ### Parallel Pack
+
+At this point, we're one step closer to the solution. We've redefined `MSB` as `Rank` and we have a method for solving `Rank` in constant time — `parallel_rank`. That procedure, however, assumes that the underlying array can be packed in a single machine word. It also assumes that our query `x` is as wide as our packed underlying array. Clearly, we cannot fit `64` numbers is a single machine word. However, if we can somehow reduce the size of our query, then, maybe, we can reduce the size of the needed underlying array. To do that, we'll borrow a technique that we saw extensively while discussing [the median of medians method](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#the-method-of-four-russians): Block Decomposition.
+
+We'll decompose the bits of our query into blocks of `8` bits. This means that the underlying array of powers of two will only have `8` elements down from `64`. This still won't fit in a single machine word – remember that when discussing `parallel_rank`, we assumed that our numbers had only `7 bits`. Nevertheless, we can still pack our 8-bit numbers in two machine words (`u128` instead of `u64`) without affecting the runtime of `parallel_rank`. One final piece of the puzzle still remains. How will we know which block to focus on? We need some sort of routing information.
+
+For routing, we'll keep a secondary 8-bit array with one entry for each block. The `k-th` entry of this array contains a `1` if and only if the `k-th` block of our query has a numeric value greater than zero (that is, the block contains a `1` anywhere within it). Note that the size of this secondary bit array is small enough that we can pack it into a few machine words. This means that we can leverage our previous methods when operating on it.
+
+To recapitulate: To answer `MSB(x)`, we'll
+
+1. Decompose the bit representation of `x` into blocks of 8 bits.
+2. We'll also form a secondary bit array with as many bits as the number of blocks we have. In this secondary array, the `k-th` bit will be on when the `k-th` block could conceivably have a most significant bit.
+3. Finally, to find `MSB(x)`, we'll first use  `parallel_rank` to find the index of the most significant bit in the secondary routing array. This will tell us the location of the most significant block. We shall then use `parallel_rank` one more time to find the index of the most significant bit in the most significant block.
+
+We implement this three step procedure below.
 
 ```rust
 /// WIP
@@ -251,8 +263,12 @@ We can improve upon the linear scanning procedure using bit level binary search.
 
 ### `O(1) LCP(x, y)`
 
+The bit version of the LCP asks us to find the length of the longest common prefix between the bit-strings of the two numbers. This can simply be solved by leveraging our `O(1) MSB(n)` procedure from above.
+
 ```rust
-/// WIP
+pub fn lcp_len_of(a: u64, b: u64) -> u64 {
+    63 - get_msb_idx_of(a ^ b) as u64
+}
 ```
 
 ## References
