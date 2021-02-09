@@ -258,7 +258,91 @@ To recapitulate: To answer `MSB(x)`, we'll
 We implement this three step procedure below.
 
 ```rust
-/// WIP
+
+#[derive(Debug)]
+struct FourRussiansMSB {
+    /// The secondary routing bit array
+    macro_bit_array: u8,
+
+    /// This is simply the number whose `msb` we'd like to find.
+    /// It is logically split into blocks of 8 bits
+    micro_arrays: u64,
+}
+
+impl FourRussiansMSB {
+    pub fn build(query: u64) -> Self {
+        let macro_bit_array = Self::generate_macro_bit_array(query);
+        FourRussiansMSB {
+            macro_bit_array,
+            micro_arrays: query,
+        }
+    }
+
+    /// Generates the routing macro array. To do so, it
+    /// relies on the observation that a block contains a
+    /// 1 bit if it's highest bit is a 1 or if its
+    /// lower 7 bits' numeric value is greater than 0.
+    fn generate_macro_bit_array(query: u64) -> u8 {
+        // The first step is to extract information about the highest bit in each block.
+        let high_bit_mask = 0b10000000_10000000_10000000_10000000_10000000_10000000_10000000_10000000u64;
+        let is_high_bit_set = query & high_bit_mask;
+
+        // The second step is to extract information about the lower seven bits
+        // in each block. To do so, we use parallel_compare, which is basically
+        // subtraction.
+        let packed_ones = 0b00000001_00000001_00000001_00000001_00000001_00000001_00000001_00000001u64;
+        let mut are_lower_bits_set = query | high_bit_mask;
+        are_lower_bits_set -= packed_ones;
+        are_lower_bits_set &= high_bit_mask;
+
+        // We unify the information from the first two steps into a single value
+        // that tells us if a block could conceivably contain the MSB
+        let is_block_active = is_high_bit_set | are_lower_bits_set;
+
+        // To generate the macro array, we need to form an 8-bit number out of the
+        // per-block highest bits from the last step. To pack them together, we simply use
+        // an appropriate multiplier which does the work of a series of bitshifts
+        let packer = 0b10000001_00000010_00000100_00001000_00010000_00100000_010000001u64;
+        let mut macro_bit_array = is_block_active as u128 * packer as u128;
+        macro_bit_array >>= 49;
+        macro_bit_array &= 0b1111_1111;
+        macro_bit_array as u8
+    }
+
+    pub fn get_msb(&self) -> u8 {
+        let block_id = self.msb_by_rank(self.macro_bit_array);
+        let msb_block = self.get_msb_block(block_id);
+        let msb = self.msb_by_rank(msb_block);
+        msb // TODO: Map this correctly. At this point this is 0..7
+    }
+
+    /// Given a block id -- which is the msb value in the macro routing array,
+    /// this method retrieves the 8 bits that represent that block
+    /// from the `micro_arrays`. `block_id 0 refers to the highest
+    fn get_msb_block(&self, block_id: u8) -> u8 {
+        let right_shift_by = block_id * 8;
+        let block_mask = 0b1111_1111u64 << 56;
+        let mut block = self.micro_arrays;
+        block &= block_mask >> right_shift_by;
+        block as u8
+    }
+
+    /// Finds the index of the most significant bit in the
+    /// provided 8-bit number by finding its rank among the
+    /// 8 possible powers of 2: <1, 2, 4, 8, 16, 32, 64, 128>.
+    /// To do so in constant time, it employs techniques from
+    /// our discussion of `parallel_rank`
+    fn msb_by_rank(&self, x: u8) -> u8 {
+        todo!()
+    }
+}
+```
+
+```rust
+
+pub fn get_msb_idx_of(query: u64) -> u8 {
+    FourRussiansMSB::build(query).get_msb()
+}
 ```
 
 ### `O(1) LCP(x, y)`

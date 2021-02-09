@@ -37,3 +37,7 @@ A distillation of some of the most compelling ideas in bioinformatics, as presen
 - [ ]  Combinatorial Pattern Matching
 - [ ]  Hidden Markov Models
 - [ ]  Computational Proteomics
+
+##### Protocols [WIP]
+
+- [ ] Knowledge Management & How I study for Mastery
