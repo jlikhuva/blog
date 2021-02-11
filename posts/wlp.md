@@ -305,7 +305,11 @@ impl FourRussiansMSB {
         let packer = 0b10000001_00000010_00000100_00001000_00010000_00100000_010000001u64;
         let mut macro_bit_array = is_block_active as u128 * packer as u128;
         macro_bit_array >>= 49;
-        macro_bit_array &= 0b1111_1111;
+        if is_block_active >> 56 == 0 {
+            macro_bit_array &= 0b0111_1111;
+        } else {
+            macro_bit_array &= 0b1111_1111;
+        }
         macro_bit_array as u8
     }
 

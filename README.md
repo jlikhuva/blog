@@ -28,7 +28,7 @@ A distillation of some of the most compelling ideas in bioinformatics, as presen
 
 - [ ]  Introduction
 - [ ]  Randomized Algorithms
-- [ ]  Graph Algorithms
+- [ ]  Genome Assembly using de Bruijn Graphs
 - [ ]  Brute-force Algorithms
 - [ ]  Dynamic Programming
 - [ ]  Combinatorial Algorithms
@@ -40,4 +40,4 @@ A distillation of some of the most compelling ideas in bioinformatics, as presen
 
 ##### Protocols [WIP]
 
-- [ ] Knowledge Management & How I study for Mastery
+- [ ] Knowledge Management: How I Study for Mastery
