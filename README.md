@@ -30,7 +30,7 @@ A distillation of some of the most compelling ideas in bioinformatics, as presen
 - [ ]  Randomized Algorithms
 - [ ]  Genome Assembly using de Bruijn Graphs
 - [ ]  Brute-force Algorithms
-- [ ]  Dynamic Programming
+- [ ]  Sequence Alignment
 - [ ]  Combinatorial Algorithms
 - [ ]  Evolutionary Tree Reconstruction
 - [ ]  Clustering Algorithms

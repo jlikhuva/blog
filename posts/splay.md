@@ -382,7 +382,9 @@ impl<K: Ord + Default, V: Default> SplayTree<K, V> {
     }
 }
 ```
+
 **Write Operations**
+
 ```rust
 /// Implementation of Write operations. These procedures
 /// do lead to structural changes in the tree
@@ -409,6 +411,7 @@ impl<K: Ord, V> SplayTree<K, V> {
     }
 }
 ```
+
 <!-- #### Testing the API
 ```rust
 /// WIP
