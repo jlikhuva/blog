@@ -12,11 +12,13 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [ ]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
 - [ ]  [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
 - [x]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
+  
+- [x]  [Word Level Parallelism](https://github.com/jlikhuva/blog/blob/main/posts/wlp.md)
 - [ ]  Graphs: All Foundational Methods
-- [ ]  Sketching Algorithms
+- [ ]  [Sketching Algorithms](posts/sketching.md)
 - [ ]  Algorithms for Discrete Optimization
 - [ ]  The Lazy Binomial Heap
-- [x]  [Word Level Parallelism](https://github.com/jlikhuva/blog/blob/main/posts/wlp.md)
+
 - [ ]  Specialized Containers for Integers
 - [ ]  Online Algorithms
 - [ ]  Persistent & Retroactive Data Structures
@@ -28,7 +30,7 @@ A distillation of some of the most compelling ideas in bioinformatics, as presen
 
 - [ ]  Introduction
 - [ ]  Randomized Algorithms
-- [ ]  Genome Assembly using de Bruijn Graphs
+- [ ]  [Genome Assembly using de Bruijn Graphs](posts/genome_asm.md)
 - [ ]  Brute-force Algorithms
 - [ ]  Sequence Alignment
 - [ ]  Combinatorial Algorithms
@@ -40,4 +42,4 @@ A distillation of some of the most compelling ideas in bioinformatics, as presen
 
 ##### Protocols [WIP]
 
-- [ ] Knowledge Management: How I Study for Mastery
+- [ ] Knowledge Management: How I Study for Mastery*
