@@ -8,7 +8,11 @@ Before we begin, we should note that while this note aims to be expansive, it is
 
 ## Decision Making
 
-## Greedy Algorithms wrt an objective
+The core primitive is choosing from a set of actions. How we choose.
+
+## Greedy Algorithms
+
+When is a greedy approach guaranteed to work? Can we rigorously prove this?
 
 ## Dynamic Programming: Foundational Methods
 
