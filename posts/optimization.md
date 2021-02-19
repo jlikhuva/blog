@@ -18,6 +18,8 @@ When is a greedy approach guaranteed to work? Can we rigorously prove this?
 
 ## Decision Making Under Uncertainty
 
+### Bandits
+
 ## Finite MDPs
 
 ## Dynamic Programming Methods in RL

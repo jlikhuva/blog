@@ -107,30 +107,68 @@ Before we begin discussing strategies for answering standing queries on streamin
 
 Although hashing is mostly known as the first key ingredient in the design of hash tables ([the other half being techniques for resolving collisions](https://www.notion.so/Hashing-The-Cutting-Room-Floor-0dd4f5280f3c4ac88d3823a35336f5fa)), it is also quite useful when designing probabilistic sketching algorithms. In this setting, we use hashing to introduce randomness. To see why randomness is important, consider an alternate method for sampling `k` items from a possibly infinite data stream. We could accomplish this by tagging each incoming item with a random number then storing the items and their tags in a bounded heap. Once the heap reaches capacity, we evict the item with the smallest tag before adding in a new `<item, tag>` pair.
 
-At this point, we have a vague idea of why hashing is a useful idea. But, what is hashing — really? [Put simply](https://gankra.github.io/blah/robinhood-part-1/#hashing), hashing takes an arbitrary input (often as a collection of bytes) and transforms it, using a hash function, into a random integer. How is this different from tagging each input with a random number as we did above? Well, if the hash function is _well constructed_, and the functions co-domain is of size `m`, then the probability that two distinct items receive the same tag is $\frac{1}{m}$. A hash function that provides thus guarantee is called a universal hash function. In this note, we assume that all our hash functions are universal.
+At this point, we have a vague idea of why hashing is a useful idea. But, what is hashing — really? [Put simply](https://gankra.github.io/blah/robinhood-part-1/#hashing), hashing takes an arbitrary input (often as a collection of bytes) and transforms it, using a hash function, into a random integer. How is this different from tagging each input with a random number as we did above? Well, if the hash function is _well constructed_, and the functions co-domain is of size `m`, then the probability that two distinct items receive the same tag is <!-- $\frac{1}{m}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/BLfyb0DTU5.svg">. A hash function that provides thus guarantee is called a universal hash function. In this note, we assume that all our hash functions are universal.
 
 In addition to universality, there are other details that are cool to know about hash functions. First, there exists a tradeoff between the speed of a hash function and its security guarantees. Second, when hashing is used as a component of systems that  have exposure to potential adversaries, it as an attack vector — via hash-flooding attacks. This is why we almost always use a randomly initialized hash function. We won't make use of these last two ideas in this note, so we don't discuss them further. For a much more detailed examination fee free to take a look at [this write-up](https://gankra.github.io/blah/robinhood-part-1/) and this other [rough write up](https://paper.dropbox.com/doc/CS-Knowledge-Base--kehJSKrL5YSH8Ws59M1wb#:h2=Hash-Tables-+-Linear-Probing-+)
 
 Below, we explore the hashing interface provided by the rust programming language.
 
 ```rust
-/// WIP
+//! Rust exposes hashing utilities via a Streaming Hasher interface. That is, you
+//! feed arbitrary bytes into the hash function, then, when done, you ask
+//! the hasher to produce a hash value.
+//!
+//! use std::hash::{Hash, Hasher};
+
+/// The Hasher trait from the standard library. This is implemented
+/// by hash functions
+pub trait Hasher {
+    /// Writes the given list of bytes into this hasher. This usually
+    /// updates some internal state. Because the hasher is stateful,
+    /// we can keep on calling `write` until we've exhausted all our
+    /// bytes
+    fn write(&mut self, bytes: &[u8]);
+
+    /// Produces the hash value of the bytes fed into this hasher so far
+    /// without resetting the hasher's internal state. This means that
+    /// if we want a hash value for a different stream of bytes, we have to
+    /// create a new hasher instance.
+    fn finish(&self) -> u64;
+
+    // ... snip
+}
+
+/// The Hash trait from the standard library. This is implemented by hashable
+/// types
+pub trait Hash {
+    /// Feed the value into a given Hasher
+    fn hash<H: Hasher>(&self, state: &mut H);
+
+    // ... snip
+}
+
+/// Usage Examples
+fn examples_of_hashing() {
+
+}
 ```
 
 ### Fingerprints & Probability Amplification
 
 Once we apply a hash function to an item, we can use the generated hash value to almost uniquely identify that object. The hash value can thus be thought of as a fingerprint of the initial object in that it is a relatively unique and lightweight identifier of the object -- just like human fingerprints. Because of hash collisions, however, it is not fully unique. Our goal is to reduce the likelihood of a collision. That is where probability amplification comes in. Rerun the hashing experiment `k` times, each time with a different random hash function. Now, the fingerprint is composed of the `k` hash values. This dramatically reduces the probability of fingerprint collision. probability that two fingerprints from two different objects are the same is `m^-k`.
 
+To recapitulate, we can represent arbitrary objects using their hash value. These values are often smaller (e.g 8 bytes) than the underlying objects. Furthermore, instead of simply using a single hash value, we can use a collection of `k` hash values each produced by `k` independent hash functions.
+
 ## Bloom Filters
 
-A compact structure for answering membership queries.
+A bloom filter is a compact structure for answering membership queries. It is constructed by only making use of object fingerprinting and probability amplification.  
 
 ```rust
 /// Indicates that the filter has probably seen a given
 /// item before
 pub struct ProbablyYes;
 
-/// indicates that a filter hasn't seen a given item before.
+/// Indicates that a filter hasn't seen a given item before.
 pub struct DefinitelyNot;
 
 /// A filter will be any object that is able to observe a possibly
