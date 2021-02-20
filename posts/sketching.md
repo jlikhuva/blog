@@ -158,7 +158,7 @@ Now, the fingerprint is composed of the `k` hash values. This scheme dramaticall
 
 <!-- To really appreciate how powerful these two ideas are, let's look at a quick example borrowed from [CS 168](https://web.stanford.edu/class/cs168/l/l4.pdf). Suppose we have `n` objects from a universe `U`. Each object requires $\lg_2 |U|$ bits to uniquely identify. For instance, if our universe is the address space on a 64 bit machine, each address would require $\lg_ 2 2^{64} = 64$ bits. Now, suppose that we feel that `64` bits are too many, and thus want to represent each address using fewer bits. How could we go about this? -->
 
-To recapitulate, we can represent arbitrary objects using their hash value. These values are often smaller (e.g 8 bytes) than the underlying objects. Furthermore, instead of simply using a single hash value, we can use a collection of `k` hash values each produced by `k` independent hash functions.
+To recapitulate, we can represent arbitrary objects using their hash values. These values are often smaller (e.g 8 bytes) than the underlying objects. Furthermore, instead of simply using a single hash value, we can use a collection of `k` hash values each produced by `k` independent hash functions.
 
 ## Bloom Filters
 
@@ -182,8 +182,9 @@ pub trait Filter<T> {
     /// `insert` because we do not store any of the items.
     fn observe(&mut self, item: T);
 
-    /// Produce a random uniform sample of the all the items that
-    /// have been observed so far.
+    /// Tells us whether we've seen the given item before. This method
+    /// can produce false positives. That is why instead of returning a
+    /// boolean, it returns `Result<ProbablyYes, DefinitelyNot>`
     fn has_been_observed_before(&self, item: &T) -> Result<ProbablyYes, DefinitelyNot>;
 }
 ```
@@ -213,7 +214,7 @@ pub struct BloomFilter<T: Hash> {
 }
 
 impl<T: Hash> BloomFilter<T> {
-    /// Creates a new bloom filter `m` buckets and `k` hash functions.
+    /// Creates a new bloom filter with `m` buckets and `k` hash functions.
     /// Each hash function is randomly initialized and is independent
     /// of the other hash functions
     pub fn new(m: usize, k: usize) -> Self {
@@ -223,7 +224,7 @@ impl<T: Hash> BloomFilter<T> {
             buckets.push(false);
         }
 
-        // initialize the hash functions randomly
+        // initialize the hash functions randomly.
         let mut hash_functions = Vec::with_capacity(k);
         for _ in 0..k {
             hash_functions.push(RandomState::new());
