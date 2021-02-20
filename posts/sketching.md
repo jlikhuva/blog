@@ -146,22 +146,25 @@ pub trait Hash {
 
     // ... snip
 }
-
-/// Usage Examples
-fn examples_of_hashing() {
-
-}
 ```
+
+The long and short of it is, we create a `hasher` from some random state — `random_state.build_hasher()`. Then, given an item that implements the `Hash` trait, we call its `hash` function passing in the hasher — `item.hash(hasher)`. Then to extract the hash value, we call the `finish` method of the hasher. The tricky bit to remember is that calling finish does not reset the hasher's internal state. As we'll see later on, this means that we have to create a new `hasher` instance to hash a fresh item.
 
 ### Fingerprints & Probability Amplification
 
-Once we apply a hash function to an item, we can use the generated hash value to almost uniquely identify that object. The hash value can thus be thought of as a fingerprint of the initial object in that it is a relatively unique and lightweight identifier of the object -- just like human fingerprints. Because of hash collisions, however, it is not fully unique. Our goal is to reduce the likelihood of a collision. That is where probability amplification comes in. Rerun the hashing experiment `k` times, each time with a different random hash function. Now, the fingerprint is composed of the `k` hash values. This dramatically reduces the probability of fingerprint collision. probability that two fingerprints from two different objects are the same is `m^-k`.
+Once we apply a hash function to an item, we can use the generated hash value to _almost_ uniquely identify that object. The hash value can thus be thought of as a fingerprint of the initial object in that it is a relatively unique and lightweight identifier of the object -- just like human fingerprints. Because of hash collisions, however, it is not fully unique. When designing probabilistic data structures, we strive to reduce the likelihood of two distinct items colliding. That is where probability amplification comes in. Instead of simply hashing an item once, we rerun the hashing experiment `k` times, **each time with a different, independent, random hash function**.
+
+Now, the fingerprint is composed of the `k` hash values. This scheme dramatically reduces the probability of fingerprint collision. In particular, the probability that two fingerprints from two different objects are the same is $\frac{1}{m^k}$. where `m` is the size of the co-domain of our hash functions (this is often the number of buckets we're hashing our items into).
+
+<!-- To really appreciate how powerful these two ideas are, let's look at a quick example borrowed from [CS 168](https://web.stanford.edu/class/cs168/l/l4.pdf). Suppose we have `n` objects from a universe `U`. Each object requires $\lg_2 |U|$ bits to uniquely identify. For instance, if our universe is the address space on a 64 bit machine, each address would require $\lg_ 2 2^{64} = 64$ bits. Now, suppose that we feel that `64` bits are too many, and thus want to represent each address using fewer bits. How could we go about this? -->
 
 To recapitulate, we can represent arbitrary objects using their hash value. These values are often smaller (e.g 8 bytes) than the underlying objects. Furthermore, instead of simply using a single hash value, we can use a collection of `k` hash values each produced by `k` independent hash functions.
 
 ## Bloom Filters
 
-A bloom filter is a compact structure for answering membership queries. It is constructed by only making use of object fingerprinting and probability amplification.  
+A Bloom Filter 🥦  is a compact data structure that summarizes a set of items, allowing us to answer membership questions — has a certain item been seen before? Unlike other set structures — such as hash sets and search trees — a bloom-filter’s answer to a membership query is either a `definite NO` or a `Probable Yes`. That is, it can have false positives — telling us that an item has been seen when in fact it has never been observed. Therefore, Bloom filters are best suited for cases where false positives can be tolerated and mitigated. Cases where the effect of a false positive is not a wrong program state but extra work.  
+
+Below, we introduce the interface shared across all filters capable of answering approximate membership queries.
 
 ```rust
 /// Indicates that the filter has probably seen a given
@@ -182,6 +185,93 @@ pub trait Filter<T> {
     /// Produce a random uniform sample of the all the items that
     /// have been observed so far.
     fn has_been_observed_before(&self, item: &T) -> Result<ProbablyYes, DefinitelyNot>;
+}
+```
+
+A Bloom Filter is parameterized by two values: a bit array `buckets` with `m` buckets in it, and a set of `k` hash functions <!-- $\{h_1, h_2, \ldots h_k\}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/1kMHSWazJW.svg">. Given an input `item`, we apply each of our `k` hash functions to it and then set all the indexes that `item`  hashed to to `true`.  To check if an item has already been seen, we again first apply each of our `k` hash functions and check if **all** corresponding locations to are `true`.
+
+Notice how a bloom filter is simply a direct application of object fingerprinting and probability amplification. We hash each item using multiple hash functions to reduce the chances of getting a false positive.
+
+Below, we provide an implementation of a bloom filter
+
+```rust
+#[derive(Debug)]
+pub struct BloomFilter<T: Hash> {
+    /// The bit vector. The number of buckets is determined
+    /// by the client
+    buckets: Vec<bool>,
+
+    /// The list of hash functions. Again, the number of
+    /// hash functions is determined by the client
+    hash_functions: Vec<RandomState>,
+
+    /// This is here to make the compiler happy. We'd
+    /// like for our filter to be parameterized by
+    /// the items it's monitoring. However, we do not
+    /// store those items in the filter.
+    _marker: PhantomData<T>,
+}
+
+impl<T: Hash> BloomFilter<T> {
+    /// Creates a new bloom filter `m` buckets and `k` hash functions.
+    /// Each hash function is randomly initialized and is independent
+    /// of the other hash functions
+    pub fn new(m: usize, k: usize) -> Self {
+        // initialize all the bucket locations to false
+        let mut buckets = Vec::with_capacity(m);
+        for _ in 0..m {
+            buckets.push(false);
+        }
+
+        // initialize the hash functions randomly
+        let mut hash_functions = Vec::with_capacity(k);
+        for _ in 0..k {
+            hash_functions.push(RandomState::new());
+        }
+
+        BloomFilter {
+            buckets,
+            hash_functions,
+            _marker: PhantomData,
+        }
+    }
+
+    /// This performs the actual hashing.
+    fn get_index(&self, state: &RandomState, item: &T) -> usize {
+        let mut hasher = state.build_hasher();
+        item.hash(&mut hasher);
+        let idx = hasher.finish() % self.buckets.len() as u64;
+        idx as usize
+    }
+}
+```
+
+With the above abstractions in place, we can go ahead and implement the core filter procedures.
+
+```rust
+impl<T: Hash> Filter<T> for BloomFilter<T> {
+    /// As already explained, we apply each of our `k` hash functions to the
+    /// given item and set the locations it hashes to to true
+    fn observe(&mut self, item: T) {
+        for state in &self.hash_functions {
+            let index = self.get_index(state, &item);
+            self.buckets[index] = true;
+        }
+    }
+
+    /// Again, we start by applying each of our `k` hash functions 
+    /// to the given item then. If all resultant `k` locations are `true`,
+    /// we conclude that we MIGHT have observed this item. If any location
+    /// is false, we immediately conclude that we NEVER saw this item
+    fn has_been_observed_before(&self, item: &T) -> Result<ProbablyYes, DefinitelyNot> {
+        for state in &self.hash_functions {
+            let index = self.get_index(state, &item);
+            if !self.buckets[index] {
+                return Err(DefinitelyNot);
+            }
+        }
+        Ok(ProbablyYes)
+    }
 }
 ```
 
