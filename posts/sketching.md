@@ -278,10 +278,39 @@ impl<T: Hash> Filter<T> for BloomFilter<T> {
 
 ## The Count-Min Sketch
 
-A compact structure for estimating the counts for each type of item.
+Count-Min Sketch 🍅 is a compact structure for estimating the counts of each type of items in our set. A naive way of solving the count each problem would be to allocate an integer counter for each class of items. However, this may not be practical when the number of item types grows huge. The CMSketch provides a tradeoff between count accuracy and low memory usage — it encodes a potentially massive number of item types in a small array, guaranteeing that large counts will be preserved fairly accurately while small counts may incur greater relative error. Count-Min sketches are thus best suited to when we can handle a slight inflation in frequency. As with the bloom filter, we use multiple hash functions. However, unlike with the bloom filter where all the functions hashed to the same array, now each functions has its own dedicated set of buckets. A CMSketch is thus a matrix with as many rows as the number of hash functions and as many columns as the number or buckets. When we see an item, we apply our `k` hash functions to it and increment the slots that it maps to in each row of the sketch. To estimate the count of an item, we apply our hash functions and read the values at the slots that it maps to and then select the minimum out of these. One cool thing to note is that the accuracy guarantees of the CMSketch are not in any way related to the size of the dataset, this is in contrast with the guarantees of the bloom filter. They depend entirely on the number of hash functions `k` and the number of buckets `m`
 
 ## The Hyper-Log-Log
 
 A method for estimating the cardinality of a multi-set. That is, answering the question, how many distinct items do we have?
 
 ## The Johnson-Lindenstrauss Transform
+
+Euclidean Distance , also known as the $\ell_2$ distance, is the most common distance metric. it is defined over vectors of real values. It is defined as $D_\epsilon (x, y) = ||x - y||_2 = \left( \sum_{i = 1}^{d} [x_i - y_i]^2 \right)^{0.5}$ for points $x \in \mathbb{R}^d, y \in \mathbb{R}^d$. This can be generalized by replacing 2 with arbitrary values $p$. 
+
+
+The Curse of Dimensionality is the observation that, the number of neighbors of any point $p$ is related exponentially to the number of dimensions of our space. In $\mathbb{R}^1, \mathbb{R}^2, \mathbb{R}^3$ we have $p = 2^1, 2^2, 2^3$ respectively. In general, $p = 2^d, \text{ for } \mathbb{R}^d$. This grows so large for moderate values of $d$. Since there is no known way to overcome this curse, we have to resort to using approximate methods. 
+
+At the heart of approximate nearest neighbor methods  lies Dimensionality Reduction . The goal is to project our high dimensional data into a low dimensional space while preserving inter-point distance as much as possible. This would allows have our cake and it it too — we’d be able to richly represent our data in high dimensions and leverage dimensionality reduction to map our data and queries down to a small number of dimensions so as to overcome — approximately, the curse of dimensionality. 
+
+To motivate dimensionality reduction, it is instructive to look at two key foundational techniques — fingerprinting and probability amplification: Suppose we have a set of $n$ objects from a universe $\mathcal{U}$. Note that we need $\log_2|\mathcal{U}|$ bits to distinctly represent any object from this universe. For large $\mathcal{U}$ this may be too many bits. Can we distinctly represent each object with fewer bits?  One simple scheme is to use a single bit using the mapping  $f(x) = h(x) \mod 2$If the hash function is good, we expect $x = y \rightarrow f(x) = f(y)$, i.e equality to be preserved and when  $\text x \neq y \text{ then }Pr[f(x) = f(y)] \leq 0.5$, i.e distinctness is preserved 50% of the time. 
+We can improve this last error rate by repeating the hashing experiment $k$ times using $k$ independent hash functions and label each object using $k$ bits — this bitstring is the fingerprint of the original object. This is probability amplification. It dramatically reduces the error rate. With 2 hash functions, the error rate drops down to $0.25$. In general, the error rate is $2^{-k}$.
+
+Random Projections is an extension of  the idea of fingerprinting to approximately preserve the $L_2$ distance between object pairs. Suppose we have $n$ objects of interest, $x_1 \ldots x_n$ in $k$-dimensional space. We can choose a random vector $r = (r_1 \ldots r_k)$ from the same space. If we take the inner product between $r$ and any of our objects, we’ll get a single number $f_r(x_i) = \langle x_i, r\rangle = x^Tr$. We have thus mapped a k-vector to a single real value that is a random linear combination of the elements in the original vector. This is the random projection of the vector.
+
+The value in our random vector can be sampled iid from a standard gaussian. If we do that, the projections of any two vectors will be an unbiased estimate of the euclidean distance between the two vectors. As usual, we can use the magic of independent trials to increase the “accuracy” of our projections. To do so, instead of picking a single random vector, we pick $d$ random vectors and average the random projections we get from them. Averaging $d$ independent unbiased estimates yields an unbiased estimate and drops the variance of our estimate by a factor of $d$.
+
+The Johnson-Lindenstrauss transform (JL) generalizes this idea. It is defined by a $d \times k$ matrix $A$ composed of our $d$ random vectors. The matrix maps vectors in $\mathbb{R}^k$ to vectors in $\mathbb{R}^d$ using the mapping $x_d = \dfrac{1}{\sqrt d}Ax$. We can apply the JL-transform whenever we have high dimensional data and are working an a computation that only cares about euclidean distance. in that case, there’s little loss in doing the computation in $d$-dimensional space.
+
+## Analysis Tools
+
+### Markov's Inequality
+
+### Chebyshev’s  Inequality
+
+## References
+
+1. [CS 168 Lecture 2](https://web.stanford.edu/class/cs168/l/l2.pdf)
+2. [CS 168 Lecture 4](https://web.stanford.edu/class/cs168/l/l4.pdf)
+3. [This Survey Paper](http://dimacs.rutgers.edu/~graham/pubs/papers/cacm-sketch.pdf)
+4. [This Book by Jelani Nelson](https://www.sketchingbigdata.org/fall20/lec/notes.pdf)
