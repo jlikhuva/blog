@@ -25,15 +25,15 @@ A distillation of some of the most elegant ideas in computer science. The collec
 
 A distillation of some of the most compelling ideas in bioinformatics, as presented by Compeau et al. in `Bioinformatics Algorithms`
 
-- [ ]  Introduction
+- [ ]  String Matching: Finding the Origin of Replication
 - [ ]  Randomized Algorithms
 - [ ]  [Genome Assembly using de Bruijn Graphs](posts/genome_asm.md)
 - [ ]  Brute-force Algorithms
-- [ ]  Sequence Alignment
+- [ ]  [Dynamic Programming: Sequence Alignment](posts/seq_seq.md)
 - [ ]  Combinatorial Algorithms
 - [ ]  Evolutionary Tree Reconstruction
 - [ ]  Clustering Algorithms
-- [ ]  Combinatorial Pattern Matching
+- [ ]  Pattern Matching & String Indexing
 - [ ]  Hidden Markov Models
 - [ ]  Computational Proteomics
 

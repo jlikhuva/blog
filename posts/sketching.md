@@ -1,10 +1,10 @@
 # Sketching Algorithms
 
-All algorithms operate on some data. Traditional algorithms assume that they have full access to the data they need in order to solved the problem at hand. For instance, algorithms for sorting a collection of items naturally assume that they have access to a buffer holding all the items. Similarly, procedures for computing the convex hull of a set of points assume that they have all the points. In some applications, however, the full set of data is not known a priori. In this _online setting_, algorithms have to provide useful answers to queries before having the chance to see all the data.
+All algorithms operate on some data. Traditional algorithms assume that they have full access to the data they need in order to solve the problem at hand. For instance, algorithms for sorting a collection of items naturally assume that they have access to a buffer holding all the items. Similarly, procedures for computing the convex hull of a set of points assume that they have all the points. In some applications, however, the full set of data is not known a priori. In this _online setting_, algorithms have to provide useful answers to queries before having the chance to see all the data.
 
 The way such algorithms provide their answers depends on the kind of query being asked. Queries can be `ad hoc` meaning that we do not know the exact query we'd like to run a priori. In this case, the most common technique used is `random sampling`. We can also have `standing queries`. In this case, we know exactly the queries that we'd like to answer. Because we know the queries beforehand, we can design specialized data structures capable of providing useful answers to our queries.
 
-The two cases discussed above share two key characteristics:
+These two cases share two key characteristics:
 
 1. The answers that they produce will be approximate — not exact.
 2. They do not seek to store and process all the incoming data. Instead, their goal is to quickly process each observation to create a summary that they can use to answer either standing or ad hoc queries. This summary is often referred to as a Sketch of the data.
@@ -278,17 +278,31 @@ impl<T: Hash> Filter<T> for BloomFilter<T> {
 
 ## The Count-Min Sketch
 
-Count-Min Sketch 🍅 is a compact structure for estimating the counts of each type of items in our set. A naive way of solving the count each problem would be to allocate an integer counter for each class of items. However, this may not be practical when the number of item types grows huge. The CMSketch provides a tradeoff between count accuracy and low memory usage — it encodes a potentially massive number of item types in a small array, guaranteeing that large counts will be preserved fairly accurately while small counts may incur greater relative error. Count-Min sketches are thus best suited to when we can handle a slight inflation in frequency. As with the bloom filter, we use multiple hash functions. However, unlike with the bloom filter where all the functions hashed to the same array, now each functions has its own dedicated set of buckets. A CMSketch is thus a matrix with as many rows as the number of hash functions and as many columns as the number or buckets. When we see an item, we apply our `k` hash functions to it and increment the slots that it maps to in each row of the sketch. To estimate the count of an item, we apply our hash functions and read the values at the slots that it maps to and then select the minimum out of these. One cool thing to note is that the accuracy guarantees of the CMSketch are not in any way related to the size of the dataset, this is in contrast with the guarantees of the bloom filter. They depend entirely on the number of hash functions `k` and the number of buckets `m`
+Count-Min Sketch 🍅  is a compact structure for estimating the counts of each type of items in our set. A naive way of solving the count each problem would be to allocate an integer counter for each class of items. However, this may not be practical when the number of item types grows huge. The CMSketch provides a tradeoff between count accuracy and low memory usage — it encodes a potentially massive number of item types in a small array, guaranteeing that large counts will be preserved fairly accurately while small counts may incur greater relative error. Count-Min sketches are thus best suited to cases where a slight inflation in frequency does not lead to an illegal program state.
+
+As with the bloom filter, we use multiple hash functions. However, unlike with the bloom filter where all the functions hashed to the same array, each function in this case has its own dedicated set of buckets. A CMSketch is thus a matrix with as many rows as the number of hash functions and as many columns as the number or buckets. When we see an item, we apply our `k` hash functions to it and increment the slots that it maps to in each row of the sketch. To estimate the count of an item, we apply our hash functions and read the values at the slots that it maps to and then select the minimum out of these. One cool thing to note is that the accuracy guarantees of the CMSketch are not in any way related to the size of the dataset — they depend entirely on the number of hash functions `k` and the number of buckets `m`.
+
+```rust
+/// WIP
+```
 
 ## The Hyper-Log-Log
 
 A method for estimating the cardinality of a multi-set. That is, answering the question, how many distinct items do we have?
 
+```rust
+/// WIP
+```
+
 ## The Johnson-Lindenstrauss Transform
 
-Euclidean Distance , also known as the $\ell_2$ distance, is the most common distance metric. it is defined over vectors of real values. It is defined as $D_\epsilon (x, y) = ||x - y||_2 = \left( \sum_{i = 1}^{d} [x_i - y_i]^2 \right)^{0.5}$ for points $x \in \mathbb{R}^d, y \in \mathbb{R}^d$. This can be generalized by replacing 2 with arbitrary values $p$. 
+```rust
+/// WIP
+```
 
-
+<!-- Euclidean Distance , also known as the $\ell_2$ distance, is the most common distance metric. it is defined over vectors of real values. It is defined as $D_\epsilon (x, y) = ||x - y||_2 = \left( \sum_{i = 1}^{d} [x_i - y_i]^2 \right)^{0.5}$ for points $x \in \mathbb{R}^d, y \in \mathbb{R}^d$. This can be generalized by replacing 2 with arbitrary values $p$. 
+-->
+<!--
 The Curse of Dimensionality is the observation that, the number of neighbors of any point $p$ is related exponentially to the number of dimensions of our space. In $\mathbb{R}^1, \mathbb{R}^2, \mathbb{R}^3$ we have $p = 2^1, 2^2, 2^3$ respectively. In general, $p = 2^d, \text{ for } \mathbb{R}^d$. This grows so large for moderate values of $d$. Since there is no known way to overcome this curse, we have to resort to using approximate methods. 
 
 At the heart of approximate nearest neighbor methods  lies Dimensionality Reduction . The goal is to project our high dimensional data into a low dimensional space while preserving inter-point distance as much as possible. This would allows have our cake and it it too — we’d be able to richly represent our data in high dimensions and leverage dimensionality reduction to map our data and queries down to a small number of dimensions so as to overcome — approximately, the curse of dimensionality. 
@@ -300,13 +314,19 @@ Random Projections is an extension of  the idea of fingerprinting to approximate
 
 The value in our random vector can be sampled iid from a standard gaussian. If we do that, the projections of any two vectors will be an unbiased estimate of the euclidean distance between the two vectors. As usual, we can use the magic of independent trials to increase the “accuracy” of our projections. To do so, instead of picking a single random vector, we pick $d$ random vectors and average the random projections we get from them. Averaging $d$ independent unbiased estimates yields an unbiased estimate and drops the variance of our estimate by a factor of $d$.
 
-The Johnson-Lindenstrauss transform (JL) generalizes this idea. It is defined by a $d \times k$ matrix $A$ composed of our $d$ random vectors. The matrix maps vectors in $\mathbb{R}^k$ to vectors in $\mathbb{R}^d$ using the mapping $x_d = \dfrac{1}{\sqrt d}Ax$. We can apply the JL-transform whenever we have high dimensional data and are working an a computation that only cares about euclidean distance. in that case, there’s little loss in doing the computation in $d$-dimensional space.
+The Johnson-Lindenstrauss transform (JL) generalizes this idea. It is defined by a $d \times k$ matrix $A$ composed of our $d$ random vectors. The matrix maps vectors in $\mathbb{R}^k$ to vectors in $\mathbb{R}^d$ using the mapping $x_d = \dfrac{1}{\sqrt d}Ax$. We can apply the JL-transform whenever we have high dimensional data and are working an a computation that only cares about euclidean distance. in that case, there’s little loss in doing the computation in $d$-dimensional space. -->
 
 ## Analysis Tools
 
+In the preceding sections, we cursorily talked about the "guarantees" of our different methods. 
+
 ### Markov's Inequality
 
+`Markov’s Inequality` tells us that the probability that a random variable, <!-- $X$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/DNwP8ZLJxT.svg">, is <!-- $\lambda$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/AYiHyeOZfc.svg"> times the average value is at most <!-- $\dfrac{1}{\lambda}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/AeiTaeHNFF.svg">. That is <!-- $P \left( X \geq \lambda E[X] \right) \leq \frac{1}{\lambda}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pZ5fCGY8BP.svg">
+
 ### Chebyshev’s  Inequality
+
+`Chebyshev’s  Inequality` tells us that the probability that a random variable  <!-- $X$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/1rIMGiiRXw.svg"> is more than <!-- $\beta$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/6jZyLUaioc.svg"> standard deviations from its mean is at most <!-- $\dfrac{1}{\beta ^2}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/d9v8Af6MhN.svg">. That is <!-- $P \left( |X - E[X]| \geq \beta \sqrt {Var(X)} \right) \leq \dfrac{1}{\beta ^ 2}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/EtGrm0BiXe.svg">
 
 ## References
 
@@ -314,3 +334,4 @@ The Johnson-Lindenstrauss transform (JL) generalizes this idea. It is defined by
 2. [CS 168 Lecture 4](https://web.stanford.edu/class/cs168/l/l4.pdf)
 3. [This Survey Paper](http://dimacs.rutgers.edu/~graham/pubs/papers/cacm-sketch.pdf)
 4. [This Book by Jelani Nelson](https://www.sketchingbigdata.org/fall20/lec/notes.pdf)
+5. [This Talk by Nicholas Ormrod](https://www.youtube.com/watch?v=YA-nB2wjVcI&ab_channel=CppCon)
