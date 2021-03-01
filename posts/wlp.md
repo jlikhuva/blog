@@ -320,7 +320,7 @@ Then, we implement procedures to build the two-level structure. Most of these me
         pub fn get_msb(&self) -> u8 {
             let block_id = self.msb_by_rank(self.macro_bit_array);
             let block_start = (block_id - 1) * 8;
-            let msb_block = self.get_msb_block(block_start); // msb block is wrong!!
+            let msb_block = self.get_msb_block(block_start);
             let msb = self.msb_by_rank(msb_block);
             let in_block_location = msb - 1;
             block_start + in_block_location

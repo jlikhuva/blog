@@ -283,7 +283,52 @@ Count-Min Sketch 🍅  is a compact structure for estimating the counts of each 
 As with the bloom filter, we use multiple hash functions. However, unlike with the bloom filter where all the functions hashed to the same array, each function in this case has its own dedicated set of buckets. A CMSketch is thus a matrix with as many rows as the number of hash functions and as many columns as the number or buckets. When we see an item, we apply our `k` hash functions to it and increment the slots that it maps to in each row of the sketch. To estimate the count of an item, we apply our hash functions and read the values at the slots that it maps to and then select the minimum out of these. One cool thing to note is that the accuracy guarantees of the CMSketch are not in any way related to the size of the dataset — they depend entirely on the number of hash functions `k` and the number of buckets `m`.
 
 ```rust
-/// WIP
+
+#[derive(Debug)]
+pub struct CountMinSketch<T: Hash, const M: usize, const N: usize> {
+    /// A count sketch is defined by `N` hash functions
+    /// and `M` bucket groups. Each of the `N` hash functions 
+    /// maps an item into a single slot in a corresponding bucket group
+    sketch_matrix: [[u64; M]; N],
+
+    /// 
+    hash_functions: [RandomState; N],
+
+    /// As with the Bloom Filter, we'd like to 
+    _marker: PhantomData<T>
+}
+
+impl <T: Hash, const M: usize, const N: usize> CountMinSketch<T, M, N> {
+    /// ...
+    pub fn inc(&mut self, item: &T) {
+        for (i, state) in self.hash_functions.iter().enumerate() {
+            let idx = self.get_index(state, item);
+            self.sketch_matrix[i][idx] += 1;
+        }
+    }
+
+    /// ... 
+    pub fn count(&mut self, item: &T) -> u64{
+        let mut cur_min = u64::MIN;
+        for (i, state) in self.hash_functions.iter().enumerate() {
+            let idx = self.get_index(state, item);
+            let cur_value = self.sketch_matrix[i][idx];
+            if cur_value < cur_min {
+                cur_min = cur_value;
+            }
+        }
+        cur_min
+    }
+
+    /// Hashes the given item and maps it to the appropriate index location within
+    /// a single bucket
+    fn get_index(&self, state: &RandomState, item: &T) -> usize {
+        let mut hasher = state.build_hasher();
+        item.hash(&mut hasher);
+        let idx = hasher.finish() % self.sketch_matrix[0].len() as u64;
+        idx as usize
+    }
+} 
 ```
 
 ## The Hyper-Log-Log

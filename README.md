@@ -46,4 +46,3 @@ A distillation of various techniques that I've found quite useful when learning 
 - [ ] Knowledge Management: How I Study for Mastery*
 - [ ] Mathematical Maturity & Where to Find It
 - [ ] A Technical Interview Worksheet
-- [ ] A Mathematical & Computational Problem Solving Worksheet
