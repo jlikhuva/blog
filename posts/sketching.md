@@ -294,12 +294,13 @@ pub struct CountMinSketch<T: Hash, const M: usize, const N: usize> {
     /// 
     hash_functions: [RandomState; N],
 
-    /// As with the Bloom Filter, we'd like to 
+    /// As with the Bloom Filter, we'd like for our sketch to be
+    /// parameterized by the type of objects it is counting
     _marker: PhantomData<T>
 }
 
 impl <T: Hash, const M: usize, const N: usize> CountMinSketch<T, M, N> {
-    /// ...
+    /// Increment the count of the given item
     pub fn inc(&mut self, item: &T) {
         for (i, state) in self.hash_functions.iter().enumerate() {
             let idx = self.get_index(state, item);
@@ -307,7 +308,7 @@ impl <T: Hash, const M: usize, const N: usize> CountMinSketch<T, M, N> {
         }
     }
 
-    /// ... 
+    /// Retrieve the approximate count of the given item
     pub fn count(&mut self, item: &T) -> u64{
         let mut cur_min = u64::MIN;
         for (i, state) in self.hash_functions.iter().enumerate() {
@@ -363,7 +364,7 @@ The Johnson-Lindenstrauss transform (JL) generalizes this idea. It is defined by
 
 ## Analysis Tools
 
-In the preceding sections, we cursorily talked about the "guarantees" of our different methods. 
+In the preceding sections, we cursorily talked about the "guarantees" of our different methods. In order to fully formalize the correctness and efficiency guarantees of probabilistic algorithms, we often turn to two basic tools:
 
 ### Markov's Inequality
 
