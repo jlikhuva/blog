@@ -9,7 +9,7 @@ If it isn't obvious by now, this blog format was inspired by [Frank McSherry's a
 A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
 
 - [ ]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
-- [ ]  [String Indexing: Tries & Suffix Arrays](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
+- [ ]  [Pattern Matching & String Indexing](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
 - [x]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 - [x]  [Word Level Parallelism](https://github.com/jlikhuva/blog/blob/main/posts/wlp.md)
 - [ ]  Graphs: All Foundational Methods
@@ -33,7 +33,6 @@ A distillation of some of the most compelling ideas in bioinformatics, as presen
 - [ ]  Combinatorial Algorithms
 - [ ]  Evolutionary Tree Reconstruction
 - [ ]  Clustering Algorithms
-- [ ]  Pattern Matching & String Indexing
 - [ ]  Hidden Markov Models
 - [ ]  Computational Proteomics
 
@@ -44,5 +43,6 @@ A distillation of various techniques that I've found quite useful when learning 
 - [x]  [Common Algorithmic Patterns *](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
 - [ ] Abstractions, the Highest Stage of Mastery
 - [ ] Knowledge Management: How I Study for Mastery*
-- [ ] Mathematical Maturity & Where to Find It
-- [ ] A Technical Interview Worksheet
+
+<!-- - [ ] Mathematical Maturity & Where to Find It
+- [ ] A Technical Interview Worksheet -->
