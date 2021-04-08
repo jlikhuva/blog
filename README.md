@@ -14,7 +14,7 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [x]  [Word Level Parallelism](https://github.com/jlikhuva/blog/blob/main/posts/wlp.md)
 - [ ]  Graphs: All Foundational Methods
 - [ ]  [Sketching Algorithms](posts/sketching.md)
-- [ ]  Discrete Optimization: MDPs & Graphs are All You Need
+- [ ]  Discrete Optimization: MDPs & DAGs are All You Need
 - [ ]  The Lazy Binomial Heap
 - [ ]  Specialized Containers for Integers
 - [ ]  Online Algorithms
@@ -27,9 +27,9 @@ A distillation of some of the most compelling ideas in bioinformatics, as presen
 
 - [ ]  String Matching: Finding the Origin of Replication
 - [ ]  Randomized Algorithms
-- [ ]  [Genome Assembly using de Bruijn Graphs](posts/genome_asm.md)
+- [ ]  Genome Assembly using de Bruijn Graphs
 - [ ]  Brute-force Algorithms
-- [ ]  [Dynamic Programming: Sequence Alignment](posts/seq_seq.md)
+- [ ]  Dynamic Programming: Sequence Alignment
 - [ ]  Combinatorial Algorithms
 - [ ]  Evolutionary Tree Reconstruction
 - [ ]  Clustering Algorithms
