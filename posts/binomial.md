@@ -1,8 +1,10 @@
 # Heaps
 
+In this note, we'll explore the implementation and analysis of a binomial heap. We'll begin by discussing traditional heaps — their uses and limitations, before introducing key ideas that we'll use to build our advanced heap. As with all other notes in this series, this post follows literate programming ethos; All code snippets are fully functional and runnable. As always, if you find any bugs, feel free to open a PR.
+
 ## The Binary Heap
 
-Heaps are an important class of data structures that are used to represent data when we only ever need access to the extreme values. In particular, they allow us O(1) access to the `max` or `min` value. In general, a heap is any data structure that exposes the API below:
+Heaps are an important class of data structures that are used to represent data when we only ever need access to the extreme values. In particular, they give us O(1) access to the `max` or `min` value. In general, a heap is any data structure that exposes the API below:
 
 |    Endpoint    |                Description                                               |
 |----------------|--------------------------------------------------------------------------|
