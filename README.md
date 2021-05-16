@@ -1,4 +1,4 @@
-Hello! I am scientist working in NYC.
+Hello! I am scientist working in Cambridge MA.
 
 Below, you'll find a random collection of notes that I made over the course of my study and work. Although most of the notes are about core ideas in computer science (Data Structures & Algorithms, Reinforcement Learning, and Computational Geometry), a few are about ideas from Molecular Biology and Bioinformatics.  I wrote the notes in order to _deeply_ understand the foundational ideas in these areas of knowledge. I am distilling them here for future reference. If you find any bugs (errors or hard to understand sections) feel free to open a PR with the intended fix.
 
@@ -44,5 +44,4 @@ A distillation of various techniques that I've found quite useful when learning 
 - [ ] Abstractions, the Highest Stage of Mastery
 - [ ] Knowledge Management: How I Study for Mastery*
 
-<!-- - [ ] Mathematical Maturity & Where to Find It
 - [ ] A Technical Interview Worksheet -->
