@@ -42,6 +42,6 @@ A distillation of various techniques that I've found quite useful when learning 
 
 - [x]  [Common Algorithmic Patterns *](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
 - [ ] Abstractions, the Highest Stage of Mastery
-- [ ] Knowledge Management: How I Study for Mastery*
 
+<!-- - [ ] Knowledge Management: How I Study for Mastery*
 - [ ] A Technical Interview Worksheet -->
