@@ -21,6 +21,35 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [ ]  Persistent & Retroactive Data Structures
 - [ ]  Assorted ideas from Computational Geometry
 
+##### The Biology of Cancer: A Computational Perspective [WIP]
+
+A distillation of foundational ideas in cancer research coupled with a computational exploration of key datasets used in computational oncology.
+
+`Bioinformatics Algorithms`
+
+- [ ]  The nature of Cancer
+- [ ]  Hallmarks of Cancer
+- [ ]  Essential Chemistry
+- [ ]  Essential Molecular Biology
+- [ ]  Oncogenes
+- [ ]  The Cancer Genome Atlas*
+- [ ]  Growth Factors, Receptors, and their role in Tumorigenesis
+- [ ]  Cytoplasmic Signalling Circuitry
+- [ ]  Tumor Suppressor Genes
+- [ ]  The Cancer Cell Line Encyclopedia*
+- [ ]  pRb and the Cell Cycle Clock
+- [ ]  p53 and Apoptosis
+- [ ]  Cell Immortalization and Tumorigenesis
+- [ ]  The Human Cell Atlas*
+- [ ]  Multi-Step Tumorigenesis
+- [ ]  Maintenance of Genome Integrity and Tumorigenesis
+- [ ]  Heterotypic Interactions and Angiogenesis
+- [ ]  Invasion and Metastasis
+- [ ]  Tumor Immunology and Immunotherapy
+- [ ]  The Rational Treatment of Cancer
+- [ ]  A Compendium of Key Unanswered Questions*
+- [ ]  A Compendium of Whacky Ideas and Wild, Unenlightened Speculation*
+
 ##### Bioinformatics [WIP]
 
 A distillation of some of the most compelling ideas in bioinformatics, as presented by Compeau et al. in `Bioinformatics Algorithms`
