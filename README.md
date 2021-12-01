@@ -21,15 +21,13 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [ ]  Persistent & Retroactive Data Structures
 - [ ]  Assorted ideas from Computational Geometry
 
-##### The Biology of Cancer: A Computational Perspective [WIP]
+##### The Biology of Cancer: A Full Stack Perspective [WIP]
 
 A distillation of foundational ideas in cancer research coupled with a computational exploration of key datasets used in computational oncology.
 
 `Bioinformatics Algorithms`
 
-- [ ]  The nature of Cancer
-- [ ]  Hallmarks of Cancer
-- [ ]  Essential Chemistry
+- [ ]  The Hallmarks of Cancer
 - [ ]  Essential Molecular Biology
 - [ ]  Oncogenes
 - [ ]  The Cancer Genome Atlas*
@@ -49,21 +47,6 @@ A distillation of foundational ideas in cancer research coupled with a computati
 - [ ]  The Rational Treatment of Cancer
 - [ ]  A Compendium of Key Unanswered Questions*
 - [ ]  A Compendium of Whacky Ideas and Wild, Unenlightened Speculation*
-
-##### Bioinformatics [WIP]
-
-A distillation of some of the most compelling ideas in bioinformatics, as presented by Compeau et al. in `Bioinformatics Algorithms`
-
-- [ ]  String Matching: Finding the Origin of Replication
-- [ ]  Randomized Algorithms
-- [ ]  Genome Assembly using de Bruijn Graphs
-- [ ]  Brute-force Algorithms
-- [ ]  Dynamic Programming: Sequence Alignment
-- [ ]  Combinatorial Algorithms
-- [ ]  Evolutionary Tree Reconstruction
-- [ ]  Clustering Algorithms
-- [ ]  Hidden Markov Models
-- [ ]  Computational Proteomics
 
 ##### Protocols [WIP]
 
