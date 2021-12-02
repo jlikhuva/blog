@@ -25,8 +25,6 @@ A distillation of some of the most elegant ideas in computer science. The collec
 
 A distillation of foundational ideas in cancer research coupled with a computational exploration of key datasets used in computational oncology.
 
-`Bioinformatics Algorithms`
-
 - [ ]  The Hallmarks of Cancer
 - [ ]  Essential Molecular Biology
 - [ ]  Oncogenes
