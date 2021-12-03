@@ -23,12 +23,13 @@ A distillation of some of the most elegant ideas in computer science. The collec
 
 ##### The Biology of Cancer: A Full Stack Perspective [WIP]
 
-A distillation of foundational ideas in cancer research coupled with a computational exploration of key datasets used in computational oncology.
+Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to traslate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
 
-- [ ]  The Hallmarks of Cancer
-- [ ]  Essential Molecular Biology
+There's no better 'introduction', in the sense that CLRS is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety. In this section you'll find my synthesis of each chapter from TBoC.
+
+
+- [ ]  [The Hallmarks of Cancer](posts/cancer_hallmarks.md)
 - [ ]  Oncogenes
-- [ ]  The Cancer Genome Atlas*
 - [ ]  Growth Factors, Receptors, and their role in Tumorigenesis
 - [ ]  Cytoplasmic Signalling Circuitry
 - [ ]  Tumor Suppressor Genes
@@ -36,14 +37,21 @@ A distillation of foundational ideas in cancer research coupled with a computati
 - [ ]  pRb and the Cell Cycle Clock
 - [ ]  p53 and Apoptosis
 - [ ]  Cell Immortalization and Tumorigenesis
-- [ ]  The Human Cell Atlas*
 - [ ]  Multi-Step Tumorigenesis
 - [ ]  Maintenance of Genome Integrity and Tumorigenesis
 - [ ]  Heterotypic Interactions and Angiogenesis
 - [ ]  Invasion and Metastasis
 - [ ]  Tumor Immunology and Immunotherapy
 - [ ]  The Rational Treatment of Cancer
-- [ ]  A Compendium of Key Unanswered Questions*
+- [ ]  The Cancer Genome Atlas*
+- [ ]  The Cancer Dendency Map Project
+- [ ]  The Human Cell Atlas Project
+
+
+##### The Holstein Heifer & The Calico Cat [WIP] 
+
+- [ ]  On the Immaturity of Biology: A Historical Perspective
+- [ ]  A Compendium of Key Unanswered Questions in Cancer Biology*
 - [ ]  A Compendium of Whacky Ideas and Wild, Unenlightened Speculation*
 
 ##### Protocols [WIP]
