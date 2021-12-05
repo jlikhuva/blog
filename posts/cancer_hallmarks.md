@@ -6,16 +6,51 @@
 
 ## The Core Hallmarks
 
-- How is that capability acheved?
+- How is that capability achieved?
 - What is the effect of having that capability?
 
 ### Sustained Proliferative Signalling
 
+- Core feature of all cancer cells: They just keep growing and dividing. [Contrast with neuron cells in neuro-degenerative diseases]
+- How do cells know when to grow, when to divide? Tissue Homeostasis. What is a tissue, really?
+- Inducing and Sustaining positively acting growth stimulatory signals
+- Induction via autocrine stimulation, reciprocal interaction with stromal cells, elevated expression of growth factor receptors, Somatic mutations leading to constitutively active growth factor receptors  
+- Sustained by compromising negative feedback loops that are supposed to dampen growth signals. Examples: mutations in Ras, PTEN Phosphatase
+
 ### Evading Growth Suppressors (Removing Checks and Balances)
 
-### Resisting Cell Death (Resisting Term Limits)
+- Circumvent cellular programs that negatively regulate cell proliferation
+- Tumor Suppressor Genes. How they are discovered -- characteristic inactivation in human and mice tumors. Confirmation via gain ad loss of function experiments in mice
+- TP53 & Rb proteins.
+- RB: Gatekeeper of cll-cycle progression. Integrates signals from intracellular and extracellular and in response decides whether or not the cell should proceed through its growth and division cycles. What are these external/internal signals? How does the Rb protein "communicate" its decision? How does it make its decision?
+- TP53 receives inputs from intracellular stress and abnormality sensors. What are examples of abnormalities? TP53 can pause cell-cycle progression until the stressors are dealt with. Alternatively, it can induce apoptosis if the stresses are extreme and unrecoverable.
+- Transforming Growth Factor-$\beta$
+- Redundancies
+- Contact inhibition and Anoikis: $NF2$, $LKB1$
 
-### Replicative Immortality
+### Resisting Cell Death
+
+- Programmed cel death by apoptosis serves as a natural barrier to the development of cancer. Short lifespan of epithelial cells.
+- What triggers apoptosis? DNA damage (TP53), insufficient survival factor signalling (Bim)
+- Extrinsic apoptotic pathway - Fas Ligand & Fas Receptor
+- Intrinsic Apoptotic Pathway
+- Downstream effectors: Caspases 8 and 9
+- The Bcl-2 Family of proteins
+- How is apoptosis attenuated in the cells of successful tumors?
+  - Loss of TP53
+  - Increased Expression of anti-apoptotic Bcl family regulators
+  - Downregulation of pro-apoptotic members of the Bcl family
+  - Increased expression of survival signals
+  - short circuiting the extrinsic ligand induced apoptotic pathway
+- Beyond Apoptosis: Autophagy
+- Beyond Apoptosis: Necrosis
+
+### Replicative Immortality (Resisting Term Limits)
+
+- Most normal cell lineages in the body only pass through a limited number of successive growth and division cycles. Cancer cells need unlimited replicative potential.
+- What imposes the term limits on normal cell lineages? Telomeres, Telomere shortening, Telomerase.
+- What happens when telomeres of a given cell become too short? Fusion-Breakage-Cycles.
+- W
 
 ### Inducing Angiogenesis
 
@@ -23,7 +58,7 @@
 
 ## The Enabling Hallmarks
 
-- How is that capability acheved?
+- How is that capability achieved?
 - What is the effect of having that capability?
 
 ### Genomic Instability
@@ -40,6 +75,6 @@
 
 - Coming face to face with Biology's original sin.
 
+## Concluding Remarks
 
-
-
+- The perils of a decentralized system of government.
