@@ -49,6 +49,10 @@ There's no better 'introduction', in the sense that CLRS is an 'introduction' to
 ##### The Holstein Heifer & The Calico Cat [WIP]
 
 - [ ]  On the Immaturity of Biology: A Historical Perspective
+- [ ]  Gene Delivery into Cells and Tissues
+- [ ]  Systems Biology of Neuro-degenerative Diseases
+- [ ]  Models in Biology: Perspectives from Gunawardena et. al
+- [ ]  Systems Level Diseases: A Framework for Understanding Complex Diseases
 - [ ]  A Compendium of Key Unanswered Questions in Cancer Biology*
 - [ ]  A Compendium of Whacky Ideas and Wild, Unenlightened Speculation*
 

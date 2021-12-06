@@ -45,16 +45,35 @@
 - Beyond Apoptosis: Autophagy
 - Beyond Apoptosis: Necrosis
 
-### Replicative Immortality (Resisting Term Limits)
+### Enabling Replicative Immortality (Resisting Term Limits)
 
 - Most normal cell lineages in the body only pass through a limited number of successive growth and division cycles. Cancer cells need unlimited replicative potential.
 - What imposes the term limits on normal cell lineages? Telomeres, Telomere shortening, Telomerase.
-- What happens when telomeres of a given cell become too short? Fusion-Breakage-Cycles.
-- W
+- What happens when telomeres of a given cell become too short?Fusion-Breakage-Cycles, Senescence and telomere induced crisis
+- Immortalization
+- The Nature of telomeres and telomerase
+- How do cancer cells overcome the telomere barrier? - Jettisoning TP53 and its surveillance of genomic integrity
+- BFB cycles - increased genomic mutability - acquisition of telomerase function.
+- Other functions of telomerase. Non-canonical functions of telomerase
 
 ### Inducing Angiogenesis
 
+- Tumors are tissues (That's why they are called neoplasms). They therefore need, just like normal tissues do, a supply of nutrients and oxygen as well as a system to evacuate metabolic waste and $CO_2$
+- Angiogenesis - the generation of new blood vasculature. Vasculogenesis
+- Angiogenic switch: Embryogenesis vs Adult (Wound healing, Female cycling) vs During tumor progression
+- The nature of the angiogenic switch : $VEGF-A \uparrow$, Hypoxia, $FGF$
+- The nature of the tumor neovasculature
+- Different flavors of the angiogenic switch
+- Angiogenesis inhibitors: $TSP-1 \downarrow$, angiostatin, endostatin
+- Pericytes
+- The role of myeloid derived cells in tumor angiogenesis.
+
 ### Activating Invasion and Metastasis
+
+- When cancer becomes malignant and life threatening (Special cases where benign tumors are life threatening: gliomas ...)
+- What is meant by invasion? How is this invasion achieved? What's different about cancer cells that allows them to invade when normal cells do not? N-cadherin & E-cadherin
+- The EMT program. EMT in tissue repair. EMT in embryonic morphogenesis. EMT Transcription factors: Snail, Slug, Twist
+- The invasion metastasis cascade (not a true cascade in the strict mathematical sense): Invasion, Intravasation, Extravasation, Micro-metastatic growth, Colonization
 
 ## The Enabling Hallmarks
 
