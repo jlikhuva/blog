@@ -2,8 +2,6 @@
 
 ## Introduction
 
-## A Running Analogy
-
 ## The Core Hallmarks
 
 - How is that capability achieved?
@@ -74,21 +72,65 @@
 - What is meant by invasion? How is this invasion achieved? What's different about cancer cells that allows them to invade when normal cells do not? N-cadherin & E-cadherin
 - The EMT program. EMT in tissue repair. EMT in embryonic morphogenesis. EMT Transcription factors: Snail, Slug, Twist
 - The invasion metastasis cascade (not a true cascade in the strict mathematical sense): Invasion, Intravasation, Extravasation, Micro-metastatic growth, Colonization
-
+- The role of cross talk between cancer cells and stromal cells in enabling invasion and metastasis
+- Macrophages: an example (informal model)
+  - matrix degrading enzymes (MMP, Proteases)
+  - Cancer Cells produce IL-4. IL-4 activates macrophages
+  - Tumor Associated Macrophages (TAMs) supply EGF to cancer cells (in metastatic breast cancer). Cancer cells stimulate TAMs using CSF-1 (Macrophage Colony Stimulating Factor, a cytokine)
+- Phenotypes of high grade malignancy do not arise in a cell autonomous manner. Their manifestation cannot be understood solely through the analysis of tumor cell genomes.
+- Reversibility of the Invasive Growth Program
+- Distinct forms of Invasion
+  - Mesenchymal
+  - Collective
+  - Amoeboid
+- Metastatic Colonization
+  - Dormant Micrometastases
+  - Nutrient Starvation, Autophagy, Reversible dormancy
+  - Colonization function $f(\texttt{cancer\_cell}, \texttt{tissue\_micro\_env})$
+  - At what point during tumor progression does metastatic dissemination occur?
+  - When and where do cancer cells develop the ability to colonize foreign tissues
+  
 ## The Enabling Hallmarks
 
-- How is that capability achieved?
-- What is the effect of having that capability?
+- Characteristics of tumor cells or the tumor micro environment that allows cancer cells and the tumors they produce to acquire the six hallmark capabilities
 
 ### Genomic Instability
 
+- Why is genomic instability needed?
+- How do tumor cells make their genomes unstable?
+  - Defective DNA repair machinery
+  - Loss of TP53
+  - Loss of telomeric DNA and the attendant karyotypic chaos
+- Recurrent genetic alterations may point to a causal role of particular mutations in tumor pathogenesis
+
 ### Tumor Promoting Inflammation
+
+- Tumors as chronic wounds. Densely infiltrated by cells of the innate and adaptive immune systems.
+- The duelling roles of the immune cells in tumors: Elimination vs Fostering.
+- Tumor associated inflammatory response may have the paradoxical effect of enhancing tumor progression.
+- How does inflammation aid in the acquisition of hallmark capabilities?
 
 ## A Few Emerging Hallmarks
 
+- Distinct attributes of cancer cells that have been proposed to be functionally important
+
 ### Reprogramming Energy Metabolism
 
+- Warburg effect, Aerobic Gycolysis, Increased number of glucose transporters
+- What are the mechanisms underlying the switch to aerobic glycolysis
+- What is the functional rationale of oxidative glycolysis in cancer cells?
+- Where else do we observer aerobic glycolysis? Recall that cancer cells often make use of existing programs
+- Intra-tumoral symbiosis: Hypoxic cells use oxygen and secrete lactate. This lactate is preferentially imported by cancer cells with better access to oxygen -- where else is this observed?
+
 ### Evading Immune Destruction
+
+- The immune surveillance theory.
+- Tumors that manage to grow to macroscopic sizes have somehow managed to avoid detection by the various arms of the immune system or have managed to limit the extent of immunological killing, thereby evading eradication.
+- Immunogenecity -- the ability of a substance such as an antigen to provoke an immune response
+- How do we know that the immune system acts as a significant barrier to non viral tumor formation and progression?
+- Immunoediting; Immunodeficient mices vs Immunocompetent mice
+- Evidence from clinical epidemiology: effect of CTL and NK infiltration on prognosis
+- What strategies do cancer cells use to evade immune destruction?
 
 ### The Tumor Micro-Environment
 

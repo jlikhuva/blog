@@ -4,11 +4,15 @@
         "autocrine",
         "cadherin",
         "Caspases",
+        "cytokine",
         "datastream",
         "Downregulation",
         "Embryogenesis",
         "Gunawardena",
         "Immortalization",
+        "karyotypic",
+        "Mesenchymal",
+        "Micrometastases",
         "neovasculature",
         "neuro",
         "overexpression",
@@ -17,6 +21,7 @@
         "Telomerase",
         "Telomere",
         "Telomeres",
+        "telomeric",
         "Vasculogenesis"
     ],
     "git.ignoreLimitWarning": true
