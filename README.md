@@ -40,7 +40,7 @@ There's no better 'introduction', in the sense that CLRS is an 'introduction' to
 - [ ]  Maintenance of Genome Integrity and Tumorigenesis
 - [ ]  Heterotypic Interactions and Angiogenesis
 - [ ]  Invasion and Metastasis
-- [ ]  Tumor Immunology and Immunotherapy
+- [ ]  [Tumor Immunology and Immunotherapy](posts/immunotherapy.md)
 - [ ]  The Rational Treatment of Cancer
 - [ ]  The Cancer Genome Atlas*
 - [ ]  The Cancer Dependency Map Project
@@ -48,13 +48,13 @@ There's no better 'introduction', in the sense that CLRS is an 'introduction' to
 
 ##### The Holstein Heifer & The Calico Cat [WIP]
 
-- [ ]  On the Immaturity of Biology: A Historical Perspective
+- [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
 - [ ]  Gene Delivery into Cells and Tissues
 - [ ]  Systems Biology of Neuro-degenerative Diseases
 - [ ]  Models in Biology: Perspectives from Gunawardena et. al
 - [ ]  Systems Level Diseases: A Framework for Understanding Complex Diseases
-- [ ]  A Compendium of Key Unanswered Questions in Cancer Biology*
-- [ ]  A Compendium of Whacky Ideas and Wild, Unenlightened Speculation*
+- [ ]  A compendium of key unanswered questions in cancer biology*
+- [ ]  A compendium of whacky Ideas (And wild, unenlightened speculation)*
 
 ##### Protocols [WIP]
 

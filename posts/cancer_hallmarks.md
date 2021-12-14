@@ -128,14 +128,26 @@
 - Tumors that manage to grow to macroscopic sizes have somehow managed to avoid detection by the various arms of the immune system or have managed to limit the extent of immunological killing, thereby evading eradication.
 - Immunogenecity -- the ability of a substance such as an antigen to provoke an immune response
 - How do we know that the immune system acts as a significant barrier to non viral tumor formation and progression?
-- Immunoediting; Immunodeficient mices vs Immunocompetent mice
+- Immunoediting; Immunodeficient mice vs Immunocompetent mice
 - Evidence from clinical epidemiology: effect of CTL and NK infiltration on prognosis
 - What strategies do cancer cells use to evade immune destruction?
 
-### The Tumor Micro-Environment
+### Dimensions of Tumor Heterogeneity
 
-- Coming face to face with Biology's original sin.
+- A word about reductionist science and its limitations
+- What do we know? How do we know it? Why is knowing it import?
+- Tumors are complex tissues. But, what, precisely, is a tissue?
+- Reductionist view of cancer as a collection of relatively homogeneous cancer cells whose entire biology can be understood by elucidating the cell autonomous properties of these cells
+- Enumerate the set of important cell types known to contribute in important ways to the biology of tumors
+  
+**Cancer Cells and Cancer Stem Cells**:  Functional Definition of CSCs. CSCs express markers that are expressed by normal stem cells in the tissue of origin. What is the origin of these CSCs?
+**Endothelial Cells & Pericytes**:
+**Cells of the Immune System**:
+**Cancer Associated Fibroblasts (CAFs)**:
+**Stromal Stm and Progenitor Cells**:
 
 ## Concluding Remarks
 
 - The perils of a decentralized system of government.
+- Cancer does not invent, it usually never invents, it does not have time to invent. It always coopts.
+- The limits of reductionists science.
