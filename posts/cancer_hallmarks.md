@@ -1,13 +1,26 @@
 # The Hallmarks of Cancer [WIP]
 
+We could begin this series of notes from first principles, as is often done in college level classes. However, in my experience, doing so is often unnecessary and sub-optimal. One does not need to deeply understand the principles of organic chemistry and biochemistry in order to understand cancer biology. This is not to say that that knowledge is not important. Rather, we believe that that knowledge can be picked up "just in time" as the need arises.
+
+We will thus adopt a top down approach. That is, we'll first present the high level details of an idea, and then, in an iterative fashion, peel back the layers of abstraction until we arrive at the fundamental principles.
+
+This note is a sweeping overview of the entire field of cancer Biology.  It presents core ideas of the field at the highest possible level. As the title suggests, it's drawn from Hanahan & Weinberg's 2011 seminal paper.  Subsequent notes, drawn from "The Biology of Cancer" chapters, will present the ideas in this note in much greater depth.
+
 ## Introduction
 
-## The Core Hallmarks
+What is cancer? At a high level, cancer loosely refers to a group of diseases in which rogue cells revolt against the forces of tissue homeostasis. These revolting cells proceed to grow and divide on their own accord. At some stage, these revolting cells may break away from their tissue compartment to invade neighboring compartments. Often, after invading nearby tissue compartments, these rogue cells invade far away tissues via the blood and lymph systems.
 
-- How is that capability achieved?
-- What is the effect of having that capability?
+How, exactly, do these, so called, rogue cells "revolt"? Further, what conditions enable their "revolt"? We'll answer the first question by presenting the *hallmarks of cancer*. These are biological capabilities that tumors, and the cells that comprise them, acquire during their development. We'll then answer teh second question by outlining the so called *enabling hallmarks*. These are biological conditions that makes it easier/possible for tumors to revolt.
 
-### Sustained Proliferative Signalling
+## The Hallmarks of Cancer
+
+In this section, we present the eight (well, six, plus two) hallmarks of cancer. In presenting each hallmark, we shall focus on three core ideas:
+
+1. First, what does the hallmark entail?
+2. Second, how do tumor cells acquire that capability?
+3. And finally, why does having that capability constitute a revolt against the forces of tissue homeostasis?
+
+### 1. Sustained Proliferative Signalling
 
 - Core feature of all cancer cells: They just keep growing and dividing. [Contrast with neuron cells in neuro-degenerative diseases]
 - How do cells know when to grow, when to divide? Tissue Homeostasis. What is a tissue, really?
@@ -15,7 +28,7 @@
 - Induction via autocrine stimulation, reciprocal interaction with stromal cells, elevated expression of growth factor receptors, Somatic mutations leading to constitutively active growth factor receptors  
 - Sustained by compromising negative feedback loops that are supposed to dampen growth signals. Examples: mutations in Ras, PTEN Phosphatase
 
-### Evading Growth Suppressors (Removing Checks and Balances)
+### 2. Evading Growth Suppressors (Removing Checks and Balances)
 
 - Circumvent cellular programs that negatively regulate cell proliferation
 - Tumor Suppressor Genes. How they are discovered -- characteristic inactivation in human and mice tumors. Confirmation via gain ad loss of function experiments in mice
@@ -26,7 +39,7 @@
 - Redundancies
 - Contact inhibition and Anoikis: $NF2$, $LKB1$
 
-### Resisting Cell Death
+### 3. Resisting Cell Death
 
 - Programmed cel death by apoptosis serves as a natural barrier to the development of cancer. Short lifespan of epithelial cells.
 - What triggers apoptosis? DNA damage (TP53), insufficient survival factor signalling (Bim)
@@ -43,7 +56,7 @@
 - Beyond Apoptosis: Autophagy
 - Beyond Apoptosis: Necrosis
 
-### Enabling Replicative Immortality (Resisting Term Limits)
+### 4. Enabling Replicative Immortality (Resisting Term Limits)
 
 - Most normal cell lineages in the body only pass through a limited number of successive growth and division cycles. Cancer cells need unlimited replicative potential.
 - What imposes the term limits on normal cell lineages? Telomeres, Telomere shortening, Telomerase.
@@ -54,7 +67,7 @@
 - BFB cycles - increased genomic mutability - acquisition of telomerase function.
 - Other functions of telomerase. Non-canonical functions of telomerase
 
-### Inducing Angiogenesis
+### 5. Inducing Angiogenesis
 
 - Tumors are tissues (That's why they are called neoplasms). They therefore need, just like normal tissues do, a supply of nutrients and oxygen as well as a system to evacuate metabolic waste and $CO_2$
 - Angiogenesis - the generation of new blood vasculature. Vasculogenesis
@@ -66,7 +79,7 @@
 - Pericytes
 - The role of myeloid derived cells in tumor angiogenesis.
 
-### Activating Invasion and Metastasis
+### 6. Activating Invasion and Metastasis
 
 - When cancer becomes malignant and life threatening (Special cases where benign tumors are life threatening: gliomas ...)
 - What is meant by invasion? How is this invasion achieved? What's different about cancer cells that allows them to invade when normal cells do not? N-cadherin & E-cadherin
@@ -151,3 +164,8 @@
 - The perils of a decentralized system of government.
 - Cancer does not invent, it usually never invents, it does not have time to invent. It always coopts.
 - The limits of reductionists science.
+
+## References
+
+1. [The Hallmarks of Cancer: Next Generation](https://www.cell.com/fulltext/S0092-8674(11)00127-9)
+2. The Biology Of Cancer, Robert Weinberg, 2014
