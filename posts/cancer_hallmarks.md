@@ -4,17 +4,19 @@ We could begin this series of notes from first principles, as is often done in c
 
 We will thus adopt a top down approach. That is, we'll first present the high level details of an idea, and then, in an iterative fashion, peel back the layers of abstraction until we arrive at the fundamental principles.
 
-This note is a sweeping overview of the entire field of cancer Biology.  It presents core ideas of the field at the highest possible level. As the title suggests, it's drawn from Hanahan & Weinberg's 2011 seminal paper.  Subsequent notes, drawn from "The Biology of Cancer" chapters, will present the ideas in this note in much greater depth.
+Having said that, I'll assume a basic understanding of high school molecular biology. I'll assume that the reader knows, at the highest of levels, about genes and gene expression. That is, I'll assume that the reader knows that all cells in the human body have a full local copy of the genome and that the cells selectively read from different parts of their local copy of the genome.
+
+This note is a sweeping overview of the entire field of cancer Biology.  It presents core ideas of the field at the highest possible level. As the title suggests, it's drawn from Hanahan & Weinberg's 2011 seminal paper. Subsequent notes, drawn from "The Biology of Cancer" chapters, will present the ideas in this note in much greater depth.
 
 ## Introduction
 
-What is cancer? At a high level, cancer loosely refers to a group of diseases in which rogue cells revolt against the forces of tissue homeostasis. These revolting cells proceed to grow and divide on their own accord. At some stage, these revolting cells may break away from their tissue compartment to invade neighboring compartments. Often, after invading nearby tissue compartments, these rogue cells invade far away tissues via the blood and lymph systems.
+What is cancer? At a high level, cancer loosely refers to a group of diseases in which rogue cells revolt against the forces of tissue homeostasis. These revolting cells proceed to grow and divide on their own accord. Furthermore, they develop ways to resist various distinct  efforts, both intracellular and extracellular, to halt their expansionist agenda. At some stage, these revolting cells may break away from their tissue compartment to invade neighboring compartments. Often, after invading nearby tissue compartments, these rogue cells invade far away tissues via the blood and lymph systems.
 
-How, exactly, do these, so called, rogue cells "revolt"? Further, what conditions enable their "revolt"? We'll answer the first question by presenting the *hallmarks of cancer*. These are biological capabilities that tumors, and the cells that comprise them, acquire during their development. We'll then answer teh second question by outlining the so called *enabling hallmarks*. These are biological conditions that makes it easier/possible for tumors to revolt.
+How, exactly, do these, so called, rogue cells "revolt"? Further, what conditions enable their "revolt"? We'll answer the first question by presenting the *hallmarks of cancer*. These are biological capabilities that tumors, and the cells that comprise them, acquire during their development. We'll then answer the second question by outlining the so called *enabling hallmarks*. These are biological conditions that make it easier or possible for tumors to revolt.
 
 ## The Hallmarks of Cancer
 
-In this section, we present the eight (well, six, plus two) hallmarks of cancer. In presenting each hallmark, we shall focus on three core ideas:
+In this section, we present the eight (actually, six, plus two) hallmarks of cancer. These hallmarks give us a framework that allows to structure and refine our thinking when learning or researching about cancer. In presenting each hallmark, we shall aim to explain the following three aspects:
 
 1. First, what does the hallmark entail?
 2. Second, how do tumor cells acquire that capability?
@@ -22,11 +24,36 @@ In this section, we present the eight (well, six, plus two) hallmarks of cancer.
 
 ### 1. Sustained Proliferative Signalling
 
-- Core feature of all cancer cells: They just keep growing and dividing. [Contrast with neuron cells in neuro-degenerative diseases]
-- How do cells know when to grow, when to divide? Tissue Homeostasis. What is a tissue, really?
-- Inducing and Sustaining positively acting growth stimulatory signals
-- Induction via autocrine stimulation, reciprocal interaction with stromal cells, elevated expression of growth factor receptors, Somatic mutations leading to constitutively active growth factor receptors  
-- Sustained by compromising negative feedback loops that are supposed to dampen growth signals. Examples: mutations in Ras, PTEN Phosphatase
+In order for the cells of a tissue to exist harmoniously, that is, in order for them to construct and maintain a functioning tissue, they must continuously communicate by exchanging *signals*. These signals are often small proteins secreted into the surrounding environment. Once a signal is in the environment, it can be *received* by surrounding cells that have the corresponding receptor. Once received, the signal may affect how the receiving cell behaves.
+
+Out of the many signals exchanged among cells, none are more important than those that instruct a cell to grow and divide. These signals are called growth factors. Therefore, a normal cell knows its time to grow and divide by "listening" for growth factor signals, using its cell surface growth factor receptors, released in its surrounding environment by other cells.
+
+Recall that a core feature of all cancer cells is that they just keep growing and dividing. In order to achieve this, they must, somehow, deregulate the growth factor signalling system described above. How exactly do they do that? How do tumor cells **induce** and **sustain** positively acting growth stimulatory signals? Below, we outline a few ways they achieve this.
+
+#### Induce
+
+   1. Autocrine proliferative stimulation. Expression of receptors of growth factors that they produce. Or releasing growth factors whose receptors they express.
+   2. Over-expression of growth factor receptors. Hyper responsive to otherwise limiting amounts of growth factor ligand.
+   3. Perverse paracrine stimulation with stromal cells.
+   4. Structural alteration in the receptor molecules that facilitate ligand independent activation.
+   5. Constitutive activation of components downstream of the receptors, removing the need for ligand stimulation
+
+#### Sustain
+
+   1. Compromised negative feedback loops that are supposed to dampen growth signals
+
+By deregulating the framework that normal cells rely on in order to know when it is appropriate to proliferate, cancer cells are able to take matters growth and division into their own hands. This, obviously, is a revolt against the forces of tissue homeostasis. By not coordinating their decisions to grow and divide with their neighbors, cancer cells lead to a breakdown of homeostasis of cell number. This threatens normal tissue architecture and function.
+
+#### Going Deeper
+
+Before moving on to the next hallmark, let's take a moment to outline a few ideas and questions that may give motivated readers a deeper appreciation of the complexity associated with this hallmark. I hope that these ideas and questions can serve as a jumping off point for more reading or research
+
+1. Growth factors: Identity, Spatial, Temporal ...
+2. Cell surface receptors: Identity, Expression, Surfacesome ...
+3. Internal signalling circuitry: Kinase cascades. Pleiotropy
+4. Mutations, Epigenetic: Methylation, Acetylation
+5. Dependency and Therapeutic targeting: Herceptin ...
+6. System level exploration of paracrine / autocrine growth signalling
 
 ### 2. Evading Growth Suppressors (Removing Checks and Balances)
 
