@@ -25,7 +25,7 @@ A distillation of some of the most elegant ideas in computer science. The collec
 
 Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
 
-There's no better 'introduction', in the sense that CLRS is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety. In this section you'll find my synthesis of each chapter from TBoC.
+There's no better 'introduction', in the sense that CLRS is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety. In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
 
 - [ ]  [The Hallmarks of Cancer](posts/cancer_hallmarks.md)
 - [ ]  Oncogenes
@@ -40,7 +40,7 @@ There's no better 'introduction', in the sense that CLRS is an 'introduction' to
 - [ ]  Maintenance of Genome Integrity and Tumorigenesis
 - [ ]  Heterotypic Interactions and Angiogenesis
 - [ ]  Invasion and Metastasis
-- [ ]  Tumor Immunology and Immunotherapy
+- [ ]  [Tumor Immunology and Immunotherapy](posts/immunotherapy.md)
 - [ ]  The Rational Treatment of Cancer
 - [ ]  The Cancer Genome Atlas*
 - [ ]  The Cancer Dependency Map Project
@@ -48,13 +48,13 @@ There's no better 'introduction', in the sense that CLRS is an 'introduction' to
 
 ##### The Holstein Heifer & The Calico Cat [WIP]
 
-- [ ]  On the Immaturity of Biology: A Historical Perspective
+- [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
 - [ ]  Gene Delivery into Cells and Tissues
 - [ ]  Systems Biology of Neuro-degenerative Diseases
 - [ ]  Models in Biology: Perspectives from Gunawardena et. al
 - [ ]  Systems Level Diseases: A Framework for Understanding Complex Diseases
-- [ ]  A Compendium of Key Unanswered Questions in Cancer Biology*
-- [ ]  A Compendium of Whacky Ideas and Wild, Unenlightened Speculation*
+- [ ]  A compendium of key unanswered questions in cancer biology*
+- [ ]  A compendium of whacky Ideas (And wild, unenlightened speculation)*
 
 ##### Protocols [WIP]
 
