@@ -128,7 +128,7 @@
 - Tumors that manage to grow to macroscopic sizes have somehow managed to avoid detection by the various arms of the immune system or have managed to limit the extent of immunological killing, thereby evading eradication.
 - Immunogenecity -- the ability of a substance such as an antigen to provoke an immune response
 - How do we know that the immune system acts as a significant barrier to non viral tumor formation and progression?
-- Immunoediting; Immunodeficient mices vs Immunocompetent mice
+- Immunoediting; Immunodeficient mice vs Immunocompetent mice
 - Evidence from clinical epidemiology: effect of CTL and NK infiltration on prognosis
 - What strategies do cancer cells use to evade immune destruction?
 
