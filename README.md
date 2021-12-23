@@ -50,8 +50,8 @@ There's no better 'introduction', in the sense that CLRS is an 'introduction' to
 
 - [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
 - [ ]  Gene Delivery into Cells and Tissues
-- [ ]  Systems Biology of Neuro-degenerative Diseases
-- [ ]  Models in Biology: Perspectives from Gunawardena et. al
+- [ ]  [Systems Biology of Neuro-degenerative Diseases](posts/systems_biology.md)
+- [ ]  [Models in Biology: Perspectives from Gunawardena et. al](posts/models.md)
 - [ ]  Systems Level Diseases: A Framework for Understanding Complex Diseases
 - [ ]  A compendium of key unanswered questions in cancer biology*
 - [ ]  A compendium of whacky Ideas (And wild, unenlightened speculation)*
