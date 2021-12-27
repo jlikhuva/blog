@@ -1,4 +1,4 @@
-# Graphs: All Foundational Methods [WIP: Draft Start Much Simpler]
+# Graphs: All Foundational Methods [WIP]
 
 In this note, we shall take a detailed look at, perhaps, the most versatile combinatoric structure: the graph. We'll examine key foundational ideas that allow us to reason about graphs. Although this note aims to be as detailed as possible, it does not seek to be comprehensive. To that end, we constrain ourselves to ideas that one would find in an introductory algorithms textbook (with the observation that all other complex methods are derived from these ideas). In particular, we deeply explore ideas and methods presented in `CLRS 22 – 26`, with occasional references to interesting blog posts.
 
@@ -8,7 +8,7 @@ Before we begin, let's briefly explore a neat idea that we'll make use of later 
 
 ## Representing Graph with Indexes
 
-Graphs are complex because they involve cyclic ownership where multiple variables may need mutable access to a single resource. This can be represented in Rust using reference counting via `std::Rc` coupled with `RefCell`. This, however, introduces complexity that I'm quite frankly not ready to deal with. Furthermore, I think it's quite inelegant. Therefore, in this note, we'll instead represent our graphs using indexes as explained [here](http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/). Note that this is also the approach we took when discussing [the bottom up splay tree](https://github.com/jlikhuva/blog/blob/main/posts/splay.md). 
+Graphs are complex because they involve cyclic ownership where multiple variables may need mutable access to a single resource. This can be represented in Rust using reference counting via `std::Rc` coupled with `RefCell`. This, however, introduces complexity that I'm quite frankly not ready to deal with. Furthermore, I think it's quite inelegant. Therefore, in this note, we'll instead represent our graphs using indexes as explained [here](http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/). Note that this is also the approach we took when discussing [the bottom up splay tree](https://github.com/jlikhuva/blog/blob/main/posts/splay.md).
 
 We shall keep all the nodes in the graph in a single vector. We'll also store our edges in a separate vector. To index into these containers, we could simply use a raw `usize`. Doing so, however, has a number of limitations, the main one being that given a `usize` we have no idea if it refers to an edge or a node. One has to be super vigilant not to mistakenly use an index meant for an edge to index into the nodes vector. This vigilance imposes a cognitive load that we'd like to offload to the compiler via the type system. We do so by using the [wrapped index pattern](https://matklad.github.io/2018/06/04/newtype-index-pattern.html). Below, we use this pattern to introduce the core abstractions that we'll be using going forward.
 
@@ -87,6 +87,7 @@ pub mod handles {
     }
 }
 ```
+
 Now that we have a rough idea how we plan to store the nodes and edges, let's introduce types for these structures
 
 ```rust
@@ -114,6 +115,7 @@ impl<K: Ord, V> Node<K, V> {
 ```
 
 So now we know what our nodes will look like and how we can create them. I have purposely left out any talk of how edges will be represented because it involves a bit of complexity. Since our aim is to be as detailed as possible, we want ensure that our smal library is aware of the 4 major kinds of graphs: Either `weighted or unweighted` and `directed or undirected`. These are properties of the edges in the graph. Furthermore, some methods only apply to specific kinds of graphs. For instance, `BFS` (when used to find shortest paths) assumes that the graph is unweighted whereas all methods for solving flow problems assume that the graph is weighted and directed. We would like to encode all these ideas and constraints using the type system. To that end, we'll have 4 different edge types, one for each of the 4 possible graph types. We'll then use a trait to unify then so that our graph object doesn't have to worry about the different edge types. The snippets below implement these ideas.
+
 ```rust
 
 pub mod edge {
@@ -246,7 +248,8 @@ pub mod edge {
     }
 }
 ```
-The 
+
+The
 
 ```rust
 /// Types representing the different types
@@ -272,6 +275,7 @@ pub mod graph_states {
     impl GraphWeight for Unweighted {}
 }
 ```
+
 Say that now we can finally introduce the graph abstraction. Explain what the roles of the mapper are
 
 ```rust
@@ -294,8 +298,11 @@ pub struct Graph<K: Ord + Hash, V, D: GraphDirection, W: GraphWeight> {
     _kind: (PhantomData<D>, PhantomData<W>),
 }
 ```
+
 ### Methods on Graphs
+
 #### Adding and Removing Nodes
+
 Introduce methods that apply to all graph types and are the same regardless. Creating new graph and adding nodes. Say that one could think of introducing a type state like `EmptyGraph` that exposes no methods and transitions to `NonEmptyGraph` once a node is added. But the design is fairly complex already, so we don't do that here. Below we have the logic to creating graph and adding nodes to it
 
 ```rust
@@ -356,32 +363,51 @@ impl<K: Ord + Hash + Clone, V, D: GraphDirection, W: GraphWeight> Graph<K, V, D,
     }
 }
 ```
-#### Adding and Removing Edges 
+
+#### Adding and Removing Edges
+
 ```rust
 /// WIP
 ```
+
 #### SSSP
+
 1. ###### BFS
+
 2. ###### Relaxation
+
 3. ###### Dijkstra's Algorithm
-4. ###### Bellman & Ford's Algorithm 
-   
+
+4. ###### Bellman & Ford's Algorithm
+
 #### Topological Sorting & SCC
+
 1. ###### DFS
+
 2. ###### DFS Applied: Topological Sorting
+
 3. ###### Graphs Cuts
+
 4. ###### Graph Cuts + DFS: SCC
-   
+
 #### Minimum Weight Spanning Trees
+
 1. ###### Prim's Algorithms
+
 2. ###### Kruskal's Algorithm
 
 #### APSP
+
 1. ###### Matrix Multiplication & Repeated Squaring
+
 2. ###### Floyd & Warshall's Algorithm
+
 3. ###### Johnson's Algorithm
 
 #### Maximum Flow in Graphs
+
 1. ###### A Naïve Greedy Procedure
+
 2. ###### Ford & Fulkerson's Algorithm
+
 3. ###### The Push-Relabel Method

@@ -12,20 +12,18 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [ ]  [Pattern Matching & String Indexing](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
 - [x]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 - [x]  [Word Level Parallelism](https://github.com/jlikhuva/blog/blob/main/posts/wlp.md)
-- [ ]  Graphs: All Foundational Methods
+- [ ]  [Graphs: All Foundational Methods](posts/graphs.md)
 - [ ]  [Sketching Algorithms](posts/sketching.md)
-- [ ]  Discrete Optimization: MDPs & DAGs are All You Need
+- [ ]  [Discrete Optimization: MDPs & DAGs are All You Need](posts/optimization.md)
 - [ ]  The Lazy Binomial Heap
 - [ ]  Specialized Containers for Integers
 - [ ]  Online Algorithms
-- [ ]  Persistent & Retroactive Data Structures
-- [ ]  Assorted ideas from Computational Geometry
 
 ##### The Biology of Cancer: A Full Stack Perspective [WIP]
 
 Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
 
-There's no better 'introduction', in the sense that CLRS is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety. In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
+There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety. In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
 
 - [ ]  [The Hallmarks of Cancer](posts/cancer_hallmarks.md)
 - [ ]  Oncogenes
