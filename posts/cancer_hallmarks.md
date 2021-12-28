@@ -1,12 +1,12 @@
 # The Hallmarks of Cancer [WIP]
 
-We could begin this series of notes from first principles, as is often done in college level classes. However, in my experience, doing so is often unnecessary and sub-optimal. One does not need to deeply understand the principles of organic chemistry and biochemistry in order to understand cancer biology. This is not to say that that knowledge is not important. Rather, we believe that that knowledge can be picked up "just in time" as the need arises.
+We could begin this series of notes from first principles, as is often done in college level classes. However, in my experience, doing so is often unnecessary and sub-optimal. One does not need to deeply understand the principles of organic chemistry and biochemistry in order to understand cancer biology. This is not to say that that knowledge is not important. Rather, we believe that, that knowledge can be picked up "just in time", as the need arises.
 
-We will thus adopt a top down approach. That is, we'll first present the high level details of an idea, and then, in an iterative fashion, peel back the layers of abstraction until we arrive at the fundamental principles.
+We will thus adopt a top down approach. That is, we'll first present the high level details of an idea, and then, in an iterative fashion, peel back the layers of abstraction until we arrive at the most fundamental principles.
 
-Having said that, I'll assume a basic understanding of high school molecular biology. I'll assume that the reader knows, at the highest of levels, about genes and gene expression. That is, I'll assume that the reader knows that all cells in the human body have a full local copy of the genome and that the cells selectively read from different parts of their local copy of the genome.
+Having said that, we'll assume a basic understanding of high school molecular biology. we'll assume that the reader knows, at the highest of levels, about genes and gene expression. That is, we'll assume that the reader knows that all cells in the human body have a full local copy of the genome and that their identity, and thus function, is determined by their decisions regarding which parts of their local copy to read, that is express, and which parts to ignore.
 
-This note is a sweeping overview of the entire field of cancer Biology.  It presents core ideas of the field at the highest possible level. As the title suggests, it's drawn from Hanahan & Weinberg's 2011 seminal paper. Subsequent notes, drawn from "The Biology of Cancer" chapters, will present the ideas in this note in much greater depth.
+This note is a sweeping overview of the entire field of cancer Biology.  It presents core ideas of the field at an extremely high level. As the title suggests, it draws heavily from Hanahan & Weinberg's 2011 seminal paper. Subsequent notes, drawn from chapters of the book "The Biology of Cancer", will present the ideas in this note in much greater depth.
 
 ## Introduction
 
@@ -24,11 +24,11 @@ In this section, we present the eight (actually, six, plus two) hallmarks of can
 
 ### 1. Sustained Proliferative Signalling
 
-In order for the cells of a tissue to exist harmoniously, that is, in order for them to construct and maintain a functioning tissue, they must continuously communicate by exchanging *signals*. These signals are often small proteins secreted into the surrounding environment. Once a signal is in the environment, it can be *received* by surrounding cells that have the corresponding receptor. Once received, the signal may affect how the receiving cell behaves.
+In order for the cells of a tissue to exist harmoniously, that is, in order for them to construct and maintain a functioning tissue, they must continuously communicate by exchanging *signals*. These signals, or factors,  are often small proteins secreted into the surrounding environment. Once a signal is in the environment, it can be *received* by surrounding cells that have the corresponding receptor. Once received, the signal may affect how the behavior of the receiving.
 
-Out of the many signals exchanged among cells, none are more important than those that instruct a cell to grow and divide. These signals are called growth factors. Therefore, a normal cell knows its time to grow and divide by "listening" for growth factor signals, using its cell surface growth factor receptors, released in its surrounding environment by other cells.
+Out of the many signals exchanged among cells, none are, perhaps, more important than those that instruct a cell to grow and divide. These signals are called growth factors. Therefore, a normal cell knows its time to grow and divide by "listening" for growth factors, using its cell surface growth factor receptors, released in its surrounding environment by other cells.
 
-Recall that a core feature of all cancer cells is that they just keep growing and dividing. In order to achieve this, they must, somehow, deregulate the growth factor signalling system described above. How exactly do they do that? How do tumor cells **induce** and **sustain** positively acting growth stimulatory signals? Below, we outline a few ways they achieve this.
+Recall that a core feature of all cancer cells is that they just keep growing and dividing. In order to achieve this, they must, somehow, deregulate the growth factor signalling system described above. How exactly do they do that? That is, how do tumor cells **induce** and **sustain** positively acting growth stimulatory signals? Below, we outline a few ways they achieve this.
 
 #### Induce
 
@@ -42,7 +42,7 @@ Recall that a core feature of all cancer cells is that they just keep growing an
 
    1. Compromised negative feedback loops that are supposed to dampen growth signals
 
-By deregulating the framework that normal cells rely on in order to know when it is appropriate to proliferate, cancer cells are able to take matters growth and division into their own hands. This, obviously, is a revolt against the forces of tissue homeostasis. By not coordinating their decisions to grow and divide with their neighbors, cancer cells lead to a breakdown of homeostasis of cell number. This threatens normal tissue architecture and function.
+By deregulating the framework that normal cells rely on in order to know when it is appropriate to proliferate, cancer cells are able to take matters growth and division into their own hands. This, obviously, is a revolt against the forces of tissue homeostasis. By not coordinating their decisions to grow and divide with their neighbors, cancer cells lead to a breakdown of homeostasis of cell number. This breakdown threatens normal tissue architecture and function.
 
 #### Going Deeper
 
@@ -64,7 +64,7 @@ Before moving on to the next hallmark, let's take a moment to outline a few idea
 - TP53 receives inputs from intracellular stress and abnormality sensors. What are examples of abnormalities? TP53 can pause cell-cycle progression until the stressors are dealt with. Alternatively, it can induce apoptosis if the stresses are extreme and unrecoverable.
 - Transforming Growth Factor-$\beta$
 - Redundancies
-- Contact inhibition and Anoikis: $NF2$, $LKB1$
+- Contact inhibition, Anchorage Dependence, and Anoikis: $NF2$, $LKB1$
 
 ### 3. Resisting Cell Death
 
