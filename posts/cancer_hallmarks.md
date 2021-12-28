@@ -55,7 +55,7 @@ Before moving on to the next hallmark, let's take a moment to outline a few idea
 5. Dependency and Therapeutic targeting: Herceptin ...
 6. System level exploration of paracrine / autocrine growth signalling
 
-### 2. Evading Growth Suppressors (Removing Checks and Balances)
+### 2. Evading Growth Suppressors
 
 - Circumvent cellular programs that negatively regulate cell proliferation
 - Tumor Suppressor Genes. How they are discovered -- characteristic inactivation in human and mice tumors. Confirmation via gain ad loss of function experiments in mice
