@@ -50,7 +50,7 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ]  Gene Delivery into Cells and Tissues
 - [ ]  [Systems Biology of Neuro-degenerative Diseases](posts/systems_biology.md)
 - [ ]  [Models in Biology: Perspectives from Gunawardena et. al](posts/models.md)
-- [ ]  Systems Level Diseases: A Framework for Understanding Complex Diseases
+- [ ]  [System Level Diseases: A Framework for Understanding Complex Diseases](posts/system_level.md)
 - [ ]  A compendium of key unanswered questions in cancer biology*
 - [ ]  A compendium of whacky Ideas (And wild, unenlightened speculation)*
 
