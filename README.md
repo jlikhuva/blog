@@ -19,7 +19,7 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [ ]  Specialized Containers for Integers
 - [ ]  Online Algorithms
 
-##### The Biology of Cancer: A Full Stack Perspective [WIP]
+##### The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
 
 Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
 
@@ -30,7 +30,6 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ]  Growth Factors, Receptors, and their role in Tumorigenesis
 - [ ]  Cytoplasmic Signalling Circuitry
 - [ ]  Tumor Suppressor Genes
-- [ ]  The Cancer Cell Line Encyclopedia*
 - [ ]  pRb and the Cell Cycle Clock
 - [ ]  p53 and Apoptosis
 - [ ]  Cell Immortalization and Tumorigenesis
@@ -40,19 +39,44 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ]  Invasion and Metastasis
 - [ ]  [Tumor Immunology and Immunotherapy](posts/immunotherapy.md)
 - [ ]  The Rational Treatment of Cancer
-- [ ]  The Cancer Genome Atlas*
-- [ ]  The Cancer Dependency Map Project
-- [ ]  The Human Cell Atlas Project
 
-##### The Holstein Heifer & The Calico Cat [WIP]
+##### The Biology of Cancer: Alternative Perspectives [WIP]
+
+- [ ] The Tissue Organization Field Theory Perspective
+- [ ] The Morphogenetic Field Theory Perspective
+
+##### Modelling Biological Systems [WIP]
 
 - [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
 - [ ]  Gene Delivery into Cells and Tissues
 - [ ]  [Systems Biology of Neuro-degenerative Diseases](posts/systems_biology.md)
 - [ ]  [Models in Biology: Perspectives from Gunawardena et. al](posts/models.md)
 - [ ]  [System Level Diseases: A Framework for Understanding Complex Diseases](posts/system_level.md)
-- [ ]  A compendium of key unanswered questions in cancer biology*
-- [ ]  A compendium of whacky Ideas (And wild, unenlightened speculation)*
+
+##### Rough Sketches, Random Questions, and Uninformed Speculation [WIP]
+
+- [ ] Can we use ideas from GWAS and eQTL mapping to better understand Artificial Neural Networks?
+- [ ] How does the idea of Basal Cognition enrich, update, and challenge foundational aspects of ML & RL?
+- [ ] The Evolution of Multicellularity and its implications on Complex Cognition.
+
+##### Paper Summaries [WIP]
+
+- [ ] Does New Physics Lurk inside Living Matter?
+- [ ] [Ratcheting the Evolution of Multicellularity](posts/ratchet.md)
+- [ ] Life, Logic, and Information
+- [ ] Developmental Bioelectricity, Multicellularity, and Scale-free Cognition
+- [ ] Elementary Nervous Systems
+- [ ] Evolutionary Transitions in Learning and Cognition
+- [ ] Active Perception during Angiogenesis
+- [ ] Reafference and the origin of the self in early nervous system evolution
+- [ ] Endogenous Bioelectric Signalling Networks
+- [ ] Bioelectrical approaches to cancer as a problem of the scaling of the cellular self
+- [ ] Bioelectric Signalling: Reprogrammable Circuits underlying embryogenesis, regeneration, and cancer
+- [ ] Top Down models in Biology
+- [ ] Genome Wide Association Studies
+- [ ] Expression Quantitative Trait Loci (eQTL) Mapping
+- [ ] Cancer as a disorder of Patterning Information
+- [ ] At the Interface of Algebra and Statistics*
 
 ##### Protocols [WIP]
 
