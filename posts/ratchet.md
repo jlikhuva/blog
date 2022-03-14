@@ -25,7 +25,7 @@
 - Increased Apoptosis (Programmed Cell Death). Enterocytes, epithelial cells that line the walls of the intestines, live for only 2 to 5 days.
 - Division of labor. Within a tissue collective, only stem cells are tasked with regenerating the tissue — they have replicative immortality. All other cells either enter senescence or die, eventually. Within the body collective, only germ line cells are tasked with regenerating the body across generations.
 
-## My Synthesis
+## My Synthesis & Questions
 
 - A key question not discussed in the article is, what caused those initial cell clusters to form? What sorts of evolutionary pressures selected for the trait of multicellularity?
 - Extending this line of inquiry further, we can ask, how can we induce the formation of *organized*  collectives from (1) Biological cells (2) Artificial Cognitive Agents?

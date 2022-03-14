@@ -61,8 +61,9 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 
 ##### Paper Summaries [WIP]
 
-- [ ] Does New Physics Lurk inside Living Matter?
+- [ ] [Does New Physics Lurk inside Living Matter?](posts/new_physics.md)
 - [ ] [Ratcheting the Evolution of Multicellularity](posts/ratchet.md)
+- [ ] [Bioelectric Signalling: Reprogrammable Circuits underlying embryogenesis, regeneration, and cancer](posts/levin_cell_2021.md)
 - [ ] Life, Logic, and Information
 - [ ] Developmental Bioelectricity, Multicellularity, and Scale-free Cognition
 - [ ] Elementary Nervous Systems
@@ -71,7 +72,6 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ] Reafference and the origin of the self in early nervous system evolution
 - [ ] Endogenous Bioelectric Signalling Networks
 - [ ] Bioelectrical approaches to cancer as a problem of the scaling of the cellular self
-- [ ] Bioelectric Signalling: Reprogrammable Circuits underlying embryogenesis, regeneration, and cancer
 - [ ] Top Down models in Biology
 - [ ] Genome Wide Association Studies
 - [ ] Expression Quantitative Trait Loci (eQTL) Mapping
