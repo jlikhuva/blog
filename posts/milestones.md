@@ -6,4 +6,5 @@
 - Quantum Probability Theory
 - Modelling Open and Interconnected Systems
 - State Dependent Dynamics in Biological Systems
+- Basal Cognition
   
