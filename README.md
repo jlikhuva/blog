@@ -4,7 +4,7 @@ Below, you'll find a random collection of notes that I made over the course of m
 
 If it isn't obvious by now, this blog format was inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
 
-##### Computer Science [WIP]
+#### Computer Science [WIP]
 
 A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
 
@@ -19,15 +19,15 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [ ]  Specialized Containers for Integers
 - [ ]  Online Algorithms
 
-##### The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
+#### The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
 
 Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
 
 There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety. In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
 
-- [ ]  [The Hallmarks of Cancer](posts/cancer_hallmarks.md)
-- [ ]  Oncogenes
-- [ ]  Growth Factors, Receptors, and their role in Tumorigenesis
+- [ ]  [Preliminaries](posts/prelim.md)
+- [ ]  [Oncogenes](posts/oncogenes.md)
+- [ ]  [Growth Factors, Receptors, and their role in Tumorigenesis](posts/gf_gr.md)
 - [ ]  Cytoplasmic Signalling Circuitry
 - [ ]  Tumor Suppressor Genes
 - [ ]  pRb and the Cell Cycle Clock
@@ -39,13 +39,14 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ]  Invasion and Metastasis
 - [ ]  [Tumor Immunology and Immunotherapy](posts/immunotherapy.md)
 - [ ]  The Rational Treatment of Cancer
+- [ ]  [The Hallmarks of Cancer](posts/cancer_hallmarks.md)
 
-##### The Biology of Cancer: Alternative Perspectives [WIP]
+#### The Biology of Cancer: Alternative Perspectives [WIP]
 
 - [ ] The Tissue Organization Field Theory Perspective
 - [ ] The Morphogenetic Field Theory Perspective
 
-##### Modelling Biological Systems [WIP]
+#### Modelling Biological Systems [WIP]
 
 - [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
 - [ ]  Gene Delivery into Cells and Tissues
@@ -53,18 +54,19 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ]  [Models in Biology: Perspectives from Gunawardena et. al](posts/models.md)
 - [ ]  [System Level Diseases: A Framework for Understanding Complex Diseases](posts/system_level.md)
 
-##### Rough Sketches, Random Questions, and Uninformed Speculation [WIP]
+#### Rough Sketches, Random Questions, and Uninformed Speculation [WIP]
 
-- [ ] Can we use ideas from GWAS and eQTL mapping to better understand Artificial Neural Networks?
-- [ ] How does the idea of Basal Cognition enrich, update, and challenge foundational aspects of ML & RL?
+- [ ] [Can we use ideas from GWAS and eQTL mapping to better understand Artificial Neural Networks?](posts/gwas_eqtl_nn.md)
+- [ ] [How does the idea of Basal Cognition enrich, update, and challenge foundational aspects of ML & RL?](posts/basal_rl.md)
 - [ ] The Evolution of Multicellularity and its implications on Complex Cognition.
 
-##### Paper Summaries [WIP]
+#### Paper Summaries [WIP]
+
+##### Life Sciences
 
 - [ ] [Does New Physics Lurk inside Living Matter?](posts/new_physics.md)
 - [ ] [Ratcheting the Evolution of Multicellularity](posts/ratchet.md)
 - [ ] [Bioelectric Signalling: Reprogrammable Circuits underlying embryogenesis, regeneration, and cancer](posts/levin_cell_2021.md)
-- [ ] Life, Logic, and Information
 - [ ] Developmental Bioelectricity, Multicellularity, and Scale-free Cognition
 - [ ] Elementary Nervous Systems
 - [ ] Evolutionary Transitions in Learning and Cognition
@@ -72,13 +74,27 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ] Reafference and the origin of the self in early nervous system evolution
 - [ ] Endogenous Bioelectric Signalling Networks
 - [ ] Bioelectrical approaches to cancer as a problem of the scaling of the cellular self
+- [ ] Cancer as a disorder of Patterning Information
+
+##### Mathematical Sciences
+
 - [ ] Top Down models in Biology
+- [ ] A new perspective on entropy
+- [ ] Life, Logic, and Information
 - [ ] Genome Wide Association Studies
 - [ ] Expression Quantitative Trait Loci (eQTL) Mapping
-- [ ] Cancer as a disorder of Patterning Information
-- [ ] At the Interface of Algebra and Statistics*
+- [ ] Network Structure from Rich but Noisy Data
+- [ ] Current Best Practices in scRNAseq Analysis
+- [ ] RNA Velocity of Single Cells
+- [ ] Laplacian Dynamics on General Graphs
 
-##### Protocols [WIP]
+#### Theses Summaries [WIP]
+
+- [ ] At the Interface of Algebra and Statistics*
+- [ ] Systems, Generativity, and Interactional Effects
+- [ ] An Algebra of Open and Interconnected Systems
+
+#### Protocols [WIP]
 
 A distillation of various techniques that I've found quite useful when learning new things.
 
