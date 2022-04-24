@@ -79,7 +79,7 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 ##### Mathematical Sciences
 
 - [ ] Top Down models in Biology
-- [ ] A new perspective on entropy
+- [ ] [A new perspective on entropy](posts/tdb_entropy.md)
 - [ ] Life, Logic, and Information
 - [ ] Genome Wide Association Studies
 - [ ] Expression Quantitative Trait Loci (eQTL) Mapping

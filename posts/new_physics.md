@@ -17,7 +17,7 @@
 
 - Difference between **what life is**, **what life does** (and how it does it), and **why life does what it does**.
 - Is known physics sufficient to explain what life is?
-- The point of the paper, briefly, is that, no, known physics is not sufficient. There exists some yet to be uncovered rules governing teh function of living systems.
+- The point of the paper, briefly, is that, no, known physics is not sufficient. There exists some yet to be uncovered rules governing the function of living systems.
 - This new physics will be found at the intersection of Information and Biological Systems. Information storage, flow/transmission, and processing in biological systems
 - **Life = Matter + Information**
 
