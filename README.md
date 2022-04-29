@@ -13,6 +13,7 @@ If you find any bugs (errors or hard to understand sections) feel free to open a
 - [x]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
 - [x]  [Pattern Matching & String Indexing](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
 - [x]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
+- [ ]  [The Bottom up Splay Tree](posts/splay.md)
 - [x]  [Word Level Parallelism](https://github.com/jlikhuva/blog/blob/main/posts/wlp.md)
 - [ ]  [Graphs: All Foundational Methods](posts/graphs.md)
 - [x]  [Sketching Algorithms](posts/sketching.md)
@@ -102,5 +103,5 @@ If you find any bugs (errors or hard to understand sections) feel free to open a
 > A distillation of various techniques that I've found quite useful when learning new things.
 
 - [x]  [Common Algorithmic Patterns *](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
-- [ ] Abstractions, the Highest Stage of Mastery
+- [ ] [Cogent Ideas, and Succinct Sentences](posts/cogent.md)
 - [ ] [Sketchpad](posts/a.md)
