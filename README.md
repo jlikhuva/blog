@@ -1,29 +1,33 @@
+# At the Interface of Hubris & Humility
+
 Hello! I an aspiring scientist working in Cambridge MA.
 
-Below, you'll find a random collection of notes that I made over the course of my study and work. Although most of the notes are about core ideas in computer science (Data Structures & Algorithms, Reinforcement Learning, and Computational Geometry), a few are about ideas from Molecular Biology and Bioinformatics.  I wrote the notes in order to _deeply_ understand the foundational ideas in these areas of knowledge. I am distilling them here for future reference. If you find any bugs (errors or hard to understand sections) feel free to open a PR with the intended fix.
+Below, you'll find a random collection of notes that I made over the course of my study and work. Although most of the notes are about core ideas in computer science (Data Structures & Algorithms, Reinforcement Learning, and Computational Geometry), a few are about ideas from Molecular Biology.  I write these notes in order to _deeply_ understand the foundational ideas in these areas of knowledge. I am distilling them here for future reference. If you find any bugs (errors or hard to understand sections) feel free to open a PR with the intended fix.
 
-If it isn't obvious by now, this blog format was inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
+If it isn't obvious by now, this blog format was heavily inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
 
-#### Computer Science [WIP]
+## Computer Science [WIP]
 
 A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
 
-- [ ]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
-- [ ]  [Pattern Matching & String Indexing](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
+- [x]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
+- [x]  [Pattern Matching & String Indexing](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
 - [x]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 - [x]  [Word Level Parallelism](https://github.com/jlikhuva/blog/blob/main/posts/wlp.md)
 - [ ]  [Graphs: All Foundational Methods](posts/graphs.md)
-- [ ]  [Sketching Algorithms](posts/sketching.md)
+- [x]  [Sketching Algorithms](posts/sketching.md)
 - [ ]  [Discrete Optimization: MDPs & DAGs are All You Need](posts/optimization.md)
-- [ ]  The Lazy Binomial Heap
-- [ ]  Specialized Containers for Integers
+- [ ]  [The Lazy Binomial Heap](posts/binomial.md)
+- [ ]  [Specialized Containers for Integers](posts/integer.md)
 - [ ]  Online Algorithms
 
-#### The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
+## The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
 
 Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
 
-There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety. In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
+There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety.
+
+In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
 
 - [ ]  [Preliminaries](posts/prelim.md)
 - [ ]  [Oncogenes](posts/oncogenes.md)
@@ -41,12 +45,12 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ]  The Rational Treatment of Cancer
 - [ ]  [The Hallmarks of Cancer](posts/cancer_hallmarks.md)
 
-#### The Biology of Cancer: Alternative Perspectives [WIP]
+### The Biology of Cancer: Alternative Perspectives [WIP]
 
 - [ ] The Tissue Organization Field Theory Perspective
 - [ ] The Morphogenetic Field Theory Perspective
 
-#### Modelling Biological Systems [WIP]
+### Modelling Biological Systems [WIP]
 
 - [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
 - [ ]  Gene Delivery into Cells and Tissues
@@ -54,15 +58,15 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ]  [Models in Biology: Perspectives from Gunawardena et. al](posts/models.md)
 - [ ]  [System Level Diseases: A Framework for Understanding Complex Diseases](posts/system_level.md)
 
-#### Rough Sketches, Random Questions, and Uninformed Speculation [WIP]
+## Rough Sketches, Random Questions, and Uninformed Speculation [WIP]
 
 - [ ] [Can we use ideas from GWAS and eQTL mapping to better understand Artificial Neural Networks?](posts/gwas_eqtl_nn.md)
 - [ ] [How does the idea of Basal Cognition enrich, update, and challenge foundational aspects of ML & RL?](posts/basal_rl.md)
 - [ ] The Evolution of Multicellularity and its implications on Complex Cognition.
 
-#### Paper Summaries [WIP]
+## Paper Summaries [WIP]
 
-##### Life Sciences
+### Life Sciences
 
 - [ ] [Does New Physics Lurk inside Living Matter?](posts/new_physics.md)
 - [ ] [Ratcheting the Evolution of Multicellularity](posts/ratchet.md)
@@ -76,7 +80,7 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ] Bioelectrical approaches to cancer as a problem of the scaling of the cellular self
 - [ ] Cancer as a disorder of Patterning Information
 
-##### Mathematical Sciences
+### Mathematical Sciences
 
 - [ ] Top Down models in Biology
 - [ ] [A new perspective on entropy](posts/tdb_entropy.md)
@@ -88,13 +92,13 @@ There's no better 'introduction', in the sense that `CLRS` is an 'introduction' 
 - [ ] RNA Velocity of Single Cells
 - [ ] Laplacian Dynamics on General Graphs
 
-#### Theses Summaries [WIP]
+## Theses Summaries [WIP]
 
 - [ ] At the Interface of Algebra and Statistics*
 - [ ] Systems, Generativity, and Interactional Effects
 - [ ] An Algebra of Open and Interconnected Systems
 
-#### Protocols [WIP]
+## Protocols [WIP]
 
 A distillation of various techniques that I've found quite useful when learning new things.
 

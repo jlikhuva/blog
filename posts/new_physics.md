@@ -9,7 +9,7 @@
 
 ## Why You and I Should Care
 
-- Rational control of living systems - such powerful technology. [Raise By Wolves, The Expanse].
+- Rational control of living systems - such powerful technology. [Raised By Wolves, The Expanse].
 - Regeneration, System Level Diseases
 - Substrate for Programmable Matter
 
