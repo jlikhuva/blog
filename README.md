@@ -8,7 +8,7 @@ If it isn't obvious by now, this blog format was heavily inspired by [Frank McSh
 
 ## Computer Science [WIP]
 
-A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
+> A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
 
 - [x]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
 - [x]  [Pattern Matching & String Indexing](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
@@ -54,11 +54,9 @@ A distillation of some of the most elegant ideas in computer science. The collec
 
 #### The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
 
-Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
-
-There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety.
-
-In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
+> Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
+> There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety.
+> In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
 
 - [ ]  [Preliminaries](posts/prelim.md)
 - [ ]  [Oncogenes](posts/oncogenes.md)
@@ -101,10 +99,8 @@ In this section you'll find my synthesis of each chapter from TBoC, along with m
 
 ## Protocols [WIP]
 
-A distillation of various techniques that I've found quite useful when learning new things.
+> A distillation of various techniques that I've found quite useful when learning new things.
 
 - [x]  [Common Algorithmic Patterns *](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
 - [ ] Abstractions, the Highest Stage of Mastery
-
-<!-- - [ ] Knowledge Management: How I Study for Mastery*
-- [ ] A Technical Interview Worksheet -->
+- [ ] [Sketchpad](posts/a.md)
