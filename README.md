@@ -21,7 +21,38 @@ A distillation of some of the most elegant ideas in computer science. The collec
 - [ ]  [Specialized Containers for Integers](posts/integer.md)
 - [ ]  Online Algorithms
 
-## The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
+## Core Strands
+
+### Rational Control of Living Biological Systems
+
+- [ ] [Does New Physics Lurk inside Living Matter?](posts/new_physics.md)
+- [ ] [Ratcheting the Evolution of Multicellularity](posts/ratchet.md)
+- [ ] [Bioelectric Signalling: Reprogrammable Circuits underlying embryogenesis, regeneration, and cancer](posts/levin_cell_2021.md)
+- [ ] Developmental Bioelectricity, Multicellularity, and Scale-free Cognition
+- [ ] Elementary Nervous Systems
+- [ ] Evolutionary Transitions in Learning and Cognition
+- [ ] Active Perception during Angiogenesis
+- [ ] Re-afference and the origin of the self in early nervous system evolution
+- [ ] Endogenous Bioelectric Signalling Networks
+
+### Principled Modelling of Complex Biological Systems
+
+- [ ] Top Down models in Biology
+- [ ] [A new perspective on entropy](posts/tdb_entropy.md)
+- [ ] Life, Logic, and Information
+- [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
+- [ ]  Gene Delivery into Cells and Tissues
+- [ ] Network Structure from Rich but Noisy Data
+- [ ] Current Best Practices in scRNAseq Analysis
+- [ ] RNA Velocity of Single Cells
+- [ ] Laplacian Dynamics on General Graphs
+- [ ]  [Systems Biology of Neuro-degenerative Diseases](posts/systems_biology.md)
+- [ ]  [Models in Biology: Perspectives from Gunawardena et. al](posts/models.md)
+- [ ]  [System Level Diseases: A Framework for Understanding Complex Diseases](posts/system_level.md)
+
+### System Level Diseases
+
+#### The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
 
 Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
 
@@ -45,56 +76,26 @@ In this section you'll find my synthesis of each chapter from TBoC, along with m
 - [ ]  The Rational Treatment of Cancer
 - [ ]  [The Hallmarks of Cancer](posts/cancer_hallmarks.md)
 
-### The Biology of Cancer: Alternative Perspectives [WIP]
+#### The Biology of Cancer: Alternative Perspectives [WIP]
 
 - [ ] The Tissue Organization Field Theory Perspective
 - [ ] The Morphogenetic Field Theory Perspective
-
-### Modelling Biological Systems [WIP]
-
-- [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
-- [ ]  Gene Delivery into Cells and Tissues
-- [ ]  [Systems Biology of Neuro-degenerative Diseases](posts/systems_biology.md)
-- [ ]  [Models in Biology: Perspectives from Gunawardena et. al](posts/models.md)
-- [ ]  [System Level Diseases: A Framework for Understanding Complex Diseases](posts/system_level.md)
-
-## Rough Sketches, Random Questions, and Uninformed Speculation [WIP]
-
-- [ ] [Can we use ideas from GWAS and eQTL mapping to better understand Artificial Neural Networks?](posts/gwas_eqtl_nn.md)
-- [ ] [How does the idea of Basal Cognition enrich, update, and challenge foundational aspects of ML & RL?](posts/basal_rl.md)
-- [ ] The Evolution of Multicellularity and its implications on Complex Cognition.
-
-## Paper Summaries [WIP]
-
-### Life Sciences
-
-- [ ] [Does New Physics Lurk inside Living Matter?](posts/new_physics.md)
-- [ ] [Ratcheting the Evolution of Multicellularity](posts/ratchet.md)
-- [ ] [Bioelectric Signalling: Reprogrammable Circuits underlying embryogenesis, regeneration, and cancer](posts/levin_cell_2021.md)
-- [ ] Developmental Bioelectricity, Multicellularity, and Scale-free Cognition
-- [ ] Elementary Nervous Systems
-- [ ] Evolutionary Transitions in Learning and Cognition
-- [ ] Active Perception during Angiogenesis
-- [ ] Reafference and the origin of the self in early nervous system evolution
-- [ ] Endogenous Bioelectric Signalling Networks
 - [ ] Bioelectrical approaches to cancer as a problem of the scaling of the cellular self
 - [ ] Cancer as a disorder of Patterning Information
 
-### Mathematical Sciences
+### At the interface of Statistical Genetics and Neural Networks
 
-- [ ] Top Down models in Biology
-- [ ] [A new perspective on entropy](posts/tdb_entropy.md)
-- [ ] Life, Logic, and Information
 - [ ] Genome Wide Association Studies
 - [ ] Expression Quantitative Trait Loci (eQTL) Mapping
-- [ ] Network Structure from Rich but Noisy Data
-- [ ] Current Best Practices in scRNAseq Analysis
-- [ ] RNA Velocity of Single Cells
-- [ ] Laplacian Dynamics on General Graphs
+- [ ] [GWAS + (e)QTL + ANN = ?](posts/gwas_eqtl_nn.md)
+- [ ] The Evolution of Multicellularity and its implications on Complex Cognition.
+- [ ] [Basal Cognition + Evolution of Multicellularity + RL/ML = ?](posts/basal_rl.md)
 
-## Theses Summaries [WIP]
+### An Algebra and Calculus of Living Systems
 
-- [ ] At the Interface of Algebra and Statistics*
+### Summaries of Key Theses [WIP]
+
+- [ ] At the Interface of Algebra and Statistics
 - [ ] Systems, Generativity, and Interactional Effects
 - [ ] An Algebra of Open and Interconnected Systems
 
