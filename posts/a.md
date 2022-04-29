@@ -24,3 +24,46 @@
 > There is a fundamental difference between **what life does** and **what life is**. Further, there is a difference between understanding **how life does what it does** and understanding **why life does what it does**. Physics and Biology, in their present form, have helped us in generating rudimentary answers to the former questions. Answers to the latter, more interesting, questions, what life is and why life does what it does, still elude us.
 
 ## How Groups of Cells Cooperate to build Organs and Organisms
+
+> Understanding Biology's software. How can we motivate/instruct/program cell collectives to build whatever anatomical features we want?
+
+- How do cellular collectives orchestrate the building of complex, three dimensional structures?
+- Genomes encode proteins. However, a simple list of molecular parts does not tell us enough about the anatomical layout or regenerative potential tat those parts collaborate to construct.
+- Genomes are not a blueprint for anatomy, and genome editing is fundamentally limited by the fact that it's very hard to infer which components to tweak in order to achieve a desired system level outcome. Think of this as attempting to program a super computer by monkeying around with the individual transistors.
+
+## New Clues about the origins of Biological Intelligence
+
+> WIP
+
+## Cognition all the way down
+
+> Cognition/intelligence is a trait among many other traits exhibited by complex biological systems. However, we have placed the trait of intelligence on a pedestal. This apotheosizing of intelligence has a number of downsides, chief among them being that it has blinded us to the possibility that intelligence may exist in unfamiliar substrates.
+
+- Teleology refers to the purposefulness of an agent or system. Teleology attributes  explains what a system does to its internal goals. Biologists are extremely wary of Teleology.
+- Attributing purpose to objects profligately is a mistake. However, it's also a mistake to fail to attribute goal-directed-ness to a system that has it. Failing to do so hampers our ability to predict and control complex systems by preventing the discovery of their most efficient controls and pressure points.
+- Bottom up research in molecular biology and its shortcomings.
+- The molecular biology details cannot enable a prediction [of some anatomical outcome] because they address cell level questions. Such details are unaware of the issue of how a collective of cells decides what to build and when to stop once the desired outcome is achieved.
+- The collective has an information processing level of analysis. That is, groups of cells are essentially computational substrates. This, of course, is true of groups of neurons in the brain. The claim here is that all groups of cells in the body are computational substrates. The brain is simply a refinement of those traits.
+- Parts of organisms are agents, basal agents but still agents. They detect opportunities and try to accomplish missions. More formally, they can acquire information, process information, store information, and transmit information.
+- The more adaptive an agent is to external interference, the more competence it demonstrates. Wound healing, in both plants and animals, is an example of such adaptive behavior.
+- Individual cells are not just building *blocks*. They have extra competences that turn them into agents that, thanks to the information they have on board, can assist in their own assembly into larger structures and in other large scale projects that they need not understand.
+- You can be a single cell or a multicellular organism, or an organ in a multicellular organism, and still be gifted with informational processing structures.
+- Agents need not be conscious. Neither do they need to understand, nor understand, nor have minds. What they need is to be be structured in such a way that they can exploit physical regularities that enable them to use information to perform tasks.
+
+```rust
+//! WIP
+```
+
+> Here's teh punchline: we reject the simplistic essentialism where humans have 'real' goals, and everything else, from other animals, to aneural organisms, have metaphorical 'as if' goals!
+
+## Non-Neural Bioelectricity
+
+```rust
+//! WIP
+```
+
+## Top-Down Models in Biology
+
+```rust
+//! WIP
+```
