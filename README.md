@@ -4,7 +4,7 @@ Hello! I an aspiring scientist working in Cambridge MA.
 
 > Below, you'll find a random collection of notes that I made over the course of my study and work. Most of the notes are about core ideas from the mathematical sciences. A few are about ideas from the Life Sciences. Others are about ideas that lie at the intersection of these two fields. I write these notes in order to _deeply_ understand the foundational ideas in these areas of knowledge. I am distilling them here for future reference. While I have every intention to complete each set of notes, most of what you'll see here will remain incomplete for a very long time.
 
-If you find any bugs (errors or hard to understand sections) feel free to open a PR with the intended fix, or shot me an e-mail. Finally, If it isn't obvious by now, this blog format was heavily inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
+If you find any bugs (errors or hard to understand sections) feel free to open a PR with the intended fix, or shoot me an e-mail. Finally, If it isn't obvious by now, this blog format was heavily inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
 
 ## Computer Science [WIP]
 
