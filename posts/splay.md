@@ -2,7 +2,7 @@
 
 ## Introduction
 
-A splay tree is an adaptive, amortized, self balancing tree data structure. What does this mean? Adaptive refers to the fact that the data structure is able to change its conformation in order to best serve the current data access patterns. Amortized refers to the fact that some operations on the tree take much longer than logarithmic time. However, on aggregate, any sequence of `n` operations takes `O(n lg n)` meaning that each operation takes, on average, logarithmic time. Self balancing refers to the fact that we do not store any auxilliary data in the nodes to use when balancing the tree — the way, for instance, red-black-trees do.
+A splay tree is an adaptive, amortized, self balancing tree data structure. What does this mean? Adaptive refers to the fact that the data structure is able to change its conformation in order to best serve the current data access patterns. Amortized refers to the fact that some *individual* operations on the tree may take much longer than logarithmic time. However, on aggregate, any sequence of `n` operations takes `O(n lg n)` meaning that each operation takes, on average, logarithmic time. Self balancing refers to the fact that we do not store any auxillary data in the nodes to use when balancing the tree — the way, for instance, red-black-trees do.
 
 In this note, we will mostly focus on how to implement a bottom up splay tree in Rust. I do have a different note that explains why we'd want to have such a tree in the first place. You can find it on [this notion page](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a).
 
