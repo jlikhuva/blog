@@ -82,7 +82,9 @@
 //! WIP
 ```
 
+> <span style="color:blue">
 > Here's the punchline: we reject the simplistic essentialism where humans have 'real' goals, and everything else, from other animals, to aneural organisms, have metaphorical 'as if' goals!
+> </span>
 
 ## Non-Neural Bioelectricity
 
@@ -116,7 +118,21 @@
     <i>Nature Horizons, 2008</i>
 </div>
 
-> Focusing on Information Flow in living systems will help us better understand how such systems function
+> Focusing on Information Flow in living systems will help us better understand how such systems function. We need to rigorously investigate how living systems gather, process, store, and use information.
+
+- The remarkable progress in biology, progress that has allowed us to develop effective therapies for all infectious diseases, has dependent to *Molecular Biology*.
+- Molecular Biology can be summarized using two key points: (1) The Gene is the fundamental unit of Biological information storage and transfer. (2) Chemistry provides effective mechanistic explanations of biological processes.
+- Furthermore, Molecular Biology often relies on another assumption: That most biological processes are cell autonomous. This allows the field to study the whole by studying the parts in isolation.
+- Comprehensive understanding of many higher level biological phenomena remains elusive. Once reason for this is that our past successes have led us to underestimate the complexity of living organisms.
+
+> We need to focus more on how information is managed in living systems and how this brings about higher level biological phenomena. This will require the development of [an] appropriate [mathematical] language to describe information processing in biological system ...
+
+- We need to know **how information is gathered** from various sources: from the environment, from other cells, from short and long term memories in the cell [and the host tissue]. Further, we need to know how that information is integrated and processed, and how it is then used, rejected, or stored for later use. **In short, we need to understand living systems, from cells to tissues, to organs as cognitive and computational substrates**.
+- Because natural selection operates on pre-existing living organisms, novelties will initially arise as add-ons to systems already in existence, almost guaranteeing some redundancy.
+  
+> <span style="color:blue">
+> The audible rhyme between evolution by natural selection and model training by error minimization has not escaped my attention. Just as evolution is the search in an abstract fitness landscape for fit organisms, Neural Network training is essentially the search through some fitness landscape for fit models. This observation implies that ideas developed to understand organisms produced by one process can be refined and repurposed to help understand those produced by the other process.
+> </span>
 
 ## Basal Cognition
 
