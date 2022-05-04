@@ -1,5 +1,11 @@
 # Word Level Parallelism
 
+<div align="right" style="text-align:right">
+    <i>Okonda, Joseph L.</i>
+    <br>
+    <i>2021</i>
+</div>
+
 In this note, we shall explore a few bit level algorithms that we'll need when developing some of the specialized integer data structures. We begin by discussing a procedure that allows us to extract the first (the top) `k` bits of any integer in constant time. We then proceed to discuss procedures that allow us, in constant time, to operate on integers in parallel.
 
 ## Finding the `top(k)` bits of an integer

@@ -1,5 +1,7 @@
 # Sketch Pad
 
+> This note is, essentially, a sketch pad for recording notes from various texts before they are unified and distilled into the main notes on the blog.
+
 ## A Call for a better understanding of causation in biology
 
 <div align="right" style="text-align:right">
@@ -50,6 +52,10 @@
     <br>
     <i>Scientific American, 2021</i>
 </div>
+
+```rust
+// WIP
+```
 
 ## Cognition all the way down
 

@@ -1,5 +1,11 @@
 # The Bottom-up Splay Tree
 
+<div align="right" style="text-align:right">
+    <i>Okonda, Joseph L.</i>
+    <br>
+    <i>2021</i>
+</div>
+
 ## Introduction
 
 A splay tree is an adaptive, amortized, self balancing tree data structure. What does this mean? Adaptive refers to the fact that the data structure is able to change its conformation in order to best serve the current data access patterns. Amortized refers to the fact that some *individual* operations on the tree may take much longer than logarithmic time. However, on aggregate, any sequence of `n` operations takes `O(n lg n)` meaning that each operation takes, on average, logarithmic time. Self balancing refers to the fact that we do not store any auxillary data in the nodes to use when balancing the tree — the way, for instance, red-black-trees do.
