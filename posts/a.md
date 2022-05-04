@@ -2,6 +2,12 @@
 
 ## A Call for a better understanding of causation in biology
 
+<div align="right" style="text-align:right">
+    <i>Mariano Bizzarri et. al.</i>
+    <br>
+    <i>Nature Reviews Comment, 2019</i>
+</div>
+
 > The substrates of life on earth are not the most interesting aspects of life. Life = Substrate (matter) + Information, but biology has over-indexed on the first while paying little to no attention o the second.
 
 - Explaining the causal structure underlying the dynamic function f living systems is a central goal of biology.
@@ -25,6 +31,12 @@
 
 ## How Groups of Cells Cooperate to build Organs and Organisms
 
+<div align="right" style="text-align:right">
+    <i>Michael Levin</i>
+    <br>
+    <i>The Scientist, 2020</i>
+</div>
+
 > Understanding Biology's software. How can we motivate/instruct/program cell collectives to build whatever anatomical features we want?
 
 - How do cellular collectives orchestrate the building of complex, three dimensional structures?
@@ -33,9 +45,19 @@
 
 ## New Clues about the origins of Biological Intelligence
 
-> WIP
+<div align="right" style="text-align:right">
+    <i>Rafael Yuste & Michael Levin</i>
+    <br>
+    <i>Scientific American, 2021</i>
+</div>
 
 ## Cognition all the way down
+
+<div align="right" style="text-align:right">
+    <i>Michael Levin & Daniel Dennet</i>
+    <br>
+    <i>Aeon Essays, 2022</i>
+</div>
 
 > Cognition/intelligence is a trait among many other traits exhibited by complex biological systems. However, we have placed the trait of intelligence on a pedestal. This apotheosizing of intelligence has a number of downsides, chief among them being that it has blinded us to the possibility that intelligence may exist in unfamiliar substrates.
 
@@ -54,9 +76,15 @@
 //! WIP
 ```
 
-> Here's teh punchline: we reject the simplistic essentialism where humans have 'real' goals, and everything else, from other animals, to aneural organisms, have metaphorical 'as if' goals!
+> Here's the punchline: we reject the simplistic essentialism where humans have 'real' goals, and everything else, from other animals, to aneural organisms, have metaphorical 'as if' goals!
 
 ## Non-Neural Bioelectricity
+
+<div align="right" style="text-align:right">
+    <i>Michael Levin et. al.</i>
+    <br>
+    <i>Cell, 2021</i>
+</div>
 
 ```rust
 //! WIP
@@ -64,6 +92,34 @@
 
 ## Top-Down Models in Biology
 
+<div align="right" style="text-align:right">
+    <i>Giovanni Pezullo & Michael Levin</i>
+    <br>
+    <i>Royal Society Interface, 2016 </i>
+</div>
+
 ```rust
 //! WIP
+```
+
+## Life, Logic, & Information
+
+<div align="right" style="text-align:right">
+    <i>Paul Nurse</i>
+    <br>
+    <i>Nature Horizons, 2008</i>
+</div>
+
+> Focusing on Information Flow in living systems will help us better understand how such systems function
+
+## Basal Cognition
+
+<div align="right" style="text-align:right">
+    <i>Many, Different Scientists</i>
+    <br>
+    <i>Philosophical Transactions of the Royal Society B, 2021</i>
+</div>
+
+```rust
+// WIP
 ```

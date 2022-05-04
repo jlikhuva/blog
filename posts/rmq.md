@@ -1,4 +1,10 @@
-# Rusty Solutions to the Range-Min Query Problem
+# Rusty Solutions to the RMQ Problem
+
+<div align="right" style="text-align:right">
+    <i>Okonda, Joseph L.</i>
+    <br>
+    <i>2021</i>
+</div>
 
 ## A Naïve Solution
 

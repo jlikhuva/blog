@@ -1,5 +1,11 @@
 # String Indexing: A Rust Implementation
 
+<div align="right" style="text-align:right">
+    <i>Okonda, Joseph L.</i>
+    <br>
+    <i>2021</i>
+</div>
+
 I lied. We will not talk about Tries. We will, however, discuss two structures that are foundational to tasks that need to do substring matching: The Suffix Array and The Longest Common Prefix Array. We'll explore two linear time procedures (SA-IS & Kasai's Algorithm) for constructing these data structures given some underlying, fairly static string from some alphabet <!-- $\Sigma$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pqSc9UzkQu.svg">.
 
 ## Substring Search

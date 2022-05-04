@@ -1,5 +1,11 @@
 # Sketching Algorithms
 
+<div align="right" style="text-align:right">
+    <i>Okonda, Joseph L.</i>
+    <br>
+    <i>2021</i>
+</div>
+
 All algorithms operate on some data. Traditional algorithms assume that they have full access to the data they need in order to solve the problem at hand. For instance, algorithms for sorting a collection of items naturally assume that they have access to a buffer holding all the items. Similarly, procedures for computing the convex hull of a set of points assume that they have all the points. In some applications, however, the full set of data is not known a priori. In this _online setting_, algorithms have to provide useful answers to queries before having the chance to see all the data.
 
 The way such algorithms provide their answers depends on the kind of query being asked. Queries can be `ad hoc` meaning that we do not know the exact query we'd like to run a priori. In this case, the most common technique used is `random sampling`. We can also have `standing queries`. In this case, we know exactly the queries that we'd like to answer. Because we know the queries beforehand, we can design specialized data structures capable of providing useful answers to our queries.
