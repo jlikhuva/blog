@@ -82,9 +82,9 @@
 //! WIP
 ```
 
-> <span style="color:blue">
+> <div style="color:blue">
 > Here's the punchline: we reject the simplistic essentialism where humans have 'real' goals, and everything else, from other animals, to aneural organisms, have metaphorical 'as if' goals!
-> </span>
+> </div>
 
 ## Non-Neural Bioelectricity
 
