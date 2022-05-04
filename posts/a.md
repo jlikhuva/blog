@@ -82,9 +82,9 @@
 //! WIP
 ```
 
-> <div style="color:blue">
-> Here's the punchline: we reject the simplistic essentialism where humans have 'real' goals, and everything else, from other animals, to aneural organisms, have metaphorical 'as if' goals!
-> </div>
+<div style="background-color:#ada0a0">
+Here's the punchline: we reject the simplistic essentialism where humans have 'real' goals, and everything else, from other animals, to aneural organisms, have metaphorical 'as if' goals!
+</div>
 
 ## Non-Neural Bioelectricity
 
@@ -130,9 +130,9 @@
 - We need to know **how information is gathered** from various sources: from the environment, from other cells, from short and long term memories in the cell [and the host tissue]. Further, we need to know how that information is integrated and processed, and how it is then used, rejected, or stored for later use. **In short, we need to understand living systems, from cells to tissues, to organs as cognitive and computational substrates**.
 - Because natural selection operates on pre-existing living organisms, novelties will initially arise as add-ons to systems already in existence, almost guaranteeing some redundancy.
   
-> <span style="color:blue">
-> The audible rhyme between evolution by natural selection and model training by error minimization has not escaped my attention. Just as evolution is the search in an abstract fitness landscape for fit organisms, Neural Network training is essentially the search through some fitness landscape for fit models. This observation implies that ideas developed to understand organisms produced by one process can be refined and repurposed to help understand those produced by the other process.
-> </span>
+<div style="background-color:#ada0a0">
+The audible rhyme between evolution by natural selection and model training by error minimization has not escaped my attention. Just as evolution is the search in an abstract fitness landscape for fit organisms, Neural Network training is essentially the search through some fitness landscape for fit models. This observation implies that ideas developed to understand organisms produced by one process can be refined and repurposed to help understand those produced by the other process.
+</div>
 
 ## Basal Cognition
 
