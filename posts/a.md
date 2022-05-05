@@ -141,3 +141,15 @@
 ```rust
 // WIP
 ```
+
+## Learning Outside the Brain: Integrating Cognitive Science & Systems Biology
+
+<div align="right" style="text-align:right">
+    <i>Jeremy Gunawardena</i>
+    <br>
+    <i>Proceedings of the IEEE, 2022</i>
+</div>
+
+```rust
+// WIP
+```

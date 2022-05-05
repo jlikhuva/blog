@@ -8,7 +8,8 @@
 ## Entropy
 
 - information and probability are inversely correlated. Observing a highly probable event does not give us much information.
-- $\hat{I} = \frac{1}{p}$
+  
+- <!-- $\hat{I} = \frac{1}{p}$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/dIJqFDWoWN.svg">
 
 ## Topology
 
