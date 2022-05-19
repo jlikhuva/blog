@@ -9,13 +9,13 @@
 ## A Naïve Solution
 
 The most straightforward way to solve this problem is to create a lookup table with all the RMQ answers precomputed. This will allow us to answer any RMQ in constant time by doing a table lookup. How can we build such a table? The first thing to notice is that this is a discrete optimization problem - we are interested in the minimal (aka the optimal) value in a given range. A quick reference to [common algorithmic patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) should tell us that we may be able to use dynamic programming to solve the problem. All we need to do is come up with an update rule. In particular, suppose our array is <!-- $A$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fT4Y6ki4ih.svg">,  if we know the smallest value in some range `(i, j)` to be <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg">, we can easily figure out the answer on a larger range <!-- $(i, j+1)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/BR28J51dHP.svg"> by comparing <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg"> with <!-- $A[i + 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/DVfAuKZf2r.svg">. That is:
-<!-- $$
+
+$$
 RMQ_A(i, j) = \begin{cases}
       A[j], & \text{if}\ i = j \\
       \min\left(A[j], RMQ_A(i, j - 1)\right), & \text{otherwise}
 \end{cases}
-$$ -->
-<div align="center"><img style="background: white;" src="../svg/vZtLroTQei.svg"></div>
+$$
 
 We can do this for all possible values of `i` and `j` to fill up our lookup table. This takes quadratic time. Thus, with this approach, we cam solve the RMQ problem in <!-- $\left<\Theta(n^2), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/8UBwqFAqMg.svg">.
 
