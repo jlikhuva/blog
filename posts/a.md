@@ -150,6 +150,5 @@
     <i>Proceedings of the IEEE, 2022</i>
 </div>
 
-```rust
-// WIP
-```
+> - Learning can be rigorously interpreted as a form of information processing
+> - Learning can also take place in non-canonical substrates, outside of the brain; in non-neural contexts, such as physiology, development, and individual cells
