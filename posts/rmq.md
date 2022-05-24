@@ -102,11 +102,13 @@ Can we do better than $\left<\Theta(n^2), \Theta(1)\right>$ ? The query time is 
 
 ## Binary Representation & Sparse Tables
 
-Any positive integer can be factored into a sum of powers of two. This binary factorization is the basis of binary representation. For instance, the decimal number 19 can be represented as <!-- $19 = 16 + 2 + 1 = 2^4 + 0*2^3 + 0*2^2 + 2^1 + 2^0 = (10011)_2$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/5zxNilT8JM.svg">. Given some range `[i, j]` we know that its length, `(j - i) + 1` is positive. We can therefore factor it using binary factorization to get shorter ranges. For instance, if our range is `(0, 18)` we see that it has a length of `19` which, as we saw above, can be be factored into `(0, 15) + (16, 17) + (18, 18)`. 
+Any positive integer can be factored into a sum of powers of two. This binary factorization is the basis of binary representation. For instance, the decimal number 19 can be represented as $19 = 16 + 2 + 1 = 2^4 + 0*2^3 + 0*2^2 + 2^1 + 2^0 = (10011)_2$. Given some range `[i, j]` we know that its length, $(j - i) + 1$ is positive. We can therefore factor it using binary factorization to get shorter ranges. For instance, if our range is `(0, 18)` we see that it has a length of `19` which, as we saw above, can be be factored into $(0, 15) + (16, 17) + (18, 18)$.
 
 ### Preprocessing
 
-How can we use these observations to construct a solution to our problem? First, note that powers of two are sparsely distributed among positive integers. Also, because they can be combined to form any other number, if we had a table with answers to all possible ranges whose size is a power of two, we would be able to get answers for any range. How can we construct such sparse table? For an array of length `k`, there are `O(lg k)`  ranges whose size is a power of two (just as there are `lg x` bits in the binary representation of `x`).We shall thus construct the sparse table by computing answers to all `lg k` ranges for all `n` possible values of `k`. Therefore, the time needed to create the sparse table is <!-- $\mathcal{O}(n \log n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/CEiOpX0Hzv.svg">.We implement this scheme below.
+How can we use these observations to construct a solution to our problem? First, note that powers of two are sparsely distributed among positive integers. Also, because they can be combined to form any other number, if we had a table with answers to all possible ranges whose size is a power of two, we would be able to get answers for any range. How can we construct such sparse table?
+
+For an array of length `k`, there are $\log k$  ranges whose size is a power of two (just as there are `lg x` bits in the binary representation of `x`). We shall thus construct the sparse table by computing answers to all `lg k` ranges for all `n` possible values of `k`. Therefore, the time needed to create the sparse table is $\mathcal{O}(n \log n)$. We implement this scheme below.
 
 ```rust
 /// An index into our sparse table
@@ -133,7 +135,7 @@ impl From<(usize, usize)> for SparseTableIdx {
 
 ```rust
 /// A sparse table is simply a collection of rmq answers for ranges whose
-/// length is a power of two. We precompute such ranges for all possible starting
+/// length is a power of two. We pre-compute such ranges for all possible starting
 /// positions
 type SparseTable<'a, T> = HashMap<SparseTableIdx, RMQResult<'a, T>>;
 
@@ -251,13 +253,15 @@ impl MSBLookupTable {
     }
 }
 ```
+
 Once again, the query time is the best possible. However, even though the pre-processing time reduced from quadratic to `O(n lg n)`, we can still do better. In particular, we can shave off a log factor and arrive at a linear time pre-processing algorithm. To figure out how to do that, we shall take a detour to discuss the method of four russians.
 
 If you'd like to take a breather, feel free to play around with the sparse table code in [the rust playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=7f9c152dee95816d7ef8ef9d14bc1f72).
 
 ---
 
-##### The Method of Four Russians
+### The Method of Four Russians
+
 We begin this detour by taking another detour. Let us discuss the algorithms used to find the median (or more generally, the `i_th` order statistic) of a collection of pairwise comparable items. `Quickselect` can solve this problem in expected linear time. However, if we want a worst case linear time solution, we need to use the `Median of Medians` procedure.
 
 `MoM` is exactly similar `Quickselelect`  except, instead of randomly picking the index to partition around, we compute an approximate median value. We begin by dividing the input collection into blocks of `length=5`. This gives us <!-- $\lceil \frac{n}{5}\rceil$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pF1PFO71La.svg"> blocks, with the final block possibly having `< 5` items. For each block, we calculate the median by first sorting and selection the lower median. For a single block, this always takes constant time, meaning that finding the median for all blocks takes linear time. We aggregate all the block-level medians into a single array. This array is of length <!-- $\lceil \frac{n}{5}\rceil$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pF1PFO71La.svg">. Once we have aggregated the lock level medians, we are faced with the xeact same problem we started with -- just on a much smaller array. Therefore, we can recursively find the median of this new array. Once we have this value, we can proceed as usual, using the [prune and conquer](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) strategy. Below, we implement this scheme
@@ -551,7 +555,7 @@ impl<'a, T: Ord + Eq + Hash> RMQSolver<'a, T> for SparseTableSolver<'a, T> {
 
 ---
 
-## Two-Level Structures
+### Two-Level Structures
 
 To apply the method of four russians to the RMQ problem, we begin by dividing the input array into blocks of length <!-- $b$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fCJxfN2Ysc.svg">. If the length of the array is <!-- $n$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/k2Z6CavdDQ.svg">, this results in <!-- $\mathcal{O}(\frac{n}{b})$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/gwfsqBuBks.svg"> blocks. For each of these blocks, we find the index of the smallest value bu doing a simple scan. This takes <!-- $\mathcal{O}(b)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/Dqg8jnCq0o.svg"> in each block and <!-- $\mathcal{O}(\frac{n}{b}) * \mathcal{O}(b) = \mathcal{O}(n)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/oI85zP1xyG.svg"> for all the blocks. We aggregate these min values in a new macro array. Given a query range `[i, j]` how can we use the blocks and the macro array to satisfy the query? Also, what value of `b` should we use? To query, we start by figuring out which block the ends of the query fall into. We do that by dividing each end with the block size, i.e `start_block = i/b, end_block = j/b`. We then scan the items in `start_block` that appear after `i` and the items in `end_block` that appear before `j` and take the minimal value over them. Let's call this value, the smallest value at the ends of the range, <!-- $\lambda$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/w3irZZ0Jg1.svg"> Then we scan the macro array to find the minimal value among all blocks between `start_block` and `end_block`. let's call this value <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/6bXEiZZAEX.svg">. The answer to our query is the `min` (or `argmin`) between these two values: <!-- $RMQ_A(i, j) = \min(\lambda, \alpha)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/KHSI90DMS3.svg"> How long does this take? Well, finding the `min` in the end blocks take `O(b)` and scanning the intermediate blocks takes `O(n/b)`. This gives us `O(b + n/b)`. Therefore, to properly characterize the runtime, we need to find the value of `b` that minimized the expression `b + n/b`. We do so below
 <!-- $$
