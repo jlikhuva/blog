@@ -8,7 +8,7 @@
 
 ## A Naïve Solution
 
-The most straightforward way to solve this problem is to create a lookup table with all the RMQ answers precomputed. This will allow us to answer any RMQ in constant time by doing a table lookup. How can we build such a table? The first thing to notice is that this is a discrete optimization problem - we are interested in the minimal (aka the optimal) value in a given range. A quick reference to [common algorithmic patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) should tell us that we may be able to use dynamic programming to solve the problem. All we need to do is come up with an update rule. In particular, suppose our array is <!-- $A$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/fT4Y6ki4ih.svg">,  if we know the smallest value in some range `(i, j)` to be <!-- $\alpha$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg">, we can easily figure out the answer on a larger range <!-- $(i, j+1)$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/BR28J51dHP.svg"> by comparing <img style="transform: translateY(0.1em); background: white;" src="../svg/pU0BwDfjZb.svg"> with <!-- $A[i + 1]$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/DVfAuKZf2r.svg">. That is:
+The most straightforward way to solve this problem is to create a lookup table with all the RMQ answers precomputed. This will allow us to answer any RMQ in constant time by doing a table lookup. How can we build such a table? The first thing to notice is that this is a discrete optimization problem - we are interested in the minimal (aka the optimal) value in a given range. A quick reference to [common algorithmic patterns](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f) should tell us that we may be able to use dynamic programming to solve the problem. All we need to do is come up with an update rule. In particular, suppose our array is $A$ ,  if we know the smallest value in some range `(i, j)` to be $\alpha$, we can easily figure out the answer on a larger range $(i, j+1)$ by comparing $\alpha$ with $A[i + 1]$ . That is:
 
 $$
 RMQ_A(i, j) = \begin{cases}
@@ -17,9 +17,9 @@ RMQ_A(i, j) = \begin{cases}
 \end{cases}
 $$
 
-We can do this for all possible values of `i` and `j` to fill up our lookup table. This takes quadratic time. Thus, with this approach, we cam solve the RMQ problem in <!-- $\left<\Theta(n^2), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/8UBwqFAqMg.svg">.
+We can do this for all possible values of `i` and `j` to fill up our lookup table. This takes quadratic time. Thus, with this approach, we cam solve the RMQ problem in $\left<\Theta(n^2), \Theta(1)\right>$.
 
-The code below implements this approach. The only modification we make is that instead or calculating the actual minimal value, we calculate the index of the smallest value. That is `argmin` instead of `min`
+The code below implements this approach. The only modification we make is that instead or calculating the actual minimal value, we calculate the index of the smallest value. That is $\argmin$ instead of `min`
 
 ```rust
 /// An inclusive ([i, j]), 0 indexed range for specifying a range
@@ -74,10 +74,6 @@ type LookupTable<'a, T> = HashMap<RMQRange<'a, T>, usize>;
 /// is lower bounded by the starting index, the resulting lookup table is an
 /// upper triangular matrix. Therefore, instead of representing it as a matrix,
 /// we use a hashmap instead (to save space)
-/// Computes the answers to all possible queries. Since the ending index of a query
-/// is lower bounded by the starting index, the resulting lookup table is an
-/// upper triangular matrix. Therefore, instead of representing it as a matrix,
-/// we use a hashmap instead (to save space)
 fn compute_rmq_all_ranges<T: Hash + Eq + Ord>(array: &[T]) -> LookupTable<'_, T> {
     let len = array.len();
     let mut lookup_table = HashMap::with_capacity((len * len) / 2);
@@ -102,7 +98,7 @@ fn compute_rmq_all_ranges<T: Hash + Eq + Ord>(array: &[T]) -> LookupTable<'_, T>
 
 You can play around with the code so far [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=ccb49819827b6e1834765389f7ecf12b)
 
-Can we do better than <!-- $\left<\Theta(n^2), \Theta(1)\right>$ --> <img style="transform: translateY(0.1em); background: white;" src="../svg/8UBwqFAqMg.svg">? The query time is the best we can ever hope for. However, we can reduce the processing time. Let's see how we can do that in the next section.
+Can we do better than $\left<\Theta(n^2), \Theta(1)\right>$ ? The query time is the best we can ever hope for. However, we can reduce the processing time. Let's see how we can do that in the next section.
 
 ## Binary Representation & Sparse Tables
 
