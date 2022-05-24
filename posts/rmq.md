@@ -102,13 +102,7 @@ Can we do better than $\left<\Theta(n^2), \Theta(1)\right>$ ? The query time is 
 
 ## Binary Representation & Sparse Tables
 
-Any positive integer can be factored into a sum of powers of two. This binary factorization is the basis of binary representation. For instance, the decimal number 19 can be represented as
-
-$$
-19 = 16 + 2 + 1 = 2^4 + 0*2^3 + 0*2^2 + 2^1 + 2^0 = \left(10011\right)_2
-$$
-
-Given some range `[i, j]` we know that its length, $(j - i) + 1$ is positive. We can therefore factor it using binary factorization to get shorter ranges. For instance, if our range is `(0, 18)` we see that it has a length of `19` which, as we saw above, can be be factored into $(0, 15) + (16, 17) + (18, 18)$.
+Any positive integer can be factored into a sum of powers of two. This binary factorization is the basis of binary representation. For instance, the decimal number 19 can be represented as $19 = 16 + 2 + 1 = 2^4 + 0*2^3 + 0*2^2 + 2^1 + 2^0 = (10011)_2$. Given some range `[i, j]` we know that its length, $(j - i) + 1$ is positive. We can therefore factor it using binary factorization to get shorter ranges. For instance, if our range is `(0, 18)` we see that it has a length of `19` which, as we saw above, can be be factored into $(0, 15) + (16, 17) + (18, 18)$.
 
 ### Preprocessing
 
