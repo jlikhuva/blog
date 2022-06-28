@@ -10,9 +10,9 @@
     <i>Nature Reviews Comment, 2019</i>
 </div>
 
-> The substrates of life on earth are not the most interesting aspects of life. Life = Substrate (matter) + Information, but biology has over-indexed on the first while paying little to no attention o the second.
+> The substrates of life on earth are not the most interesting aspects of life. Life = Substrate (matter) + Information, but biology has over-indexed on the first while paying little to no attention to the second.
 
-- Explaining the causal structure underlying the dynamic function f living systems is a central goal of biology.
+- Explaining the causal structure underlying the dynamic function of living systems is a central goal of biology.
 - To attain our goal of rationally controlling complex living systems, we'll need to come up with efficient strategies to trigger desired system level outcomes.
 - Currently, our understanding of living systems is extremely gene-centric. Biological processes tend to be described as a series of genes.
 - We would, arguable, make more progress towards our goal of understanding the mechanisms underlying living systems by shifting out attention from the biological components to *patterns and dynamics of the connections between the components.*
