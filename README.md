@@ -2,13 +2,13 @@
 
 Hello! I an aspiring scientist working in Cambridge MA.
 
-> Below, you'll find a random collection of notes that I made over the course of my study and work. Most of the notes are about core ideas from the mathematical sciences. A few are about ideas from the Life Sciences. Others are about ideas that lie at the intersection of these two fields. I write these notes in order to _deeply_ understand the foundational ideas in these areas of knowledge. I am distilling them here for future reference. While I have every intention to complete each set of notes, most of what you'll see here will remain incomplete for a very long time.
+> Below, you'll find an assortment of notes and presentation slides that I made over the course of my independent study and work. Most of them are about _foundational_ ideas that lie at the intersection of the life and the mathematical sciences. I write these notes in order to _deeply_ understand the core ideas that animate these two areas of knowledge. I am distilling them here for future reference. While I have every intention to complete each set of notes, most of what you'll see here will remain incomplete for a very long time.
 
-If you find any bugs (errors or hard to understand sections) feel free to open a PR with the intended fix, or shoot me an e-mail. Finally, If it isn't obvious by now, this blog format was heavily inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
+> If you find any bugs (errors or hard to understand sections) feel free to open a PR with the intended fix, or shoot me an e-mail. Finally, If it isn't obvious by now, this blog format was heavily inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
 
-## Computer Science [WIP]
+## Mathematical Sciences [WIP]
 
-> A distillation of some of the most elegant ideas in computer science. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
+> A distillation of some of the most elegant ideas in computer science and mathematics. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
 
 - [x]  [`<O(n), O(1)>` RMQ in Rust](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md)
 - [x]  [Pattern Matching & String Indexing](https://github.com/jlikhuva/blog/blob/main/posts/string_indexing.md)
@@ -20,9 +20,19 @@ If you find any bugs (errors or hard to understand sections) feel free to open a
 - [ ]  [Discrete Optimization: MDPs & DAGs are All You Need](posts/optimization.md)
 - [ ]  [The Lazy Binomial Heap](posts/binomial.md)
 - [ ]  [Specialized Containers for Integers](posts/integer.md)
-- [ ]  Online Algorithms
+- [ ] The Multiplicative Weights Algorithm
+- [ ] The Deferred Acceptance Algorithm
+- [ ] At the Interface of Algebra and Statistics
+- [ ] Systems, Generativity, and Interactional Effects
+- [ ] An Algebra of Open and Interconnected Systems
+- [ ] Laplacian Dynamics on General Graphs
+- [ ] Network Structure from Rich but Noisy Data
+- [ ] Neural Network Interpretation Methods
+- [ ] Retroactive Data Structures
 
-## Core Strands
+## Life Sciences [WIP]
+
+### Developmental Biology [WIP]
 
 ### Rational Control of Living Biological Systems
 
@@ -43,10 +53,8 @@ If you find any bugs (errors or hard to understand sections) feel free to open a
 - [ ] Life, Logic, and Information
 - [ ]  [On the Immaturity of Biology: A Historical Perspective](posts/biology_immature.md)
 - [ ]  Gene Delivery into Cells and Tissues
-- [ ] Network Structure from Rich but Noisy Data
 - [ ] Current Best Practices in scRNAseq Analysis
 - [ ] RNA Velocity of Single Cells
-- [ ] Laplacian Dynamics on General Graphs
 - [ ]  [Systems Biology of Neuro-degenerative Diseases](posts/systems_biology.md)
 - [ ]  [Models in Biology: Perspectives from Gunawardena et. al](posts/models.md)
 - [ ]  [System Level Diseases: A Framework for Understanding Complex Diseases](posts/system_level.md)
@@ -55,9 +63,8 @@ If you find any bugs (errors or hard to understand sections) feel free to open a
 
 #### The Biology of Cancer: The Somatic Mutation Theory Perspective [WIP]
 
-> Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into, a so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
-> There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). Earlier this year (2021) I resolved to read TBoC in its entirety.
-> In this section you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
+> Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into a, so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
+> There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). That's why in 2021, I resolved to study TBoC in its entirety. In the following set of notes you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
 
 - [ ]  [Preliminaries](posts/prelim.md)
 - [ ]  [Oncogenes](posts/oncogenes.md)
@@ -82,21 +89,12 @@ If you find any bugs (errors or hard to understand sections) feel free to open a
 - [ ] Bioelectrical approaches to cancer as a problem of the scaling of the cellular self
 - [ ] Cancer as a disorder of Patterning Information
 
-### At the interface of Statistical Genetics and Neural Networks
+## At the Interface of the Life & Mathematical Sciences [WIP]
 
-- [ ] Genome Wide Association Studies
-- [ ] Expression Quantitative Trait Loci (eQTL) Mapping
-- [ ] [GWAS + (e)QTL + ANN = ?](posts/gwas_eqtl_nn.md)
+- [ ] [The Genetics of Neural Networks](posts/genetics%2Bnn.md)
 - [ ] The Evolution of Multicellularity and its implications on Complex Cognition.
 - [ ] [Basal Cognition + Evolution of Multicellularity + RL/ML = ?](posts/basal_rl.md)
-
-### An Algebra and Calculus of Living Systems
-
-### Summaries of Key Theses [WIP]
-
-- [ ] At the Interface of Algebra and Statistics
-- [ ] Systems, Generativity, and Interactional Effects
-- [ ] An Algebra of Open and Interconnected Systems
+- [ ] An Algebra and Calculus of Living Systems
 
 ## Protocols [WIP]
 
