@@ -1,6 +1,6 @@
 # The Genetics of Deep Neural Networks [WIP]
 
-> This write-up is based on a talk that I gave at the Broad Institute. You can find the [slides from that talk here](../slides/Genetics+NN.pdf)
+> This write-up is based on a talk that I gave at the Broad Institute. You can find the [slides from that talk here](../../slides/Genetics+NN.pdf)
 
 ## Introduction
 
