@@ -1,4 +1,4 @@
-# An Algebra and Calculus of Living Systems
+# In Search of An Algebra and Calculus of Living Systems
 
 - Algebra - compositionality and associated rules
 - Calculus - continuos variation / dynamics / change
