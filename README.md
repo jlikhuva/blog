@@ -16,7 +16,7 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [x]  [Pattern Matching & String Indexing](posts/mathematical-sciences/string_indexing.md)
 - [x]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 - [ ]  [The Bottom up Splay Tree](posts/mathematical-sciences/splay.md)
-- [x]  [Word Level Parallelism](posts/mathematical-sciences/wlp.md)
+- [x]  [Word Level Parallelism](posts/mathematical-sciences/wlp.md) [![Crates.io][crates-badge]][crates-url]
 - [ ]  [Graphs: All Foundational Methods](posts/mathematical-sciences/graphs.md)
 - [x]  [Streaming Algorithms: Sampling and Sketching](posts/mathematical-sciences/sketching.md)
 - [ ]  [Discrete Optimization](posts/mathematical-sciences/optimization.md)
@@ -31,6 +31,9 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [ ] [A new perspective on entropy](posts/mathematical-sciences/tdb_entropy.md)
 - [ ] Current Best Practices in scRNAseq Analysis
 - [ ] RNA Velocity of Single Cells
+
+[crates-badge]: https://img.shields.io/crates/v/bit-parallelism.svg
+[crates-url]: https://crates.io/crates/bit-parallelism
 
 ## Mechanistic Interpretation of Neural Networks
 
