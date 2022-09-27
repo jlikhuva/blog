@@ -241,7 +241,7 @@ fn get_msb_idx_of(query: u64) -> u8 {
 }
 ```
 
-We can improve upon the linear scanning procedure using bit level binary search. This brings down the running time to `O(lg lg n)`. Often, however, when we know that we'll be doing many `msb` queries, we use a lookup table to compute this value. This is the solution we adopted when discussing sparse tables in the context of [the range min query problem](https://github.com/jlikhuva/blog/blob/main/posts/rmq.md#querying-the-sparse-table). Using that method, we're able to locate the index of the highest bit set in constant  `O(1)` time, albeit with an added preprocessing step to build the lookup table. The question we seek to answer in this section is, can we locate the index of the most significant bit in constant time without using a lookup table?
+We can improve upon the linear scanning procedure using bit level binary search. This brings down the running time to `O(lg lg n)`. Often, however, when we know that we'll be doing many `msb` queries, we use a lookup table to compute this value. This is the solution we adopted when discussing sparse tables in the context of [the range min query problem](./rmq.md#querying-the-sparse-table). Using that method, we're able to locate the index of the highest bit set in constant  `O(1)` time, albeit with an added preprocessing step to build the lookup table. The question we seek to answer in this section is, can we locate the index of the most significant bit in constant time without using a lookup table?
 
 ### The MSB(x)-Rank(x) Equivalence
 

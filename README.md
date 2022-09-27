@@ -23,7 +23,7 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [ ]  [The Lazy Binomial Heap](posts/mathematical-sciences/binomial.md)
 - [ ]  [Specialized Containers for Integers](posts/mathematical-sciences/integer.md)
 - [ ] The Multiplicative Weights Algorithm
-- [ ] The Deferred Acceptance Algorithm
+- [ ] [The Deferred Acceptance Algorithm](posts/mathematical-sciences/stable-matching.md)
 - [ ] Laplacian Dynamics on General Graphs
 - [ ] Network Structure from Rich but Noisy Data
 - [ ] Neural Network Interpretation Methods
@@ -34,15 +34,14 @@ Hello! I an aspiring scientist working in Cambridge MA.
 
 ## Mechanistic Interpretation of Neural Networks
 
-> In spite of their impressive performance on a number of learning tasks, Neural Networks still largely exist as computational black boxes. It is still very challenging to understand why and how they perform so well.
-> Within Biology, we have developed a rich set of experimental ideas, methods, and tools in our quest to understand and interpret biological black boxes (i.e organisms and the cells that com-prise them). Is it possible to use these ideas, tools, and techniques to develop a general framework for understanding and interpreting trained Neural Networks?
+> Is it possible to use ideas, tools, and techniques developed to understand the structure and function of biological black boxes to develop a general framework for understanding and interpreting trained Neural Networks (aka computational black boxes)?
 
 - [ ] [The Genetics of Neural Networks](posts/genetics-plus-anns/genetics%2Bnn.md)
 
-## Developmental Biology
+<!-- ## Developmental Biology
 
 > Notes from reading Barresi & Gilbert's `Developmental Biology`
-
+ -->
 
 ## In Search of an Algebra of Biological Systems
 

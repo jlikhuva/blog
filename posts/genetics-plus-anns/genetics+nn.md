@@ -14,3 +14,14 @@ In particular, we explore preliminary experimental designs and analysis methods 
 
 We hypothesize that, if we're able to answer all the questions above in the affirmative, then methods, concepts, and ideas developed in the life sciences to help us understand and interpret complex biological black boxes can be refined and repurposed to aid in our understanding and interpretation of complex computational black boxes such as trained Neural Networks.
 
+## The Audible Rhyme
+
+## Current Methods
+
+## The Genetic of Neural Networks?
+
+### Q1: Do Trained Neural Network Weights Have Functional Modules?
+
+#### Experimental Set Up & Training
+
+#### Preliminary Analysis
