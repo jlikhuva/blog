@@ -16,7 +16,7 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [x]  [Pattern Matching & String Indexing](posts/mathematical-sciences/string_indexing.md)
 - [x]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 - [ ]  [The Bottom up Splay Tree](posts/mathematical-sciences/splay.md)
-- [x]  [Word Level Parallelism](posts/mathematical-sciences/wlp.md) [![Crates.io][crates-badge]][crates-url]
+- [x]  [Word Level Parallelism](posts/mathematical-sciences/wlp.md) [![Crates.io][crates-badge]][crates-url] [![Documentation][docs-badge]][docs-url]
 - [ ]  [Graphs: All Foundational Methods](posts/mathematical-sciences/graphs.md)
 - [x]  [Streaming Algorithms: Sampling and Sketching](posts/mathematical-sciences/sketching.md)
 - [ ]  [Discrete Optimization](posts/mathematical-sciences/optimization.md)
@@ -34,6 +34,8 @@ Hello! I an aspiring scientist working in Cambridge MA.
 
 [crates-badge]: https://img.shields.io/crates/v/bit-parallelism.svg
 [crates-url]: https://crates.io/crates/bit-parallelism
+[docs-badge]: https://docs.rs/bit-parallelism/badge.svg
+[docs-url]: https://docs.rs/bit-parallelism
 
 ## Mechanistic Interpretation of Neural Networks
 
