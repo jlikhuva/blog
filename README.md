@@ -11,13 +11,13 @@ Hello! I an aspiring scientist working in Cambridge MA.
 > A distillation of some of the most elegant ideas in computer science and mathematics. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk. Finally, notes that evolved into full fledged libraries or binaries have the appropriate badges next to them.
 
 - [x]  [Common Algorithmic Patterns *](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
-- [x]  [`<O(n), O(1)>` RMQ in Rust](posts/mathematical-sciences/rmq.md)
+- [x]  [`<O(n), O(1)>` RMQ in Rust](posts/mathematical-sciences/rmq.md) :star2: :sparkles:
 - [x]  [Pattern Matching & String Indexing](posts/mathematical-sciences/string_indexing.md)
 - [x]  [The Bottom-up Splay Tree *](https://www.notion.so/Splay-Trees-3942f6942b7f4b06b5f666912f26a33a)
 - [ ]  [The Bottom up Splay Tree](posts/mathematical-sciences/splay.md)
 - [x]  [Word Level Parallelism](posts/mathematical-sciences/wlp.md) [![Crates.io][crates-badge]][crates-url] [![Documentation][docs-badge]][docs-url]
 - [ ]  [Graphs: All Foundational Methods](posts/mathematical-sciences/graphs.md)
-- [x]  [Streaming Algorithms: Sampling and Sketching](posts/mathematical-sciences/sketching.md)
+- [x]  [Streaming Algorithms: Sampling and Sketching](posts/mathematical-sciences/sketching.md) :star2: :sparkles:
 - [ ]  [Discrete Optimization](posts/mathematical-sciences/optimization.md)
 - [ ]  [The Lazy Binomial Heap](posts/mathematical-sciences/binomial.md)
 - [ ]  [Specialized Containers for Integers](posts/mathematical-sciences/integer.md)
@@ -25,11 +25,8 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [ ] [The Deferred Acceptance Algorithm](posts/mathematical-sciences/stable-matching.md)
 - [ ] Laplacian Dynamics on General Graphs
 - [ ] Network Structure from Rich but Noisy Data
-- [ ] Neural Network Interpretation Methods
 - [ ] Retroactive Data Structures
 - [ ] [A new perspective on entropy](posts/mathematical-sciences/tdb_entropy.md)
-- [ ] Current Best Practices in scRNAseq Analysis
-- [ ] RNA Velocity of Single Cells
 
 [crates-badge]: https://img.shields.io/crates/v/bit-parallelism.svg
 [crates-url]: https://crates.io/crates/bit-parallelism
@@ -40,7 +37,10 @@ Hello! I an aspiring scientist working in Cambridge MA.
 
 > Is it possible to use ideas, tools, and techniques developed to understand the structure and function of biological black boxes to develop a general framework for understanding and interpreting trained Neural Networks (aka computational black boxes)?
 
+- [ ] Current Neural Network Interpretation Methods
+- [ ] Neural Networks as Organisms
 - [ ] [The Genetics of Neural Networks](posts/genetics-plus-anns/genetics%2Bnn.md)
+- [ ] An Algebra of Neural Network Traits
 
 <!-- ## Developmental Biology
 
@@ -62,6 +62,8 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [ ] Re-afference and the origin of the self in early nervous system evolution
 - [ ] Endogenous Bioelectric Signalling Networks
 - [ ] Top Down models in Biology
+- [ ] Current Best Practices in scRNAseq Analysis
+- [ ] RNA Velocity of Single Cells
 - [ ] Life, Logic, and Information
 - [ ] [Models in Biology: Perspectives from Gunawardena et. al](posts/algebra-of-living-systems/models.md)
 - [ ] An Algebra and Calculus of Living Systems
