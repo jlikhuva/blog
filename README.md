@@ -2,14 +2,13 @@
 
 Hello! I an aspiring scientist working in Cambridge MA.
 
-> Below, you'll find an assortment of notes and presentation slides that I made over the course of my independent study and work. Most of them are about _foundational_ ideas that lie at the intersection of the life and the mathematical sciences. I write these notes in order to _deeply_ understand the core ideas that animate these two areas of knowledge. I am distilling them here for future reference. While I have every intention of completing each set of notes, most of what you'll see here will remain incomplete for a very long time.
+> Below, you'll find an assortment of notes and presentation slides that I made over the course of my independent study and work. Most of them are about _foundational_ ideas that lie at the intersection of the life and the mathematical sciences. I write these notes in order to _deeply_ understand the core ideas that animate these two areas of knowledge. I am distilling them here for future reference.
 
-
-> If you find any bugs (errors, or hard to understand sections) feel free to open a PR with the intended fix, or shoot me an e-mail. Finally, If it isn't obvious by now, this blog format was heavily inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
+> While I have every intention of completing each set of notes, most of what you'll see here will remain incomplete for a very long time. If you find any bugs (errors, or hard to understand sections) feel free to open a PR with the intended fix, or shoot me an e-mail. Finally, If it isn't obvious by now, this blog format was heavily inspired by [Frank McSherry's awesome blog](https://github.com/frankmcsherry/blog)
 
 ## Mathematical Sciences [WIP]
 
-> A distillation of some of the most elegant ideas in computer science and mathematics. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk.
+> A distillation of some of the most elegant ideas in computer science and mathematics. The collection is currently skewed towards ideas that showcase cool ways to design algorithms and data structures. Some of the links are to notes hosted on notion. Such links have been marked with an asterisk. Finally, notes that evolved into full fledged libraries or binaries have the appropriate badges next to them.
 
 - [x]  [Common Algorithmic Patterns *](https://www.notion.so/A-note-on-algorithmic-design-patterns-20e50d39c99945e3ad8dfb804177ab3f)
 - [x]  [`<O(n), O(1)>` RMQ in Rust](posts/mathematical-sciences/rmq.md)
