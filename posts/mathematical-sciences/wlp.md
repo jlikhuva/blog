@@ -6,6 +6,8 @@
     <i>2021</i>
 </div>
 
+[![Crates.io][bp-crates-badge]][bp-crates-url] [![Documentation][bp-docs-badge]][bp-docs-url]
+
 In this note, we shall explore a few bit level algorithms that we'll need when developing some of the specialized integer data structures. We begin by discussing a procedure that allows us to extract the first (the top) `k` bits of any integer in constant time. We then proceed to discuss procedures that allow us, in constant time, to operate on integers in parallel.
 
 ## Finding the `top(k)` bits of an integer
@@ -408,3 +410,8 @@ pub fn lcp_len_of(a: u64, b: u64) -> u64 {
 4. [6.851](http://courses.csail.mit.edu/6.851/fall17/scribe/lec12.pdf)
 5. [The Original Fusion Tree Paper](https://reader.elsevier.com/reader/sd/pii/0022000093900404?token=1610EF62181DAC974715067B85459A4709A9BC64E39827CE0369C6C8E18540DFD1DBAD38BEE35BFF95C4C05E45A1D1D5)
 6. [This StackOverflow Question. Scroll down until you find the answer by user `templatetypedef`](https://stackoverflow.com/questions/3878320/understanding-fusion-trees)
+
+[bp-crates-badge]: https://img.shields.io/crates/v/bit-parallelism.svg
+[bp-crates-url]: https://crates.io/crates/bit-parallelism
+[bp-docs-badge]: https://docs.rs/bit-parallelism/badge.svg
+[bp-docs-url]: https://docs.rs/bit-parallelism
