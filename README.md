@@ -1,4 +1,7 @@
-# At the Interface of Hubris & Humility
+<h1 align="center">Hubris & Humility: Tales at the Interface</h1>
+<div align="center">Random thoughts + Detailed Notes</div>
+
+---
 
 Hello! I an aspiring scientist working in Cambridge MA.
 
