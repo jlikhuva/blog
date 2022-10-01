@@ -38,6 +38,7 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [ ] Neural Networks as Organisms
 - [ ] Neural Network Training: Cues from Evolution
 - [ ] [The Genetics of Neural Networks](posts/genetics-plus-anns/genetics%2Bnn.md)
+- [ ] [A new perspective on entropy*](https://balsam-wasabi-670.notion.site/A-new-perspective-on-Entropy-3cf9a2115f2d4f9c99c66f5d97426e45))
 - [ ] An Algebra of Neural Network Traits
 
 <!-- ## Developmental Biology
@@ -51,9 +52,9 @@ Hello! I an aspiring scientist working in Cambridge MA.
 
 - [ ] [Does New Physics Lurk inside Living Matter?](posts/algebra-of-living-systems/new_physics.md)
 - [ ] [Ratcheting the Evolution of Multicellularity](posts/algebra-of-living-systems/ratchet.md)
+- [ ] [A new perspective on entropy*](https://balsam-wasabi-670.notion.site/A-new-perspective-on-Entropy-3cf9a2115f2d4f9c99c66f5d97426e45))
 - [ ] [Bioelectric Signalling: Reprogrammable Circuits underlying embryogenesis, regeneration, and cancer](posts/algebra-of-living-systems/levin_cell_2021.md)
 - [ ] [Basal Cognition + Evolution of Multicellularity + RL/ML = ?](posts/rl-plus-basal-cognition/basal_rl.md)
-- [ ] [A new perspective on entropy](posts/mathematical-sciences/tdb_entropy.md)
 - [ ] [Models in Biology: Perspectives from Gunawardena et. al](posts/algebra-of-living-systems/models.md)
 - [ ] Developmental Bioelectricity, Multicellularity, and Scale-free Cognition
 - [ ] Elementary Nervous Systems
