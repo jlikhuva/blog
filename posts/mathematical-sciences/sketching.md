@@ -103,7 +103,7 @@ impl<T> Sampler<T> for ReservoirSampler<T> {
 }
 ```
 
-You can find runnable code for the reservoir sampling procedure [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=70732619db2d901ea9bdf832793a9563)
+You can find runnable code for the reservoir sampling procedure [in the playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=70732619db2d901ea9bdf832793a9563). One final note: The sampling scheme we implemented, while easy to understand, can be a bottleneck in applications where speed is a priority. The slowdown comes from the fact that, hashing is an expensive operation, and our procedure hashes each item it encounters — even those that it eventually discards. Take a look at [the wikipedia page](https://en.wikipedia.org/wiki/Reservoir_sampling) for sampling schemes that improve upon the procedure above.
 
 ## Foundational Ideas
 
@@ -306,6 +306,23 @@ pub struct CountMinSketch<T: Hash, const M: usize, const N: usize> {
 }
 
 impl <T: Hash, const M: usize, const N: usize> CountMinSketch<T, M, N> {
+    /// Create a new instance of the CMSketch
+    pub fn new() -> Self {
+        let hash_functions = unsafe {
+            let mut hash_function_slots: [MaybeUninit<RandomState>; N] = MaybeUninit::uninit().assume_init();
+            for slot in &mut hash_function_slots {
+                slot.write(RandomState::new());
+            }
+            mem::transmute_copy::<_, [RandomState; N]>(&hash_function_slots)
+        };
+
+        CountMinSketch {
+            sketch_matrix: [[0; M]; N],
+            hash_functions,
+            _marker: PhantomData::default(),
+        }
+    }
+
     /// Increment the count of the given item
     pub fn inc(&mut self, item: &T) {
         for (i, state) in self.hash_functions.iter().enumerate() {
