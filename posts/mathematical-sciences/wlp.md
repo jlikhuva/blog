@@ -411,7 +411,7 @@ pub fn lcp_len_of(a: u64, b: u64) -> u64 {
 5. [The Original Fusion Tree Paper](https://reader.elsevier.com/reader/sd/pii/0022000093900404?token=1610EF62181DAC974715067B85459A4709A9BC64E39827CE0369C6C8E18540DFD1DBAD38BEE35BFF95C4C05E45A1D1D5)
 6. [This StackOverflow Question. Scroll down until you find the answer by user `templatetypedef`](https://stackoverflow.com/questions/3878320/understanding-fusion-trees)
 
-[bp-crates-badge]: https://img.shields.io/crates/v/bit-parallelism.svg
+[bp-crates-badge]: https://img.shields.io/crates/v/bit-parallelism.svg?style=for-the-badge&logo=rust
 [bp-crates-url]: https://crates.io/crates/bit-parallelism
-[bp-docs-badge]: https://docs.rs/bit-parallelism/badge.svg
+[bp-docs-badge]: https://img.shields.io/docsrs/bit-parallelism/latest?style=for-the-badge&logo=docs.rs
 [bp-docs-url]: https://docs.rs/bit-parallelism
