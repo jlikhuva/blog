@@ -35,10 +35,10 @@ Hello! I an aspiring scientist working in Cambridge MA.
 > Is it possible to use ideas, tools, and techniques developed to understand the structure and function of biological black boxes to develop a general framework for understanding and interpreting trained Neural Networks (aka computational black boxes)?
 
 - [ ] Current Neural Network Interpretation Methods
-- [ ] Neural Networks as Organisms
+- [ ] The Network as an Organism
 - [ ] Neural Network Training: Cues from Evolution
 - [ ] [The Genetics of Neural Networks](posts/genetics-plus-anns/genetics%2Bnn.md)
-- [ ] [A new perspective on entropy*](https://balsam-wasabi-670.notion.site/A-new-perspective-on-Entropy-3cf9a2115f2d4f9c99c66f5d97426e45))
+- [ ] [A new perspective on entropy*](https://balsam-wasabi-670.notion.site/A-new-perspective-on-Entropy-3cf9a2115f2d4f9c99c66f5d97426e45)
 - [ ] An Algebra of Neural Network Traits
 
 <!-- ## Developmental Biology
