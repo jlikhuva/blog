@@ -355,9 +355,54 @@ impl <T: Hash, const M: usize, const N: usize> CountMinSketch<T, M, N> {
 } 
 ```
 
-## The Hyper-Log-Log
+## Approximate Counting with The Hyper-Log-Log
 
-A method for estimating the cardinality of a multi-set. That is, answering the question, how many distinct items do we have?
+> When in doubt, count. But, what if we do not have enough scratch paper? What should we do in that case? Well, in that case, we still count, but do so while being probably approximately correct.
+
+The hyper log log (**HLL**) data structure is used to estimate the number of **distinct**/**unique**  items present in some large collection of items with duplicates. That is, it is used to estimate the **Cardinality of a Multiset**.
+
+If  our data is such the number of unique items can fit in memory, then this so called, `Count Distinct` problem can easily be solved by maintaining a counter and a `HashSet` of elements that have already been observed.
+
+In the streaming setting, we cannot afford to do that as the incoming data could even have infinite cardinality. Consider this:
+
+> You are running a popular web service and you'd like to keep track of the number of unique visitors to your site. Each visitor is uniquely identified by their IP address. Suppose your service has $10^9$ unique visitors. Using the `HashSet` approach, you'd need between 4GB for `IPV4` addresses and `16GB` for `IPV6` addresses.
+
+the HLL is able to solve this problem in a much more space efficient manner by trading off accuracy. In the following sections, we'll demonstrate how to construct the HLL structure using Rust.
+
+As usual, we begin by defining our interface.
+
+```rust
+/// A cardinality estimator will be any object that is able to observe a possibly
+/// infinite stream of items and, at any point, estimate the number of unique items
+/// seen so far.
+pub trait CardinalityEstimator<T> {
+    /// We observe each item as it comes in.
+    fn observe(&mut self, item: &T);
+
+    /// Return an estimation of the number of unique items see thus far
+    fn current_estimate(&self) -> u64;
+}
+```
+
+### A Naïve Cardinality Estimator
+
+```rust
+/// WIP
+```
+
+### An Improved Cardinality Estimator
+
+```rust
+/// WIP
+```
+
+### The HLL Estimator
+
+```rust
+/// WIP
+```
+
+### A word on HLL+
 
 ```rust
 /// WIP
@@ -404,3 +449,5 @@ In the preceding sections, we cursorily talked about the "guarantees" of our dif
 3. [This Survey Paper](http://dimacs.rutgers.edu/~graham/pubs/papers/cacm-sketch.pdf)
 4. [This Book by Jelani Nelson](https://www.sketchingbigdata.org/fall20/lec/notes.pdf)
 5. [This Talk by Nicholas Ormrod](https://www.youtube.com/watch?v=YA-nB2wjVcI&ab_channel=CppCon)
+6. [This Paper from Google](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/40671.pdf)
+7. [This Blog Post](http://blog.notdot.net/2012/09/Dam-Cool-Algorithms-Cardinality-Estimation) [And this other one from Facebook](https://engineering.fb.com/2018/12/13/data-infrastructure/hyperloglog/)

@@ -74,7 +74,7 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [ ]  [Systems Biology of Neuro-degenerative Diseases](posts/system-level-diseases/systems_biology.md)
 - [ ] Gene Delivery into Cells and Tissues
 
-#### Cancer: The Somatic Mutation Theory Perspective [WIP]
+<!-- #### Cancer: The Somatic Mutation Theory Perspective [WIP]
 
 > Cancer research has been, perhaps, the most heavily funded research area in the past few decades. Even though this research has yet to translate into a, so called, cure for cancer, it has generated so many insights into the inner workings of cells and tissues. In fact, it could be argued that, almost all progress in the  field of Molecular Biology has resulted, directly or indirectly, from cancer research.
 > There's no better 'introduction', in the sense that `CLRS` is an 'introduction' to Algorithms, to this field than Robert Weinberg's fine book, The Biology of Cancer (TBoC). In the following set of notes you'll find my synthesis of each chapter from TBoC, along with my notes on related papers and projects.
@@ -100,7 +100,7 @@ Hello! I an aspiring scientist working in Cambridge MA.
 - [ ] The Tissue Organization Field Theory Perspective
 - [ ] The Morphogenetic Field Theory Perspective
 - [ ] Bioelectrical approaches to cancer as a problem of the scaling of the cellular self
-- [ ] Cancer as a disorder of Patterning Information
+- [ ] Cancer as a disorder of Patterning Information -->
 
 ## Rough Notes [WIP]
 
