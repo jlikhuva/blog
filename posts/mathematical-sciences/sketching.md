@@ -384,16 +384,44 @@ pub trait CardinalityEstimator<T> {
 }
 ```
 
+We are going to implement three versions of probabilistic cardinality estimators. The first one, the naïve estimator, although easy to implement, will result in estimates with fairly high variance. The second one will improve upon this by making the observation that "interesting" patterns in our hash values (such as a trail of all zeroes) are rare enough that we can use their presence as a proxy for how many unique hash values we've observed. The final estimator will be based on the second. It'll simply introduce key optimization to improve teh second's efficiency.
+
+
 ### A Naïve Cardinality Estimator
 
 ```rust
-/// WIP
+/// A naïve estimator that estimates the cardinality
+/// to simply be 1 divided by the smallest hash value
+/// observed thus far, after mapping it to number
+/// between 0 and 1
+/// 
+pub struct NaiveEstimator<T> {
+    // The smallest hash value seen so far.
+    cur_hash_value_min: Option<u64>,
+    /// We want our estimator to be parameterized by the type
+    /// it is estimating, but we don't need to store anything
+    /// so we never use the provided type. To keep the compiler
+    /// happy, we sacrifice a single ghost as an offering
+    _marker: PhantomData<T>,
+}
 ```
 
 ### An Improved Cardinality Estimator
 
 ```rust
-/// WIP
+/// Estimate the number of distinct items in the stream as
+/// `2^k` where `k` is the longest trail of leading zeroes
+/// among the hash values of all the items observed so far
+pub struct MaxTrailEstimator<T> {
+    // The smallest hash value seen so far.
+    cur_max_trail_length: Option<u64>,
+    /// We want our estimator to be parameterized by the type
+    /// it is estimating, but we don't need to store anything
+    /// so we never use the provided type. To keep the compiler
+    /// happy, we sacrifice a single ghost as an offering to the
+    /// compiler gods
+    _marker: PhantomData<T>,
+}
 ```
 
 ### The HLL Estimator
